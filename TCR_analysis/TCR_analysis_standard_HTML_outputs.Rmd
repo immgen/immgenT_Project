@@ -1,0 +1,679 @@
+---
+date: "`r Sys.Date()`"
+author: "CBDM Lab"
+output:
+  rmdformats::readthedown:
+    self_contained: FALSE
+    thumbnails: FALSE
+    lightbox: FALSE
+    fig_width: 14
+    fig_height: 6
+pkgdown:
+  as_is: true
+---
+
+```{=html}
+<style type="text/css">
+#content {
+  max-width: 2000px !important;
+}
+
+.dataTables_wrapper{
+  overflow-x: hidden; !important;
+}
+
+.table-wrapper{
+  overflow-x: hidden; !important;
+  margin-bottom: 0; !important;
+}
+
+</style>
+```
+
+```{r setup, include=FALSE}
+library(knitr)
+library(rmdformats)
+library(downloadthis)
+library(readr)
+library(tidyverse)
+library(tibble)
+library(dplyr)
+library(plotly)
+library(DT)
+library(RColorBrewer)
+library(stringr)
+library(reshape2)
+library(ggplot2)
+library(ggrepel)
+library(randomcoloR)
+library(patchwork)
+library(immunarch)
+library(Seurat)
+library(igraph)
+library(naniar)
+
+
+## Global options
+options(max.print = "75")
+opts_chunk$set(echo = FALSE,
+	             cache = FALSE,
+               prompt = FALSE,
+               tidy = FALSE,
+               comment = NA,
+               message = FALSE,
+               warning = FALSE)
+opts_knit$set(width = 75)
+```
+
+```{r load_data, include = FALSE}
+###### IGT (Important!!!) #######
+IGT_number = "IGT2"
+
+integrated_umap_release_number = "v2"
+ADT_data_avail = 1
+ADT_data_not_avail_list = c("IGT7","IGT8","IGT9","IGT17","IGT18","IGT44","IGT45","IGT46","IGT71","IGT72","IGT85","IGT89","IGT90","IGT91","IGT92","IGT97","IGT98","IGT99","IGT100","IGT101","IGT102","IGT103","IGT104")
+
+Enhanced_summary_table_filename = paste0("./",IGT_number,".Enhanced.Summary.Table.",Sys.Date(),".csv")
+AllClonos_table_filename = paste0("./",IGT_number,".All.Clonos.",Sys.Date(),".csv")
+RepeatClonos_table_filename = paste0("./",IGT_number,".Repeat.Clonos.",Sys.Date(),".csv")
+TCRdist_matrix_filename = paste0("./",IGT_number,".TCRdist.Matrix.",Sys.Date(),".csv.bz2")
+conga_link = paste0("./",IGT_number,"_results_summary.html")
+
+tcr_threshold_ratio = 5
+
+#################################
+
+### Summary table
+summary_table_tmp <- read_csv(paste0("../../IMGT/Final_IGT_summary_tables_productiveANDunproductive/",IGT_number,"_summary_table.csv"))
+
+### Cell annotation
+sc <- readRDS(paste0("../../../../scRNAseq/ImmgenT/",IGT_number,"/dataset_clean.Rds"))
+
+integrated_umap_all <- read_csv("../resources/mde2_totalvi_20241006_coordinates.csv")
+
+integrated_umap <- integrated_umap_all %>% rename(IGT.cellID = `...1`, umapXi = mde2totalvi20241006_1, umapYi = mde2totalvi20241006_2) %>% filter(grepl(paste0("^", IGT_number, "\\."), IGT.cellID)) 
+  
+if(nrow(integrated_umap)){
+    colnames(integrated_umap) <- c("IGT.cellID", paste0("umapXi.",integrated_umap_release_number), paste0("umapYi.",integrated_umap_release_number))
+} else {
+    integrated_umap <- data.frame(IGT.cellID = summary_table_tmp$IGT.cellID, umapXi = rep(NA, nrow(summary_table_tmp)), umapYi = rep(NA, nrow(summary_table_tmp)))
+    colnames(integrated_umap) <- c("IGT.cellID", paste0("umapXi.",integrated_umap_release_number), paste0("umapYi.",integrated_umap_release_number))
+}
+
+annotation_table <- read_csv("../resources/annotation_table_20250109.csv")
+class_info <- annotation_table %>% filter(grepl(paste0("^", IGT_number, "\\."), cell_id)) %>% select(cell_id, level1, level2) %>% rename(IGT.cellID = cell_id)
+
+if(IGT_number %in% ADT_data_not_avail_list) { ADT_data_avail = 0 } else { ADT_data_avail = 1 }
+
+#umapX and umapY: coordinates on the reference UMAP for this dataset
+RNA_umap_coordinates <- as.data.frame(sc@reductions$umap_rna@cell.embeddings) %>% rownames_to_column(var = "IGT.cellID") %>% rename(umapX = umaprna_1, umapY = umaprna_2)
+#seuratCluster:  the number of the Seurat cluster for that cell in the standard release
+RNA_cluster <- as.data.frame(sc$RNA_clusters) %>% rownames_to_column(var = "IGT.cellID") %>% rename(Seurat.cluster= `sc$RNA_clusters`)
+  
+if(ADT_data_avail){
+    #class: CD4, CD8, CD8aa, DN
+    #class_info <- as.data.frame(sc$Distribution) %>% rownames_to_column(var = "IGT.cellID") %>% rename(lineage = `sc$Distribution`)
+  
+    #umapXp and umapYp: same for protein (CITEseq) UMAP
+    ADT_umap_coordinates <- as.data.frame(sc@reductions$umap_adt@cell.embeddings) %>% rownames_to_column(var = "IGT.cellID") %>% rename(umapXp = umapadt_1, umapYp = umapadt_2)
+    ADT_cluster <- as.data.frame(sc$Protein_clusters) %>% rownames_to_column(var = "IGT.cellID") %>% rename(Protein.cluster = `sc$Protein_clusters`)
+    
+    DefaultAssay(sc)<-'ADT'
+    ADT_data <- as.data.frame(t(as.matrix(sc@assays$ADT@counts)))
+    ADT_data <- log2(ADT_data + 1)
+    ADT_data$IGT.cellID = rownames(ADT_data)
+    ADT_data <- ADT_data[,c('IGT.cellID', 'CD8A', 'CD4')]
+}
+  
+  
+if(ADT_data_avail){
+    summary_table <- summary_table_tmp %>% 
+      mutate(clonotype.alpha.beta = case_when((!is.na(alpha.vgene))&(!is.na(beta.vgene))&(alpha.functionality=='productive')&(beta.functionality=='productive') ~ paste(alpha.vgene, alpha.jgene, alpha.junction, beta.vgene, beta.jgene, beta.junction, sep = "."))) %>% 
+      mutate(clonotype.alpha.beta2 = case_when((!is.na(alpha.vgene))&(!is.na(beta2.vgene))&(alpha.functionality=='productive')&(beta2.functionality=='productive') ~ paste(alpha.vgene, alpha.jgene, alpha.junction, beta2.vgene, beta2.jgene, beta2.junction, sep = "."))) %>% 
+      mutate(clonotype.alpha2.beta = case_when((!is.na(alpha2.vgene))&(!is.na(beta.vgene))&(alpha2.functionality=='productive')&(beta.functionality=='productive') ~ paste(alpha2.vgene, alpha2.jgene, alpha2.junction, beta.vgene, beta.jgene, beta.junction, sep = "."))) %>% 
+      mutate(clonotype.alpha2.beta2 = case_when((!is.na(alpha2.vgene))&(!is.na(beta2.vgene))&(alpha2.functionality=='productive')&(beta2.functionality=='productive') ~ paste(alpha2.vgene, alpha2.jgene, alpha2.junction, beta2.vgene, beta2.jgene, beta2.junction, sep = "."))) %>%
+      mutate(isNKT = if_else(((grepl("^TRAV11", alpha.vgene)&grepl("^TRAJ18$", alpha.jgene)&(nchar(alpha.junction)==15))|(grepl("^TRAV11", alpha2.vgene)&grepl("^TRAJ18$", alpha2.jgene)&(nchar(alpha2.junction)==15))), "TRUE", "FALSE")) %>% 
+      mutate(isMAIT = if_else(((grepl("^TRAV1$", alpha.vgene)&grepl("^TRAJ33$", alpha.jgene)&((nchar(alpha.junction)==12)|(nchar(alpha.junction)==15)))|(grepl("^TRAV1$", alpha2.vgene)&grepl("^TRAJ33$", alpha2.jgene)&((nchar(alpha2.junction)==12)|(nchar(alpha2.junction)==15)))), "TRUE", "FALSE")) %>%
+      left_join(class_info) %>%
+      left_join(RNA_umap_coordinates) %>%
+      left_join(RNA_cluster) %>%
+      left_join(ADT_umap_coordinates) %>%
+      left_join(ADT_cluster) %>%
+      left_join(integrated_umap)
+} else {
+    summary_table <- summary_table_tmp %>% 
+      mutate(clonotype.alpha.beta = case_when((!is.na(alpha.vgene))&(!is.na(beta.vgene))&(alpha.functionality=='productive')&(beta.functionality=='productive') ~ paste(alpha.vgene, alpha.jgene, alpha.junction, beta.vgene, beta.jgene, beta.junction, sep = "."))) %>% 
+      mutate(clonotype.alpha.beta2 = case_when((!is.na(alpha.vgene))&(!is.na(beta2.vgene))&(alpha.functionality=='productive')&(beta2.functionality=='productive') ~ paste(alpha.vgene, alpha.jgene, alpha.junction, beta2.vgene, beta2.jgene, beta2.junction, sep = "."))) %>% 
+      mutate(clonotype.alpha2.beta = case_when((!is.na(alpha2.vgene))&(!is.na(beta.vgene))&(alpha2.functionality=='productive')&(beta.functionality=='productive') ~ paste(alpha2.vgene, alpha2.jgene, alpha2.junction, beta.vgene, beta.jgene, beta.junction, sep = "."))) %>% 
+      mutate(clonotype.alpha2.beta2 = case_when((!is.na(alpha2.vgene))&(!is.na(beta2.vgene))&(alpha2.functionality=='productive')&(beta2.functionality=='productive') ~ paste(alpha2.vgene, alpha2.jgene, alpha2.junction, beta2.vgene, beta2.jgene, beta2.junction, sep = "."))) %>%
+      mutate(isNKT = if_else(((grepl("^TRAV11", alpha.vgene)&grepl("^TRAJ18$", alpha.jgene)&(nchar(alpha.junction)==15))|(grepl("^TRAV11", alpha2.vgene)&grepl("^TRAJ18$", alpha2.jgene)&(nchar(alpha2.junction)==15))), "TRUE", "FALSE")) %>% 
+      mutate(isMAIT = if_else(((grepl("^TRAV1$", alpha.vgene)&grepl("^TRAJ33$", alpha.jgene)&((nchar(alpha.junction)==12)|(nchar(alpha.junction)==15)))|(grepl("^TRAV1$", alpha2.vgene)&grepl("^TRAJ33$", alpha2.jgene)&((nchar(alpha2.junction)==12)|(nchar(alpha2.junction)==15)))), "TRUE", "FALSE")) %>%
+      left_join(class_info) %>%
+      left_join(RNA_umap_coordinates) %>%
+      left_join(RNA_cluster) %>%
+      mutate(umapXp = rep(NA, nrow(summary_table_tmp)), umapYp = rep(NA, nrow(summary_table_tmp)), Protein.cluster = rep(NA, nrow(summary_table_tmp))) %>%
+      left_join(integrated_umap)
+}
+
+samples <- sort(unique(summary_table$sample.name))
+# colors_samples <- distinctColorPalette(length(samples))
+if (length(samples) <= 8){
+  colors_samples <- brewer.pal(length(samples), "Dark2")
+} else if (length(samples) <= 9){
+  colors_samples <- brewer.pal(length(samples), "Set1")
+} else if (length(samples) <= 12){
+  colors_samples <- brewer.pal(length(samples), "Paired")
+} else {
+  colors_samples <- sample(colorRampPalette(brewer.pal(12, "Paired"))(length(samples)))
+}
+
+
+```
+
+---
+title: | 
+    | TCR Analysis Results ( `r IGT_number` )
+---
+
+```{r IGT.AllClono table, include = FALSE}
+
+clonotype_alpha_beta <- summary_table %>% select(IGT.cellID, clonotype.alpha.beta, alpha.junction.nt, beta.junction.nt, sample.name) %>% filter(!is.na(clonotype.alpha.beta)) %>% filter(str_detect(clonotype.alpha.beta, '\\.\\.\\.', negate = T)) %>% rename(clonotype = clonotype.alpha.beta)
+clonotype_alpha_beta2 <- summary_table %>% select(IGT.cellID, clonotype.alpha.beta2, alpha.junction.nt, beta2.junction.nt, sample.name) %>% filter(!is.na(clonotype.alpha.beta2)) %>% filter(str_detect(clonotype.alpha.beta2, '\\.\\.\\.', negate = T)) %>% rename(clonotype = clonotype.alpha.beta2, beta.junction.nt = beta2.junction.nt) %>% mutate_if(is.logical, as.character)
+clonotype_alpha2_beta <- summary_table %>% select(IGT.cellID, clonotype.alpha2.beta, alpha2.junction.nt, beta.junction.nt, sample.name) %>% filter(!is.na(clonotype.alpha2.beta)) %>% filter(str_detect(clonotype.alpha2.beta, '\\.\\.\\.', negate = T)) %>% rename(clonotype = clonotype.alpha2.beta, alpha.junction.nt = alpha2.junction.nt) %>% mutate_if(is.logical, as.character)
+clonotype_alpha2_beta2 <- summary_table %>% select(IGT.cellID, clonotype.alpha2.beta2, alpha2.junction.nt, beta2.junction.nt, sample.name) %>% filter(!is.na(clonotype.alpha2.beta2)) %>% filter(str_detect(clonotype.alpha2.beta2, '\\.\\.\\.', negate = T)) %>% rename(clonotype = clonotype.alpha2.beta2, alpha.junction.nt = alpha2.junction.nt, beta.junction.nt = beta2.junction.nt) %>% mutate_if(is.logical, as.character)
+  
+all_clonotypes <- bind_rows(clonotype_alpha_beta, clonotype_alpha_beta2, clonotype_alpha2_beta, clonotype_alpha2_beta2)
+all_clonotypes_counts_tmp <- all_clonotypes %>% group_by(clonotype) %>% mutate(cellIDs = paste0(IGT.cellID, collapse = "|")) %>% select(clonotype, cellIDs) %>% distinct()
+all_clonotypes_counts <- all_clonotypes %>% count(clonotype) %>% rename(cells.count = n) %>% arrange(desc(cells.count)) %>% mutate(clonotypeID = paste0("clonotype",row_number())) %>% left_join(all_clonotypes_counts_tmp)
+  
+all_clonotypes_distinct_junction_nt <- all_clonotypes %>% group_by(clonotype) %>% summarize(distinct.alpha.junction.nt = n_distinct(alpha.junction.nt), distinct.beta.junction.nt = n_distinct(beta.junction.nt))
+all_clonotypes_distinct_samples <- all_clonotypes %>% add_count(clonotype, sample.name) %>% group_by(clonotype) %>% mutate(most.frequent.sample = sample.name[n == max(n)][1]) %>% select(-n) %>% select(clonotype, most.frequent.sample) %>% distinct()
+all_clonotypes_out_tbl <- all_clonotypes_counts %>% left_join(all_clonotypes_distinct_junction_nt) %>% left_join(all_clonotypes_distinct_samples) %>% select(clonotypeID, clonotype, cells.count, distinct.alpha.junction.nt, distinct.beta.junction.nt, most.frequent.sample, cellIDs)
+  
+write.csv(all_clonotypes_out_tbl, AllClonos_table_filename, row.names = F, na = "")
+
+```
+
+```{r IGT.RepeatClonoInfo table, include = FALSE}
+
+all_clonotypes_repeat <- all_clonotypes %>% count(clonotype) %>% rename(cells.count = n) %>% arrange(desc(cells.count)) %>% mutate(clonotypeID = paste0("clonotype",row_number())) %>% filter(cells.count >=4) 
+all_clonotypes_repeat_count_tmp <- all_clonotypes %>% add_count(clonotype, sample.name) %>% group_by(clonotype) %>% select(clonotype, sample.name, n)
+all_clonotypes_repeat_count <- dcast(all_clonotypes_repeat_count_tmp, clonotype ~ sample.name, value.var = 'n')
+all_clonotypes_repeat_out_tbl <- all_clonotypes_repeat %>% select(clonotypeID, clonotype) %>% left_join(all_clonotypes_repeat_count)
+  
+all_clonotypes_repeat_all <- all_clonotypes %>% count(clonotype) %>% rename(cells.count = n) %>% arrange(desc(cells.count)) %>% mutate(clonotypeID = paste0("clonotype",row_number())) %>% filter(cells.count >=2)
+all_clonotypes_repeat_all_out_tbl <- all_clonotypes_repeat_all %>% select(clonotypeID, clonotype) %>% left_join(all_clonotypes_repeat_count)
+  
+write.csv(all_clonotypes_repeat_out_tbl, RepeatClonos_table_filename, row.names = F, na = "")
+
+```
+
+```{r enhanced_summary_table, include = FALSE}
+
+summary_table_out_tbl <- summary_table %>% 
+    left_join(all_clonotypes_repeat_all, by = c("clonotype.alpha.beta" = "clonotype")) %>% select(-cells.count) %>% rename(clonotype.alpha.beta.repeated.clonotypeID = clonotypeID) %>% 
+    left_join(all_clonotypes_repeat_all, by = c("clonotype.alpha.beta2" = "clonotype")) %>% select(-cells.count) %>% rename(clonotype.alpha.beta2.repeated.clonotypeID = clonotypeID) %>% 
+    left_join(all_clonotypes_repeat_all, by = c("clonotype.alpha2.beta" = "clonotype")) %>% select(-cells.count) %>% rename(clonotype.alpha2.beta.repeated.clonotypeID = clonotypeID) %>% 
+    left_join(all_clonotypes_repeat_all, by = c("clonotype.alpha2.beta2" = "clonotype")) %>% select(-cells.count) %>% rename(clonotype.alpha2.beta2.repeated.clonotypeID = clonotypeID)
+
+summary_table_out_tbl <- summary_table_out_tbl %>% select(IGT.ID, organ, genetic.variation, sample.name, IGT.cellID, clonotype.alpha.beta, clonotype.alpha.beta2, clonotype.alpha2.beta, clonotype.alpha2.beta2, alpha.functionality, alpha.vgene, alpha.jgene, alpha.junction, alpha.junction.nt, alpha.vj.nregion, alpha.reads, alpha2.functionality, alpha2.vgene, alpha2.jgene, alpha2.junction, alpha2.junction.nt, alpha2.vj.nregion, alpha2.reads, beta.functionality, beta.vgene, beta.jgene, beta.junction, beta.junction.nt, beta.vd.nregion, beta.dj.nregion, beta.reads, beta2.functionality, beta2.vgene, beta2.jgene, beta2.junction, beta2.junction.nt, beta2.vd.nregion, beta2.dj.nregion, beta2.reads, isNKT, isMAIT, level1, level2, umapX, umapY, Seurat.cluster, umapXp, umapYp, Protein.cluster, umapXi.v2, umapYi.v2, clonotype.alpha.beta.repeated.clonotypeID, clonotype.alpha.beta2.repeated.clonotypeID, clonotype.alpha2.beta.repeated.clonotypeID, clonotype.alpha2.beta2.repeated.clonotypeID) %>% arrange(sample.name, clonotype.alpha.beta)
+  
+write.csv(summary_table_out_tbl, Enhanced_summary_table_filename, row.names = F, na = "")
+
+```
+
+
+```{r immunarch_tbl, include = FALSE}
+file_path = "./immunarch"
+immdata_10x <- repLoad(file_path)
+div_chao <- repDiversity(immdata_10x$data, "chao1")
+div_hill <- repDiversity(immdata_10x$data, "hill")
+div_div <- repDiversity(immdata_10x$data, "div")
+div_d50 <- repDiversity(immdata_10x$data, "d50")
+div_raref <- repDiversity(immdata_10x$data, "raref", .verbose = F)
+div_gini_tmp <- as.data.frame(repDiversity(immdata_10x$data, "gini"))
+div_gini <- data.frame(Sample = as.factor(rownames(div_gini_tmp)), Value = round(div_gini_tmp$V1,3))
+div_gini.simp <- repDiversity(immdata_10x$data, "gini.simp")
+```
+
+
+```{r duplication plot table, include = FALSE}
+
+all_clonotypes_cell_counts_by_samples <- all_clonotypes %>% group_by(sample.name) %>% summarize(total.cells.count = n())
+min_cell_counts_by_samples <- min(all_clonotypes_cell_counts_by_samples$total.cells.count)
+if(nrow(all_clonotypes_repeat_all_out_tbl)) {
+  colors_pie <- distinctColorPalette(length(all_clonotypes_repeat_all_out_tbl$clonotype))
+  all_clonotypes_repeat_all_out_tbl <- all_clonotypes_repeat_all_out_tbl %>% mutate(colors = colors_pie)
+}
+
+step = 1
+counts_tmp_tbl = tibble()
+for(i in 1:length(samples)){
+  if(samples[i] %in% all_clonotypes_cell_counts_by_samples$sample.name) {
+    sample_total_cells = all_clonotypes %>% filter(sample.name == samples[i]) %>% select(IGT.cellID) %>% count() %>% as.numeric()
+    counts_df = tibble()
+    for(j in 1:10){
+      all_clonotypes_tmp = all_clonotypes %>% filter(sample.name == samples[i]) %>% sample_frac()
+      counts <- c()
+      for(k in seq(1, sample_total_cells, by=step)){
+        counts <- c(counts,sum(all_clonotypes_tmp$clonotype[1:k] %in% all_clonotypes_repeat_all$clonotype))
+      }
+      if(j==1){
+        counts_df <- as_tibble(counts)
+      } else {
+        counts_df <- bind_cols(counts_df, as_tibble(counts))
+      }
+    }
+    if(i==1){
+      counts_tmp_tbl <- as_tibble(data.frame(numofseq = seq(1,sample_total_cells, by=step), counts = rowMeans(counts_df), sample = rep(samples[i], ceiling(sample_total_cells/step))))
+    } else {
+      counts_tmp_tbl <- bind_rows(counts_tmp_tbl, as_tibble(data.frame(numofseq = seq(1,sample_total_cells, by=step), counts = rowMeans(counts_df), sample = rep(samples[i], ceiling(sample_total_cells/step)))))
+    }
+  }
+}
+```
+
+```{r TRAV and TRBV frequency table, include = FALSE}
+TRAV_TRBV_genes <- read_delim("../resources/TRAV_TRBV_genes.txt", delim = "\t", escape_double = FALSE, trim_ws = TRUE)
+TRAV_genes <- TRAV_TRBV_genes %>% filter(grepl("^TRAV", Vgene)) %>% select(Vgene) %>% distinct()
+TRBV_genes <- TRAV_TRBV_genes %>% filter(grepl("^TRBV", Vgene)) %>% select(Vgene) %>% distinct()
+
+TRAV_genes_samples = expand.grid("Vgene"= TRAV_genes$Vgene,"sample" = samples)
+TRBV_genes_samples = expand.grid("Vgene"= TRBV_genes$Vgene,"sample" = samples)
+  
+alpha_vgene_tmp1 = as_tibble(as.data.frame(str_split_fixed(summary_table$alpha.vgene, pattern = "\\|", 3)))
+alpha_vgene_tmp2 = as_tibble(as.data.frame(str_split_fixed(summary_table$alpha2.vgene, pattern = "\\|",3)))
+
+alpha_vgene_tmp = bind_rows(tibble(IGT.cellID = rep(summary_table$IGT.cellID, 3), sample = rep(summary_table$sample.name, 3), alpha_vgene = as.vector(as.matrix(alpha_vgene_tmp1))), tibble(IGT.cellID = rep(summary_table$IGT.cellID, 3), sample = rep(summary_table$sample.name, 3), alpha_vgene = as.vector(as.matrix(alpha_vgene_tmp2)))) %>% distinct() %>% filter(!is.na(alpha_vgene)) %>% left_join(TRAV_TRBV_genes, by = join_by(alpha_vgene == Vgene_unformatted)) %>% filter(!is.na(Vgene))
+alpha_vgene_tmp_out = alpha_vgene_tmp %>% group_by(Vgene, sample) %>% summarise(counts = n_distinct(IGT.cellID)) %>% mutate(percentage = counts/nrow(alpha_vgene_tmp1)*100)
+alpha_vgene_tmp_out_tbl = TRAV_genes_samples %>% left_join(alpha_vgene_tmp_out, by = c("Vgene", "sample")) %>% replace_na(list(counts = 0, percentage = 0)) %>% select(-counts)
+alpha_vgene_tmp_out_tbl$Vgene <- factor(alpha_vgene_tmp_out_tbl$Vgene , levels = TRAV_genes[["Vgene"]])
+alpha_vgene_tmp_out_tbl$percentage <- round(alpha_vgene_tmp_out_tbl$percentage,2)
+
+beta_vgene_tmp1 = as_tibble(as.data.frame(str_split_fixed(summary_table$beta.vgene, pattern = "\\|",3)))
+beta_vgene_tmp2 = as_tibble(as.data.frame(str_split_fixed(summary_table$beta2.vgene, pattern = "\\|",3)))
+
+beta_vgene_tmp = bind_rows(tibble(IGT.cellID = rep(summary_table$IGT.cellID, 3), sample = rep(summary_table$sample.name, 3), beta_vgene = as.vector(as.matrix(beta_vgene_tmp1))), tibble(IGT.cellID = rep(summary_table$IGT.cellID, 3), sample = rep(summary_table$sample.name, 3), beta_vgene = as.vector(as.matrix(beta_vgene_tmp2)))) %>% distinct() %>% filter(!is.na(beta_vgene)) %>% left_join(TRAV_TRBV_genes, by = join_by(beta_vgene == Vgene_unformatted)) %>% filter(!is.na(Vgene))
+beta_vgene_tmp_out = beta_vgene_tmp %>% group_by(Vgene, sample) %>% summarise(counts = n_distinct(IGT.cellID)) %>% mutate(percentage = counts/nrow(beta_vgene_tmp1)*100)
+beta_vgene_tmp_out_tbl = TRBV_genes_samples %>% left_join(beta_vgene_tmp_out, by = c("Vgene", "sample")) %>% replace_na(list(counts = 0, percentage = 0)) %>% select(-counts)
+beta_vgene_tmp_out_tbl$Vgene <- factor(beta_vgene_tmp_out_tbl$Vgene , levels = TRBV_genes[["Vgene"]])
+beta_vgene_tmp_out_tbl$percentage <- round(beta_vgene_tmp_out_tbl$percentage,2)
+
+```
+
+```{r most_expanded_clonotypes, include = FALSE}
+topN = 4
+all_clonotypes_repeat_percentage_by_sample <- all_clonotypes_repeat_count_tmp %>% distinct() %>% left_join(all_clonotypes_cell_counts_by_samples) %>% mutate(percentage = n/total.cells.count*100) %>% arrange(desc(percentage))
+all_clonotypes_repeat_percentage_by_sample_filtered <- all_clonotypes_repeat_percentage_by_sample %>% filter(percentage > 0.5) %>% arrange(desc(n), desc(percentage))
+if(nrow(all_clonotypes_repeat_percentage_by_sample_filtered) > 4){
+  all_clonotypes_repeat_percentage_by_sample_topN <- all_clonotypes_repeat_percentage_by_sample_filtered[1:topN,]
+} else {
+  all_clonotypes_repeat_percentage_by_sample_topN <- all_clonotypes_repeat_percentage_by_sample_filtered
+}
+
+```
+
+```{r tcrdist_igraph_tbl, include = FALSE}
+tcrdist_mat <- read_table(paste0("./CoNGA/",IGT_number,"_clones.tcrdist.matrix.csv"), col_names = FALSE)
+clones <- read_delim(paste0("./CoNGA/",IGT_number,"_clones.tsv"), delim = "\t", escape_double = FALSE, trim_ws = TRUE)
+clones_mapping <- read_delim(paste0("./CoNGA/",IGT_number,"_clones.tsv.barcode_mapping.tsv"), delim = "\t", escape_double = FALSE, trim_ws = TRUE)
+clones_mapping <- clones_mapping %>% mutate(barcodes = str_split_i(barcodes, ",", 1))
+sample_info <- summary_table_out_tbl %>% select(IGT.cellID, sample.name)
+colors_samples_tmp <- as_tibble(data.frame(sample.name = sort(unique(sample_info$sample.name)), colors = colors_samples))
+sample_color_info <- clones_mapping %>% left_join(sample_info, by = join_by(barcodes == IGT.cellID)) %>% left_join(colors_samples_tmp)
+
+rownames(tcrdist_mat) <- clones$clone_id
+colnames(tcrdist_mat) <- clones$clone_id
+write.csv(tcrdist_mat, bzfile(TCRdist_matrix_filename), row.names = T, col.names = T, na = "")
+
+# set a threshold
+median_tcrdist=median(as.matrix(tcrdist_mat))
+MAD_tcrdist=mad(as.matrix(tcrdist_mat))
+threshold_tcrdist=median_tcrdist-MAD_tcrdist*tcr_threshold_ratio
+
+tcrdist_mat2=tcrdist_mat<threshold_tcrdist
+edges_vec=c()
+for (j in (1:(ncol(tcrdist_mat)-1))) {
+  e1=which(tcrdist_mat2[(j+1):nrow(tcrdist_mat2),j]==T)+j
+  e2=rep(j,length(e1))
+  edges_vec=append(edges_vec,c(rbind(e2,e1)))
+}
+
+
+g <- make_graph( edges=edges_vec, n=ncol(tcrdist_mat), directed=F )
+V(g)$name=colnames(tcrdist_mat)
+V(g)$color=sample_color_info$colors
+
+which_ids <- which(degree(g, mode = "total") > 1)
+g_sub <- induced_subgraph(g, which_ids)
+
+
+```
+
+```{r vline_hline_functions, include = FALSE}
+
+vline <- function(x = 0, color = "gray") {
+  list(
+    type = "line", 
+    y0 = 0, 
+    y1 = 1, 
+    yref = "paper",
+    x0 = x, 
+    x1 = x, 
+    line = list(color = color)
+  )
+}
+
+hline <- function(y = 0, color = "gray") {
+  list(
+    type = "line", 
+    x0 = 0, 
+    x1 = 1, 
+    xref = "paper",
+    y0 = y, 
+    y1 = y, 
+    line = list(color = color)
+  )
+}
+
+```
+
+------------------------------------------------------------------------
+
+# TCR analysis output tables
+
+
+## Enhanced Summary Table ([download link](./`r Enhanced_summary_table_filename`))
+
+
+## All Unique Clonotypes Table ([download link](./`r AllClonos_table_filename`))
+
+
+## Repeated Clonotypes Table ([download link](./`r RepeatClonos_table_filename`))
+
+
+------------------------------------------------------------------------
+
+# Pie charts of repeated clonotype frequencies ( among 100 cells )
+
+<div align="center">
+```{r echo=FALSE, fig.height=12, fig.align='center'}
+
+pie_figs <- list()
+
+for(i in 1:length(all_clonotypes_cell_counts_by_samples$sample.name)){
+  samplename = all_clonotypes_cell_counts_by_samples$sample.name[i]
+  total_cell_count = all_clonotypes_cell_counts_by_samples$total.cells.count[all_clonotypes_cell_counts_by_samples$sample.name == samplename]
+  if(nrow(all_clonotypes_repeat_all_out_tbl)){
+  tmp <- all_clonotypes_repeat_all_out_tbl %>% select(clonotypeID, samplename, colors) %>% rename(sample = samplename) %>% mutate(counts = round(sample/total_cell_count*100, digits = 2))
+  tmp <- tmp %>% filter(counts != 0) %>% mutate_at(c('clonotypeID'), as.character) %>% add_row(clonotypeID = "Singletons", sample = 0, colors = "#D3D3D3", counts = 100 - sum(tmp$counts)) %>% mutate(csum = rev(cumsum(rev(counts))), pos = counts/2 + lead(csum, 1), pos = if_else(is.na(pos), counts/2, pos))
+  pie_figs[[i]] <- ggplot(tmp, aes(x = "" , y = counts, fill = fct_inorder(clonotypeID))) +
+                      ggtitle(samplename) +
+                      theme(plot.title = element_text(hjust = 0.5)) +
+                      geom_col(width = 1) +
+                      coord_polar(theta = "y") +
+                      scale_fill_manual(values = tmp$colors) +
+                      # geom_label_repel(data = tmp, aes(y = pos, label = paste0(counts, "%")), size = 3, nudge_x = 1, show.legend = FALSE) +
+                      guides(fill = guide_legend(title = "clonotypeID")) +
+                      theme_void() + 
+                      theme(legend.position = "none", plot.title = element_text(hjust=0.5, size=20))
+  } else {
+    tmp <- as_tibble(data.frame(clonotypeID = "Singletons", sample = 0, colors = "#D3D3D3", counts = 100))
+    pie_figs[[i]] <- ggplot(tmp, aes(x = "" , y = counts, fill = fct_inorder(clonotypeID))) +
+                      ggtitle(samplename) +
+                      theme(plot.title = element_text(hjust = 0.5)) +
+                      geom_col(width = 1) +
+                      coord_polar(theta = "y") +
+                      scale_fill_manual(values = tmp$colors) +
+                      # geom_label_repel(data = tmp, aes(y = pos, label = paste0(counts, "%")), size = 3, nudge_x = 1, show.legend = FALSE) +
+                      guides(fill = guide_legend(title = "clonotypeID")) +
+                      theme_void() + 
+                      theme(legend.position = "none", plot.title = element_text(hjust=0.5, size=20))
+  }
+}
+
+repeated_clonotypes_frequencies <- wrap_plots(pie_figs)
+
+repeated_clonotypes_frequencies
+download_this(repeated_clonotypes_frequencies)
+
+```
+</div>
+
+------------------------------------------------------------------------
+
+# Duplication plot
+
+```{r echo=FALSE, fig.height=8, fig.align='center'}
+
+duplication_plot <- plot_ly(counts_tmp_tbl, x = ~numofseq, y = ~counts, type = 'scatter', mode = 'lines', color = ~sample, colors = colors_samples, line = list(shape = 'vh')) %>% layout(title = "Duplication plot", yaxis = list(title = 'Number of cells with duplicated clonotypes'), xaxis = list(title = 'Number of cells'), margin = list( t=100, b = 100), hovermode = 'x')
+
+duplication_plot
+# download_this(duplication_plot)
+```
+
+------------------------------------------------------------------------
+
+# Diversity estimation (by [immunarch](https://immunarch.com/articles/web_only/v6_diversity.html))
+
+<div align="center">
+```{r echo=FALSE, fig.height=8, fig.align='center'}
+p1 <- vis(div_chao)
+p2 <- vis(div_hill)
+p3 <- vis(div_div)
+p4 <- vis(div_raref)
+p5 <- vis(div_gini.simp)
+p6 <- vis(div_d50)
+
+diversity_estimation_plots <- p5 + p1 + p2 + p3 + p6 + p4
+
+diversity_estimation_plots
+download_this(diversity_estimation_plots)
+
+DT::datatable(div_gini,
+              rownames = F, 
+              colnames = c('Sample', 'Gini coefficient'),
+              width = 500,
+              caption = "The Gini coefficient measures the inequality among values of a frequency distribution (0: perfect equality; 1: maximal inequality)",
+              options = list(dom = 't')
+              )
+```
+</div>
+------------------------------------------------------------------------
+
+# TRAV and TRBV usage plots
+
+## TRAV
+
+```{r echo=FALSE, fig.height=8, fig.align='center'}
+
+TRAV_genes_usage_plot <- plot_ly(alpha_vgene_tmp_out_tbl, x = ~Vgene, y = ~percentage, type = 'scatter', mode = 'lines+markers', line = list(width = 0.5, dash = 'dot'), color = ~sample, colors = colors_samples) %>% layout(title = "TRAV genes frequencies", yaxis = list(title = 'Pencentage (%)'), xaxis = list(title = 'TRAV genes', tickfont = list(size = 12), tickangle = 60), margin = list(t=100, b = 100), hovermode = 'x unified')
+
+TRAV_genes_usage_plot
+# download_this(TRAV_genes_usage_plot)
+```
+
+## TRBV
+
+```{r echo=FALSE, fig.height=8, fig.align='center'}
+TRBV_genes_usage_plot <- plot_ly(beta_vgene_tmp_out_tbl, x = ~Vgene, y = ~percentage, type = 'scatter', mode = 'lines+markers', line = list(width = 0.5, dash = 'dot'), color = ~sample, colors = colors_samples) %>% layout(title = "TRBV genes frequencies", yaxis = list(title = 'Pencentage (%)'), xaxis = list(title = 'TRBV genes', tickfont = list(size = 12), tickangle = 60), margin = list(t=100, b = 100), hovermode = 'x unified')
+
+TRBV_genes_usage_plot
+# download_this(TRBV_genes_usage_plot)
+```
+
+------------------------------------------------------------------------
+
+# The positions of the cells for the 4 most expanded clonotypes
+
+## <span style="background-color:#87CEFA">CD4</span> vs.<span style="background-color:#F08080">CD8A</span>
+
+<div align="center">
+```{r echo=FALSE, fig.height=10, fig.align='center'}
+
+if(nrow(all_clonotypes_repeat_percentage_by_sample_topN)>0 & ADT_data_avail){
+  figs <- list()
+  axis_max <- ceiling(max(max(ADT_data$CD8A), max(ADT_data$CD4)))
+  for(i in 1:nrow(all_clonotypes_repeat_percentage_by_sample_topN)){
+    ADT_data_tmp <- as_tibble(ADT_data) %>% left_join(summary_table_out_tbl) %>% mutate(group_tmp = case_when(clonotype.alpha.beta == all_clonotypes_repeat_percentage_by_sample_topN$clonotype[i] | clonotype.alpha.beta2 == all_clonotypes_repeat_percentage_by_sample_topN$clonotype[i] | clonotype.alpha2.beta == all_clonotypes_repeat_percentage_by_sample_topN$clonotype[i] | clonotype.alpha2.beta2 == all_clonotypes_repeat_percentage_by_sample_topN$clonotype[i] ~ "group4", .default = "group1")) %>% select(IGT.cellID, CD8A, CD4, group_tmp, level1) %>% mutate(group = case_when((level1 == 'CD4' & group_tmp != 'group4') ~ "group2", (level1 ==  'CD8AB' & group_tmp != 'group4') ~ "group3", .default = group_tmp)) %>% arrange(group)
+    title <- paste0(all_clonotypes_repeat_percentage_by_sample_topN$clonotype[i], "\nSample: ", all_clonotypes_repeat_percentage_by_sample_topN$sample.name[i], " (", "Ncells: ", all_clonotypes_repeat_percentage_by_sample_topN$n[i], "; Pct:", round(all_clonotypes_repeat_percentage_by_sample_topN$percentage[i],2), "%)")
+    figs[[i]] <- ggplot(ADT_data_tmp, aes(x = CD8A, y = CD4)) + geom_point(aes(colour = group)) + scale_color_manual(values=c("grey", "#87CEFA", "#F08080", "black")) + ggtitle(title) + scale_x_continuous(breaks = seq(0, axis_max, 2)) + scale_y_continuous(breaks = seq(0, axis_max, 2)) + theme_bw() + theme(legend.position = "none", plot.title = element_text(size=10, hjust=0.5))
+  }
+  
+  most_expanded_clonotypes_cd4_cd8_plot <- wrap_plots(figs)
+
+}
+if(exists("most_expanded_clonotypes_cd4_cd8_plot")){
+  most_expanded_clonotypes_cd4_cd8_plot
+}
+
+if(nrow(all_clonotypes_repeat_percentage_by_sample_topN)>0 & ADT_data_avail){
+  download_this(most_expanded_clonotypes_cd4_cd8_plot)
+}
+```
+</div>
+
+## UMAP (<span style="background-color:#87CEFA">CD4</span> vs.<span style="background-color:#F08080">CD8A</span>)
+<div align="center">
+```{r echo=FALSE, fig.height=10, fig.align='center'}
+if(nrow(all_clonotypes_repeat_percentage_by_sample_topN)>0 & ADT_data_avail) {
+  figs <- list()
+  axis_tbl <- summary_table_out_tbl %>% select(umapX, umapY) %>% filter(!is.na(umapX) & !is.na(umapY)) %>% as.data.frame()
+  axis_min <- floor(min(axis_tbl))
+  axis_max <- ceiling(max(axis_tbl))
+  for(i in 1:nrow(all_clonotypes_repeat_percentage_by_sample_topN)){
+    ADT_data_tmp <- summary_table_out_tbl %>% mutate(group_tmp = case_when(clonotype.alpha.beta == all_clonotypes_repeat_percentage_by_sample_topN$clonotype[i] | clonotype.alpha.beta2 == all_clonotypes_repeat_percentage_by_sample_topN$clonotype[i] | clonotype.alpha2.beta == all_clonotypes_repeat_percentage_by_sample_topN$clonotype[i] | clonotype.alpha2.beta2 == all_clonotypes_repeat_percentage_by_sample_topN$clonotype[i] ~ "group4", .default = "group1")) %>% select(IGT.cellID, umapX, umapY, group_tmp, level1) %>% mutate(group = case_when((level1 == 'CD4' & group_tmp != 'group4') ~ "group2", (level1 ==  'CD8AB' & group_tmp != 'group4') ~ "group3", .default = group_tmp)) %>% arrange(group) %>% filter(!is.na(umapX) & !is.na(umapY))
+    title <- paste0(all_clonotypes_repeat_percentage_by_sample_topN$clonotype[i], "\nSample: ", all_clonotypes_repeat_percentage_by_sample_topN$sample.name[i], " (", "Ncells: ", all_clonotypes_repeat_percentage_by_sample_topN$n[i], "; Pct:", round(all_clonotypes_repeat_percentage_by_sample_topN$percentage[i],2), "%)")
+    figs[[i]] <- ggplot(ADT_data_tmp, aes(x = umapX, y = umapY)) + geom_point(aes(colour = group)) + scale_color_manual(values=c("grey", "#87CEFA", "#F08080", "black")) + ggtitle(title) + scale_x_continuous(breaks = seq(axis_min, axis_max, 1)) + scale_y_continuous(breaks = seq(axis_min, axis_max, 1)) + theme_bw() + theme(legend.position = "none", plot.title = element_text(size=10, hjust=0.5))
+  }
+  
+  most_expanded_clonotypes_umap_plot <- wrap_plots(figs)
+}
+
+if(exists("most_expanded_clonotypes_umap_plot")){
+  most_expanded_clonotypes_umap_plot
+}
+
+if(nrow(all_clonotypes_repeat_percentage_by_sample_topN)>0 & ADT_data_avail){
+  download_this(most_expanded_clonotypes_umap_plot)
+}
+```
+</div>
+
+## UMAP (Seurat clusters)
+<div align="center">
+```{r echo=FALSE, fig.height=10, fig.align='center'}
+
+if(nrow(all_clonotypes_repeat_percentage_by_sample_topN)>0){
+  figs <- list()
+  axis_tbl <- summary_table_out_tbl %>% select(umapX, umapY, Seurat.cluster) %>% filter(!is.na(umapX) & !is.na(umapY)) %>% as.data.frame()
+  axis_min <- floor(min(c(as.numeric(axis_tbl$umapX),as.numeric(axis_tbl$umapY))))
+  axis_max <- ceiling(max(c(as.numeric(axis_tbl$umapX),as.numeric(axis_tbl$umapY))))
+  cluster_number <- length(unique(as.numeric(axis_tbl$Seurat.cluster)))
+  
+  if(cluster_number <= 12){
+    colors_clusters <- brewer.pal(cluster_number, "Paired")
+  } else {
+    colors_clusters <- sample(colorRampPalette(brewer.pal(12, "Paired"))(cluster_number))
+  }
+  
+  for(i in 1:nrow(all_clonotypes_repeat_percentage_by_sample_topN)){
+    ADT_data_tmp <- summary_table_out_tbl %>% mutate(group_tmp = case_when(clonotype.alpha.beta == all_clonotypes_repeat_percentage_by_sample_topN$clonotype[i] | clonotype.alpha.beta2 == all_clonotypes_repeat_percentage_by_sample_topN$clonotype[i] | clonotype.alpha2.beta == all_clonotypes_repeat_percentage_by_sample_topN$clonotype[i] | clonotype.alpha2.beta2 == all_clonotypes_repeat_percentage_by_sample_topN$clonotype[i] ~ "group99", .default = "group")) %>% select(IGT.cellID, umapX, umapY, group_tmp, Seurat.cluster) %>% mutate(group = if_else(group_tmp == 'group99', 'group99', paste0(group_tmp, Seurat.cluster))) %>% arrange(group) %>% filter(!is.na(umapX) & !is.na(umapY))
+    title <- paste0(all_clonotypes_repeat_percentage_by_sample_topN$clonotype[i], "\nSample: ", all_clonotypes_repeat_percentage_by_sample_topN$sample.name[i], " (", "Ncells: ", all_clonotypes_repeat_percentage_by_sample_topN$n[i], "; Pct:", round(all_clonotypes_repeat_percentage_by_sample_topN$percentage[i],2), "%)")
+    figs[[i]] <- ggplot(ADT_data_tmp, aes(x = umapX, y = umapY)) + geom_point(aes(colour = group)) + scale_color_manual(values=c(colors_clusters, "black")) + ggtitle(title) + scale_x_continuous(breaks = seq(axis_min, axis_max, 1)) + scale_y_continuous(breaks = seq(axis_min, axis_max, 1)) + theme_bw() + theme(legend.position = "none", plot.title = element_text(size=10, hjust=0.5))
+  }
+  
+  most_expanded_clonotypes_umap_clusters_plot <- wrap_plots(figs)
+  
+  
+}
+if(exists("most_expanded_clonotypes_umap_clusters_plot")){
+  most_expanded_clonotypes_umap_clusters_plot
+}
+
+if(nrow(all_clonotypes_repeat_percentage_by_sample_topN)>0){
+  download_this(most_expanded_clonotypes_umap_clusters_plot)
+}
+```
+</div>
+
+------------------------------------------------------------------------
+
+# TCRdist Visualization
+
+<h5>TCRdist distance cutoff = Median(all_tcrdist_distances) - Median_absolute_deviation(all_tcrdist_distances) * <span style="color:green"><strong>`r tcr_threshold_ratio`</strong></span></h5>
+
+### TCRdist distance matrix ([download link](./`r TCRdist_matrix_filename`))
+
+## Whole IGT
+<div align="center">
+```{r echo=FALSE, fig.height=12, fig.align='center'}
+
+plot(g_sub,vertex.size=degree(g_sub)/4+1,layout=layout_with_fr,vertex.label=NA)
+legend(
+  "topright",
+  legend = colors_samples_tmp$sample.name,
+  pt.bg  = colors_samples_tmp$colors,
+  pch    = 21,
+  cex    = 1,
+  bty    = "n",
+  title  = "Samples"
+  )
+
+```
+</div>
+
+## By samples
+<div align="center">
+```{r echo=FALSE, fig.height=14, fig.width=14, fig.align='center'}
+
+# tcr_figs <- list()
+row_number = ceiling(length(colors_samples_tmp$sample.name)/3)
+par(mfrow=c(3,row_number))
+
+# par(mfrow=c(3,3))
+for(i in 1:length(colors_samples_tmp$sample.name)){
+  clone_id_keep = sample_color_info %>% filter(sample.name == colors_samples_tmp$sample.name[i]) %>% select(clone_id) %>% unlist()
+  tcrdist_mat_tmp = tcrdist_mat[clone_id_keep, clone_id_keep]
+  tcrdist_mat2_tmp=tcrdist_mat_tmp<threshold_tcrdist
+
+  if(ncol(tcrdist_mat_tmp) > 1){
+    edges_vec=c()
+    for (j in (1:(ncol(tcrdist_mat_tmp)-1))) {
+      e1=which(tcrdist_mat2_tmp[(j+1):nrow(tcrdist_mat2_tmp),j]==T)+j
+      e2=rep(j,length(e1))
+      edges_vec=append(edges_vec,c(rbind(e2,e1)))
+    }
+
+    g_tmp <- make_graph( edges=edges_vec, n=ncol(tcrdist_mat_tmp), directed=F )
+    V(g_tmp)$name = colnames(tcrdist_mat_tmp)
+    V(g_tmp)$color = sample_color_info %>% filter(sample.name == colors_samples_tmp$sample.name[i]) %>% select(colors) %>% unlist()
+
+    which_ids_tmp <- which(degree(g_tmp, mode = "total") > 0)
+    g_sub_tmp <- induced_subgraph(g_tmp, which_ids_tmp)
+
+    plot(g_sub_tmp,vertex.size=degree(g_sub_tmp)/2+3,layout=layout_with_fr,vertex.label=NA, main = colors_samples_tmp$sample.name[i])
+  } else {
+    g_empty_tmp <- make_empty_graph(n = 0, directed = F)
+    plot(g_empty_tmp, layout=layout_with_fr,vertex.label=NA, main = colors_samples_tmp$sample.name[i])
+  }
+}
+
+# wrap_plots(tcr_figs)
+
+```
+</div>
+
+------------------------------------------------------------------------
+
+# Clonotype Neighbor Graph Analysis (CoNGA)
+
+<h4>Results Summary ([link](`r conga_link`))</h4>
+
+<br>
+
+<h5>Paper: [Integrating T cell receptor sequences and transcriptional profiles by clonotype neighbor graph analysis (CoNGA)](https://www.nature.com/articles/s41587-021-00989-2)</h5>
+
+<br><br><br>
+
+
