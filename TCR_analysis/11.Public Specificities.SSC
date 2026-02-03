@@ -1,0 +1,145 @@
+# 11. Public specificities
+# Use dt from datntr (no transgenics)
+
+
+##select the dataset to use (then as dt)
+#dt_datbsl
+dt_datntr
+
+#shorten to TCRs with junctions in both TRA and TRB
+z_dt$alpha.junction!="" & dt$beta.junction!="" 
+dt_dt[z,]
+
+#Do not collapse expanded clonotypes within each IGT, to count nucleotide sequences and catch duplicated cell barcodes
+
+all.Nclonos_paste(dt$alpha.vgene, dt$alpha.junction.nt, dt$beta.vgene, dt$beta.junction.nt, sep=".")
+all.Pclonos_paste(dt$alpha.vgene, dt$alpha.junction, dt$beta.vgene, dt$beta.junction, sep=".")
+dim(all.Pclonos)
+
+#reset IGT and org vectors
+IGT_dt$IGT
+IGT[is.element(IGT, c("IGT7", "IGT8", "IGT9"))==T]_"IGT789"		#collapse One-Mouse experiment (shared clonos between organs in different IGTs)
+for(i in 1:nrow(paired.igts)) IGT[is.element(IGT, unlist(paired.igts[i,1:2]))]_paired.igts[i,3]		#to group paired IGTs
+org_dt$organ	
+
+## Identify between-IGT Pclono repeats
+rep.Pclonos_table(all.Pclonos)
+rep.Pclonos_rep.Pclonos[rep.Pclonos>1] 
+rep.Pclonos_rep.Pclonos[regexpr("TRAV", names(rep.Pclonos))>0 & regexpr("TRBV", names(rep.Pclonos))>0] #remove partial clonos
+
+x_rep(0, length(rep.Pclonos))
+nm_names(rep.Pclonos)
+for (i in 1:length(rep.Pclonos)) {z_all.Pclonos==nm[i]
+										x[i]_length(unique(dt$IGT[z])) }
+rep.Pclonos_rep.Pclonos[x>1]
+
+# run through rep.Pclonos, get characteristics
+
+shared.Nclono_b_y_n_nn_m_susp_rep(0, length(rep.Pclonos)); ct_o_w_rep("-", length(rep.Pclonos)); shared.Pclono_rep(F, length(rep.Pclonos)) 
+nm_names(rep.Pclonos)
+a_c(10, 100, seq(1000,100000, by=1000))
+for (i in 1:length(rep.Pclonos)) {x_all.Pclonos==nm[i]
+	y[i]_length(unique(IGT[x]))
+	z_table(annot$level1[is.element(annot$IGT.cellID, dt$IGT.cellID[x])])	#cell.types in which found
+	ct[i]_paste(paste(names(z)[z>0], z[z>0], sep=":"), collapse="/")
+	z_table(org[x])
+	o[i]_paste(paste(names(z), z, sep=":"), collapse="/")
+	m[i]_sum(all.Pclonos==nm[i])
+	z_substring(dt$IGT.cellID[x],regexpr("\\.", dt$IGT.cellID[x])+1,)		#cell barcodes to check for contamination
+	b[i]_length(unique(z))
+	susp[i]_sum(duplicated(z))
+	n[i]_length(unique(all.Nclonos[x]))				#nb of different N seqs for each Pclono
+	z_table(IGT[x])
+	w[i]_paste(paste(names(z), z, sep=":"), collapse="/")	#IGTs in which found, with count
+	z_table(all.Nclonos[x]); cnt_rep(0, length(z))
+	for (j in 1:length(z)) cnt[j]_length(unique(IGT[all.Nclonos==names(z)[j]]))
+	nn[i]_max(z)															#Count of most frequentNuc
+	shared.Nclono[i]_max(cnt)											#Nb of IGTs with the main recurrent Nclono
+	if (is.element(i, a)) print(paste(i, date(), memory.size()))
+}
+z_y>1
+rep.Pclonos_data.frame(nm[z], ct[z], m[z], y[z], b[z], susp[z], w[z], o[z], n[z], nn[z], shared.Nclono[z], stringsAsFactors=F)
+colnames(rep.Pclonos)_c("Pclonos", "CellType", "TotCount", "NbIGTs", "NbBcds", "DupCelBcds",  "InIGT","InOrgans", "NbNucSqs", "CntMainNuc","IGTsSharingNclono" )
+rep.Pclonos_rep.Pclonos[order(rep.Pclonos$Pclonos),]
+
+#Identify and remove contamination suspects		## NOTE: this may remove true publics that happen to be in 100/101
+#Based on sharing of cell barcodes in different IGT
+#(mostly IGT3/IGT44, likely contamination of IGT3 into the IGT44 library, also 100:101 and 91:92 )
+z_rep.Pclonos$DupCelBcds>0
+w_(regexpr("IGT100", rep.Pclonos$InIGT)>0 | regexpr("IGT101", rep.Pclonos$InIGT)>0) & regexpr("IGT9", rep.Pclonos$InIGT)>0		#also remove combinations of 100/101 with 90 series
+w_w | (regexpr("IGT3:", rep.Pclonos$InIGT)>0) & regexpr("IGT44", rep.Pclonos$InIGT)>0
+suspect.rep.Pclonos_rep.Pclonos[z|w,]
+suspct.clono.cells_dt$IGT.cellID[is.element(all.Pclonos, suspect.rep.Pclonos$Pclonos)]
+rep.Pclonos_rep.Pclonos[z==F & w==F,]
+dim(suspect.rep.Pclonos)
+dim(rep.Pclonos)
+
+#rep.Pclonos with shared Nclonos
+z_rep.Pclonos$IGTsSharingNclono>1
+sum(z)
+sum(z==F)
+sharedN.rep.Pclonos_rep.Pclonos[z,]
+
+#Plots
+par(mfrow=c(2,2))
+n_nrow(rep.Pclonos)
+plot(rep.Pclonos$TotCount*runif(n,0.92, 1.08), rep.Pclonos$NbNucSqs*runif(n,0.95, 1.05), log="xy", ylim=c(1,20), pch=".")
+plot(rep.Pclonos$IGTsSharingNclono, rep.Pclonos$NbNucSqs, log="xy", xlim=c(1,50), ylim=c(1,20), pch=16)
+plot(rep.Pclonos$TotCount*runif(n,0.92, 1.08), rep.Pclonos$NbIGTs*runif(n,0.95, 1.05), ylim=c(1,10), log="xy", pch=16, xlab="Total nb of Occurences", ylab="Nb of IGT harboring the clonotype")
+y_rep(0, max(rep.Pclonos$NbNucSqs)); for (i in 1:length(y)) y[i]_sum(rep.Pclonos$NbNucSqs==i)
+plot(1:length(y), y, type="b", xlim=c(0,30), log="y", xlab="Nb of Nucleotides sequences encoding the TRAB clonotype", ylab="Nb of Occurences")
+x_round(100*sum(rep.Pclonos$NbNucSqs==1)/nrow(rep.Pclonos), digits=1)
+text(10, 0.9*max(y), paste("Pct of public TRAB clonotypes encoded\nby a single Nuc sequence:", x), cex=0.7, adj=0)
+
+#label TRAV11
+z_regexpr("TRAV11", rep.Pclonos$Pclonos)>0
+x_rep.Pclonos$TotCount*runif(n,0.95, 1.05)
+y_rep.Pclonos$NbIGTs*runif(n,0.95, 1.05)
+plot(x, y, ylim=c(1,60), log="xy", pch=16, xlab="Total nb of Occurences", ylab="Nb of IGT harboring the clonotype")
+points(x[z], y[z], col=3, pch=16); text(2, 40, "TRAV11", col=3, adj=0)
+
+
+
+#Count the IGTs in which same Nucleotide publics occur
+table(IGT[is.element(all.Pclonos, sharedN.rep.Pclonos$Pclonos)])
+
+
+#look at corresponding data, for those where similar nuc sequence, SFB specific
+x_is.element(all.Pclonos, SFB.rep.Pclonos$Pclonos)
+res_dt[x>0,]
+res[order(res$beta.vgene, res$beta.junction),c(5,4,2,3,7:9,21:23)]
+table(substring(res$IGT.cellID,1,regexpr("\\.", res$IGT.cellID)=1))
+table(res$sample.name)
+table(res$alpha.vgene)
+
+
+y_regexpr("IGT103", rep.Pclonos$InIGT)>0 & regexpr("IGT88", rep.Pclonos$InIGT)>0 
+x_is.element(all.Pclonos, rep.Pclonos$Pclonos[y])
+res_dt[x>0,]
+res[order(res$beta.vgene, res$beta.junction),c(5,4,2,3,7:9,21:23)]
+
+
+
+## Extract cell identities for checking on raw data of suspicious IGT3=IGT44 identities
+x_"TRAV5-1.CSASRGNYKYVF.TRBV4.CASSWGGQNTLYF"
+y_"TRAV6-1.CVLYSNYQLIW.TRBV31.CAWNFLGSTLYF"
+z_is.element(all.Pclonos, c(x,y))
+test_data.frame(dt[z, c(1,4,5,7,10,21,24)], all.Nclonos[z], stringsAsFactors=F)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

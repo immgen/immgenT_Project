@@ -1,0 +1,182 @@
+
+## Analyze TCRs shared between CD4 and CD8s and Tregs
+#Use non-transgenic datntr and abP.ntr (protein.level clonotypes)
+
+x_unique(abP.ntr[regexpr("TRBV", abP.ntr)>0 & regexpr("TRAV", abP.ntr)>0])
+#y_c("CD4", "CD8", "Treg", "CD8aa", "nonconv")
+y_c("CD4", "CD8", "Treg", "DN", "DP")
+ClonosInLins_matrix(0, length(x), 5)
+
+for (j in 1:length(y)) {z_is.element(datntr$IGT.cellID, annot$IGT.cellID[annot$level1==y[j]])
+	w_table(abP.ntr[z])
+	m_match(x, names(w), nomatch=0)
+	ClonosInLins[m>0,j]_w[m]
+}
+ClonosInLins_data.frame(x, ClonosInLins, stringsAsFactors=F); ; colnames(ClonosInLins)_c("clono", y)
+
+
+# plots
+
+#x_list(ClonosInLins$CD4, ClonosInLins$CD4, ClonosInLins$CD4, ClonosInLins$CD4, ClonosInLins$CD8, ClonosInLins$CD8)
+#xn_c("CD4","CD4","CD4","CD4","CD8","CD8") 
+#y_list(ClonosInLins$CD8, ClonosInLins$Treg, ClonosInLins$nonconv, ClonosInLins$CD8aa, ClonosInLins$CD8aa, ClonosInLins$Treg)
+#yn_c("CD8","Treg","nonconv","CD8aa","CD8aa","Treg")
+
+
+x_list(ClonosInLins$CD4, ClonosInLins$CD4, ClonosInLins$CD4, ClonosInLins$CD4, ClonosInLins$CD8, ClonosInLins$CD8, ClonosInLins$DN)
+xn_c("CD4","CD4","CD4","CD4","CD8","CD8", "DN") 
+y_list(ClonosInLins$CD8, ClonosInLins$Treg, ClonosInLins$DN, ClonosInLins$DP, ClonosInLins$DN, ClonosInLins$DP, ClonosInLins$DP)
+yn_c("CD8","Treg", "DN", "DP", "DN", "DP", "DP")
+
+ 
+n_nrow(ClonosInLins)
+par(mfcol=c(2,3), cex.main=0.7)
+for (i in 1:length(x)) {plot(x[[i]], y[[i]], xlab=xn[i], ylab=yn[i]); title(main=paste(xn[i], "vs", yn[i])) }
+
+for (i in 1:length(x)) {w_round(sum(x[[i]]>0 & y[[i]]>0)/min(sum(x[[i]]>0), sum(y[[i]]>0)), digits=3)
+plot(x[[i]]+runif(n, 0.1, 0.12), y[[i]]+runif(n, 0.1, 0.12), xlab=xn[i], ylab=yn[i], pch=".", log="xy")
+lines(c(1.8, 20), c(1.8, 1.8)); lines(c(1.8, 1.8), c(1.8, 20))
+title(main=paste(xn[i], "vs", yn[i], "OC=", w,"\n",sum(x[[i]]>1 & y[[i]]>1), "of", sum(x[[i]]>0), "+", sum(y[[i]]>0), "clonotypes"))
+}
+
+
+## Export for Morpheus - shorten ClonosInLins to only shared (>2 or more in both) or clono frequency >5
+z_rowSums(ClonosInLins[,-1]>1)>1
+res1_ClonosInLins[z,]
+
+
+
+### Closer look at CD4/CD8 and CD4/Treg overlaps
+
+x_ClonosInLins$clono[ClonosInLins$CD4>4 & ClonosInLins$CD8>4]
+sort(table(datntr$sample.name[is.element(abP.ntr, x)]))
+
+##Treg (select on at least 2 occurences)
+x_ClonosInLins$clono[ClonosInLins$CD4>2 & ClonosInLins$Treg>2]
+sort(table(datntr$IGT[is.element(abP.ntr, x)]))
+#add IGT IDs
+x_ClonosInLins[ClonosInLins$CD4>2 & ClonosInLins$Treg>2,]
+igt_nb_rep("-", nrow(x))
+for (i in 1:length(igt)) {z_is.element(abP.ntr,x[i,1])
+	w_table(datntr$IGT[z])
+	igt[i]_paste(names(w), collapse="/"); nb[i]_paste(w,collapse="/")  }
+x_data.frame(x,igt,nb,stringsAsFactors=F)
+CD4TregSharingTab_x[order(x$igt, (x$CD4/x$Treg)),]
+
+
+## Plot main CD4/Treg sharing in integrated MDE space (adapt code from OneMouse)
+#Use David's downsampled 20K for background, from igt1.96.sampled.20K.MDE.20250316
+bckgd_igt1.96.sampled.20K.MDE.20250316
+par(mfrow=c(2,3), cex.main=0.5)
+#par(fin=c(8,8), cex.main=0.8)
+#choose IGT
+k_"IGT70"
+y_(1:nrow(CD4TregSharingTab))[regexpr(k, CD4TregSharingTab$igt)>0]
+cols_sample(c(4:6, 9:15), max(y), replace=T)
+for (i in y) {  z_abP.ntr==CD4TregSharingTab[i,1]
+	#w_paste(dat1$alpha.vgene[z][1], dat1$alpha.jgene[z][1], dat1$beta.vgene[z][1], dat1$beta.jgene[z][1], sep=".") 
+						plot(bckgd$mdeX, bckgd$mdeY, pch=".", col=16)
+						points(datntr$umapXi.v2[z], datntr$umapYi.v2[z], pch=16, col=5)
+						title(main=paste(CD4TregSharingTab$igt[i], substring(CD4TregSharingTab$clono[i],1, regexpr("TRBV", CD4TregSharingTab$clono[i])+5), collapse="//"))
+						#title(main=paste(CD4TregSharingTab$igt[i], CD4TregSharingTab$clono[i], collapse="//"))
+						#title(main=CD4TregSharingTab$clono[i])
+					}
+					
+# Same, in Treg and CD4 space
+par(mfcol=c(2,3), cex.main=0.5)
+k_"IGT81"
+bckgd.4_sample((1:nrow(mde.incremental.CD4)), size=10000); bckgd.tr_sample((1:nrow(mde.incremental.Treg)), size=10000)
+y_(1:nrow(CD4TregSharingTab))[regexpr(k, CD4TregSharingTab$igt)>0]
+for (i in y) {  w_datntr$IGT.cellID[abP.ntr==CD4TregSharingTab[i,1]]
+	z_is.element(mde.incremental.CD4$IGT.cellID, w)
+	plot(mde.incremental.CD4$X[bckgd.4], mde.incremental.CD4$Y[bckgd.4], pch=".", col=16)
+	points(mde.incremental.CD4$X[z], mde.incremental.CD4$Y[z], pch=16, col=5)
+	title(main=paste(CD4TregSharingTab$igt[i], substring(CD4TregSharingTab$clono[i],1, regexpr("TRBV", CD4TregSharingTab$clono[i])+5), collapse="//"))
+	z_is.element(mde.incremental.Treg$IGT.cellID, w)
+	plot(mde.incremental.Treg$X[bckgd.tr], mde.incremental.Treg$Y[bckgd.tr], pch=".", col=16)
+	points(mde.incremental.Treg$X[z], mde.incremental.Treg$Y[z], pch=16, col=15)
+	title(main=paste(CD4TregSharingTab$igt[i], substring(CD4TregSharingTab$clono[i],1, regexpr("TRBV", CD4TregSharingTab$clono[i])+5), collapse="//"))
+}
+	
+
+##Make tables of IGT70 and 81 sharing
+sn70_unique(datntr$sample.name[datntr$IGT=="IGT70"])
+sn70.short_substring(sn70,19,)
+x_CD4TregSharingTab[CD4TregSharingTab$igt=="IGT70",-c(3,5,6)]
+y_matrix(0, nrow(x), length(sn70)); colnames(y)_sn70.short
+for (i in 1:nrow(x)) {z_is.element(abP.ntr, x$clono[i]) & datntr$IGT=="IGT70"
+	for (j in 1:length(sn70)) { y[i,j]_sum(datntr$sample.name[z]==sn70[j]) }}
+IGT70CD4TregSharingTab_data.frame(x, y, stringsAsFactors=F)
+
+sn81_unique(datntr$sample.name[datntr$IGT=="IGT81"])
+x_CD4TregSharingTab[CD4TregSharingTab$igt=="IGT81",-c(3,5,6)]
+y_matrix(0, nrow(x), length(sn81)); colnames(y)_sn81
+for (i in 1:nrow(x)) {z_is.element(abP.ntr, x$clono[i]) & datntr$IGT=="IGT81"
+	for (j in 1:length(sn81)) { y[i,j]_sum(datntr$sample.name[z]==sn81[j]) }}
+IGT81CD4TregSharingTab_data.frame(x, y, stringsAsFactors=F)
+
+
+# Plot IGT70 shared clonos across time points
+bckgd_igt1.96.sampled.20K.MDE.20250316
+par(fin=c(8,8), cex.main=0.8)
+k_"IGT70"
+tm_c("D7", "D21")
+z_is.element(abP.ntr, IGT70CD4TregSharingTab$clono) & datntr$IGT=="IGT70"
+for (i in 1:length(tm)) {  z1_regexpr(tm[i], datntr$sample.name[z])>0
+						plot(bckgd$mdeX, bckgd$mdeY, pch=".", col=16)
+						points(datntr$umapXi.v2[z][z1], datntr$umapYi.v2[z][z1], pch=".", col=5)
+						title(main=paste("CD4/Treg shared clonotypes," , k, tm[i]))
+					}
+
+# Same plots of IGT70 but down-sampled to 6 cells for each clonotype
+bckgd_igt1.96.sampled.20K.MDE.20250316
+par(fin=c(8,8), cex.main=0.8)
+k_"IGT70"
+tm_c("D7", "D21")
+z_is.element(abP.ntr, IGT70CD4TregSharingTab$clono) & datntr$IGT=="IGT70"
+for (i in 1:length(tm)) {  z_datntr$IGT==k
+								z_z & regexpr(tm[i], datntr$sample.name)>0
+								z1_0 #initialize
+								w_regexpr(tm[i], colnames(IGT70CD4TregSharingTab))>0
+								w_(1:nrow(IGT70CD4TregSharingTab))[rowSums(IGT70CD4TregSharingTab[,w])>0]	#select clonos by time
+	for (j in w) { x_(1:nrow(datntr)) [z & abP.ntr==IGT70CD4TregSharingTab$clono[j] ]
+						z1_c(z1, sample(x,size=min(6, length(x)), replace=F)) }
+						plot(bckgd$mdeX, bckgd$mdeY, pch=".", col=16)
+						points(datntr$umapXi.v2[z1], datntr$umapYi.v2[z1], pch=".", col=5)
+						title(main=paste("CD4/Treg shared clonotypes," , k, tm[i]))
+					}
+
+###Any match in the IGT70 CD4/Treg clonotypes and the Jacobsen/Victora TCRs (Scence 2021)
+#Sup table imported as VictoraSci2021TCRs.Fig4LateGCs
+
+#search for matching beta.vegene and beta.junction
+#beta.clonotypes in IGT70, retrieved from IGT70CD4TregSharingTab
+x_is.element(abP.ntr, IGT70CD4TregSharingTab$clono)
+table(datntr$IGT[x])	#all are in IGT70 within immgenT data
+y_paste(datntr$beta.vgene[x], datntr$beta.junction[x], sep=".")
+w_paste(VictoraSci2021TCRs.Fig4LateGCs$beta.vgene, VictoraSci2021TCRs.Fig4LateGCs$beta.junction, sep=".")
+length(intersect(y,w))
+# >>> Zero overlap with the Victora data in the beta chains
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	
+	
+	
+	
+	
+
+
