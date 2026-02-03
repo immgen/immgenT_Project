@@ -1,0 +1,224 @@
+## Redo of same-alpha different-betas (and vice versa)
+# Use datcntr for primary analysis to avoid clonal amplification and transgenic artefacts
+# convert to dt, remove MAIT and NKT
+
+z_(datcntr$alpha.vgene=="TRAV11" & datcntr$alpha.jgene=="TRAJ18") | (datcntr$alpha.vgene=="TRAV1" & datcntr$alpha.jgene=="TRAJ33")
+dt_datcntr[z==F,]
+
+IGTsample_paste(dt$IGT, dt$sample.name, sep=".")
+
+allA_paste(dt$alpha.vgene, dt$alpha.junction.nt, dt$alpha.junction, dt$alpha.jgene, sep=".")
+dupA_allA[duplicated(allA)]
+allB_paste(dt$beta.vgene, dt$beta.junction.nt, dt$beta.junction, dt$beta.jgene, sep=".")
+dupB_allB[duplicated(allB)]
+
+par(mfrow=c(2,2))
+x_table(dupA)
+plot(sort(x+1), log="y", xlim=c(0, 30000), ylim=c(1,500)); title(main="alpha nt.junction duplications")
+text(0, 400, paste(sum(x[x>15]), "occurrences of", sum(x>15), "recurring alphas (>15 occurences)\namong", nrow(dt), "cells"), adj=0, cex=0.7)
+x_table(dupB)
+plot(sort(x+1), log="y", xlim=c(0, 30000), ylim=c(1,500)); title(main="beta nt.junction duplications")
+text(0, 400, paste(sum(x[x>15]), "occurrences of", sum(x>15), "recurring betas (>15 occurences)\namong", nrow(dt), "cells"), adj=0, cex=0.7)
+
+
+# leave out the highly recurrent (seeing same alpha/different betas would not be as significant)
+# Loop through all dups to retrieve all sameAdiffB instances - only count within same IGTsample
+
+x_table(dupA)
+x_unlist(names(x)[x<5])
+resdat_dt[1:2,1:35]		##seeds
+res_matrix("-", 2, 6)
+cnt_c(0,0)
+colnames(res)_c("dupA", "IGTsamp", "cell1.ID", "cell1.beta", "cell2.ID", "cell2.beta")
+for (i in 1:length(x)) {z_allA==x[i]
+#for (i in 1:10) {z_allA==x[i]	
+							w_table(IGTsample[z])	# to quickly take out repeats from different mice, not relevant (same IGTsample pretty much guarantees same mouse)
+			if (sum(w>1)==0) next
+					for (j in names(w)[w>1]) { y_z & IGTsample==j		#loop through IGTsamples; y logical in dt
+	cnt_c(cnt, sum(y))
+	res_rbind(res, c(x[i], j, dt$IGT.cellID[y][1], allB[y][1], dt$IGT.cellID[y][2], allB[y][2]))
+	resdat_rbind(resdat, dt[y,1:35] )}
+	a_seq(1000, 50000, 1000)
+	if (is.element(i, a)) print(paste(i, date(), floor(memory.size()/1000000)))
+} #end i
+oneAtwoB_data.frame(res[-(1:2),1], cnt[-(1:2)], res	[-(1:2),2:6], stringsAsFactors=F)
+oneAtwoB.dat_resdat[-c(1:2),]	
+
+#verify that all within IGT
+x_substring(oneAtwoB$dupA, 1, regexpr("\\.", oneAtwoB$dupA)-1)
+y_substring(oneAtwoB$cell1.ID, 1, regexpr("\\.", oneAtwoB$cell1.ID)-1)
+w_substring(oneAtwoB$cell2.ID, 1, regexpr("\\.", oneAtwoB$cell2.ID)-1)	
+sum(x!=y)
+sum(x!=w)
+							
+
+#Count in input dataset
+#because the datcntr collapses amplified clonotypes, might hide big occurences in which a single change might be a sequencing error
+#So go back to full ntr dataset
+x_paste(datntr$alpha.vgene, datntr$alpha.junction.nt, datntr$alpha.junction, datntr$alpha.jgene, sep=".")
+y_paste(datntr$beta.vgene, datntr$beta.junction.nt, datntr$beta.junction, datntr$beta.jgene, sep=".")
+alldat.cnt_insamp.cnt_c1.beta.insamp.cnt_c2.beta.insamp.cnt_rep(0, nrow(oneAtwoB))
+for (i in 1:nrow(oneAtwoB)) {z_x==oneAtwoB[i,1]
+									w_datntr$sample.name==substring(oneAtwoB$IGTsamp[i], regexpr("\\.", oneAtwoB$IGTsamp[i])+1)
+	alldat.cnt[i]_sum(z)
+	insamp.cnt[i]_sum(z&w)
+	c1.beta.insamp.cnt[i]_sum(w & y==oneAtwoB$cell1.beta[i])
+	c2.beta.insamp.cnt[i]_sum(w & y==oneAtwoB$cell2.beta[i])
+}
+
+#compare distribution of c1 and c2 beta region
+plot(c1.beta.cnt+runif(nrow(oneAtwoB), 0, 0.5), c2.beta.cnt+runif(nrow(oneAtwoB), 0, 0.5),log="xy")
+points(c1.beta.cnt[sameVbJb]+runif(sum(sameVbJb), 0, 0.5), c2.beta.cnt[sameVbJb]+runif(sum(sameVbJb),0, 0.5), pch=16, col=5); text(100, 200, "sameVbJb", col=5)
+title(main="Counts of cell1 and cell2 beta chains")
+plot(c1.beta.insamp.cnt+runif(nrow(oneAtwoB), 0, 0.5), c2.beta.insamp.cnt+runif(nrow(oneAtwoB), 0, 0.5),log="xy")
+title(main="Counts of cell1 and cell2 beta chains")
+
+
+
+#mark IGT70 (caution, rabbit hole)
+plot(c1.beta.cnt+runif(nrow(oneAtwoB), 0, 0.5), c2.beta.cnt+runif(nrow(oneAtwoB), 0, 0.5),log="xy")
+w_regexpr("IGT70", oneAtwoB$IGTsamp)>0
+points(c1.beta.cnt[sameVbJb & w], c2.beta.cnt[sameVbJb & w], pch=16, col=3); text(100, 200, "sameVbJb in IGT70", col=3)
+
+
+#how many of the oneAtwoB pairs have the same VbJb, just with small differences in junction sequence?
+sameVbJb_rep(F, nrow(oneAtwoB))
+a_unlist(oneAtwoB$cell1.ID)
+b_unlist(oneAtwoB$cell2.ID)
+x_paste(dt$beta.vgene, dt$beta.jgene, nchar(dt$beta.junction), sep=".")
+for (i in 1:nrow(oneAtwoB)) {z_dt$IGT.cellID==a[i]; w_dt$IGT.cellID==b[i]
+	sameVbJb[i]_x[z]==x[w]
+}
+
+#Score differences in nucleotide and aa sequence
+x_match(oneAtwoB$cell1.ID, dt$IGT.cellID, nomatch=0); y_match(oneAtwoB$cell2.ID, dt$IGT.cellID, nomatch=0)
+x_dt$beta.junction.nt[x]; y_dt$beta.junction.nt[y]
+Ndiff_x!=y
+x_match(oneAtwoB$cell1.ID, dt$IGT.cellID, nomatch=0); y_match(oneAtwoB$cell2.ID, dt$IGT.cellID, nomatch=0)
+x_dt$beta.junction[x]; y_dt$beta.junction[y]
+Pdiff_x!=y
+
+### Characteristics of oneAtwoB pairs (ignore triplets for some of these)
+
+#cells in which found
+oneAtwoB.cells_dt$IGT.cellID[is.element(allA, oneAtwoB[,1])]
+		
+
+#lineages
+x_table(annot$level1[is.element(annot$IGT.cellID, dt$IGT.cellID)])
+x_x[match(cell.types, names(x), nomatch=0)]
+y_table(annot$level1[is.element(annot$IGT.cellID, oneAtwoB.cells)])
+y_y[match(cell.types, names(y), nomatch=0)]
+par(fin=c(8,8))
+plot(x+1,y+1, log="xy", pch=".", xlab="Number of lineage cells in dataset", ylab="Nb of same-alpha-different-beta cases in lineage")
+text((x+1)*1.05,y+1,names(x),adj=0)
+x; y; round(100*y/x, digits=2)
+# DEV pct.activ
+
+#in the same cell-type?
+a_as.character(annot$level1)
+a2_as.character(annot$level2)
+b_annot$IGT.cellID
+oneAtwoB.celltypes_matrix("-", nrow(oneAtwoB),2)
+oneAtwoB.subclust_matrix("-", nrow(oneAtwoB),2)
+colnames(oneAtwoB.celltypes)_c("cell1.type", "cell2.type")
+colnames(oneAtwoB.subclust)_c("cell1.sbclust", "cell2.sbclust")
+x_match(oneAtwoB$cell1.ID, b, nomatch=0); y_match(oneAtwoB$cell2.ID, b, nomatch=0)
+oneAtwoB.celltypes[x>0,1]_a[x]; oneAtwoB.celltypes[y>0,2]_a[y]
+oneAtwoB.subclust[x>0,1]_a2[x]; oneAtwoB.subclust[y>0,2]_a2[y]
+oneAtwoB.celltypes[is.element(oneAtwoB.celltypes, cell.types)==F]_"-"
+
+cnt_sum(oneAtwoB.celltypes[,1]!="-" & oneAtwoB.celltypes[,2]!="-")
+cntm_sum((oneAtwoB.celltypes[,1]!="-" & oneAtwoB.celltypes[,2]!="-") & 	oneAtwoB.celltypes[,1]== oneAtwoB.celltypes[,2])
+# permutation testing	
+iter_10000
+x_oneAtwoB.celltypes
+y_rep(0, iter)
+for ( i in 1:iter)	{	x[,2]_sample(x[,2])
+							y[i]_sum((x[,1]!="-" & x[,2]!="-") & 	x[,1]== x[,2]) }
+sum(y>(cntm-1))
+summary(y)	
+
+# in particular organs?
+x_table(dt$organ[is.element(dt$IGT.cellID, oneAtwoB.cells)])
+y_table(dt$organ)
+y_y[match(names(x), names(y), nomatch=0)]
+oneAtwoB.pctinorgan_rev(sort(round(100*x/y, digits=2)))
+
+#tag on organ data to oneAtwoB table
+oneAtwoB.organs_matrix("-", nrow(oneAtwoB),2)
+x_match(oneAtwoB$cell1.ID, dt$IGT.cellID, nomatch=0); y_match(oneAtwoB$cell2.ID, dt$IGT.cellID, nomatch=0)
+oneAtwoB.organs[x>0,1]_dt$organ[x]; oneAtwoB.organs[y>0,2]_dt$organ[y]
+colnames(oneAtwoB.organs)_c("cell1.organ", "cell2.organ")
+## there are 30 pairs with brain as the origin in both cells
+
+# Compare the nucleotide junction sequences in the sameVbJb instances
+#loop through all oneAtwoB instances, use the string.diff function to compare sequences of same length
+x_match(oneAtwoB$cell1.ID, dt$IGT.cellID, nomatch=0); y_match(oneAtwoB$cell2.ID, dt$IGT.cellID, nomatch=0)
+x_dt$beta.junction.nt[x]; y_dt$beta.junction.nt[y]
+junct.diff_rep("-", nrow(oneAtwoB))
+for (i in (1:nrow(oneAtwoB))[sameVbJb]) {junct.diff[i]_paste(string.diff(x[i], y[i]),collapse=",")}
+
+#retrieve read depth
+x_match(oneAtwoB$cell1.ID, dt$IGT.cellID, nomatch=0); y_match(oneAtwoB$cell2.ID, dt$IGT.cellID, nomatch=0)
+c1.reads_dt$beta.reads[x]; c2.reads_dt$beta.reads[y]
+
+## Combine all the information
+oneAtwoB_data.frame(oneAtwoB, alldat.cnt, insamp.cnt, sameVbJb, Ndiff, Pdiff, junct.diff, c1.beta.insamp.cnt, c2.beta.insamp.cnt, c1.reads, c2.reads, oneAtwoB.celltypes, oneAtwoB.subclust, oneAtwoB.organs, stringsAsFactors=F)
+
+## shorten to edited
+edit.B_oneAtwoB[oneAtwoB$sameVbJb & junct.diff!="DiffLength",]
+
+## for seq check
+x_match(edit.B$cell1.ID, dt$IGT.cellID, nomatch=0); y_match(edit.B$cell2.ID, dt$IGT.cellID, nomatch=0)
+c1.jn_dt$beta.junction.nt[x]; c2.jn_dt$beta.junction.nt[y]
+pos_rep("-", length(c1.jn))
+for (i in 1:length(c1.jn)) pos[i]_paste(string.diff(c1.jn[i], c2.jn[i]), collapse=",")
+editBcheck_data.frame(edit.B$cell1.ID, c1.jn, edit.B$cell2.ID, c2.jn, pos, stringsAsFactors=F)
+
+
+##
+# read depth per IGT
+x_unique(dt$IGT)
+y_rep(0, length(x))
+for (i in 1:length(x)) {y[i]_median(dt$beta.reads[dt$IGT==x[i]])}
+	names(y)_x
+y_sort(y)
+
+
+
+
+
+
+
+##### Both oneAtwoB and twoAoneB together
+
+#comparative plots
+par(mfrow=c(2,2))
+plot(sort(oneAtwoB$insamp.cnt), xlim=c(1, 2000), log="xy")
+plot(sort(twoAoneB$insamp.cnt), xlim=c(1, 2000), log="xy")
+
+
+#datasets of origin
+w_sort(table(dt$IGT))
+w_data.frame(names(w), as.numeric(w), matrix(0,length(w), 2), stringsAsFactors=F)
+colnames(w)_c("IGT", "All", "sameVbJb","sameVaJa")
+x_oneAtwoB$cell1.ID[oneAtwoB$sameVbJb]; y_twoAoneB$cell1.ID[sameVaJa]
+x_substring(x, 1, regexpr("\\.", x)-1); y_substring(y, 1, regexpr("\\.", y)-1)
+for (i in 1:nrow(w)) {w[i,3]_sum(x==w[i,1])
+						w[i,4]_sum(y==w[i,1])
+}
+par(mfcol=c(2,2), cex.main=0.8)
+plot(w$All, w$sameVbJb, pch=16)
+z_w$sameVbJb>2
+text(w$All[z]+200, w$sameVbJb[z], w$IGT[z], cex=0.6, adj=0)
+title(main="Instances of paired cells with same TCRa\nshare same VbJb but with differences in junctions")
+plot(w$All, w$sameVaJa, pch=16)
+z_w$sameVaJa>4
+text(w$All[z]+200, w$sameVaJa[z], w$IGT[z], cex=0.6, adj=0)
+title(main="Instances of paired cells with same TCRb\nshare same VaJa but with differences in junctions")						
+	
+
+
+
+

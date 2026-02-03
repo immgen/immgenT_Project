@@ -1,0 +1,98 @@
+#14 Suppression, compare CellRanger vs MIXCR output in IGT19, continued
+
+## run the nonprod/prod table in several sets:
+
+#assumes that 19 and 19x have been trimmed to where all beta are productive, and all matched
+
+###where beta2 is unproductive in 19, irrespective of 19x		>>> first findings
+z_ dat19$beta2.functionality=="unproductive" 
+
+w_dat19[z,]
+rm(vb.npppair.19)
+vb.npppair.19_matrix(0, length(Vb), length(Vb)) 
+colnames(vb.npppair.19)_rownames(vb.npppair.19)_Vb
+n_rep(0, length(Vb))
+for ( i in 1:length(Vb)) { x_w$beta2.vgene==Vb[i]
+	n[i]_sum(x)
+	for ( j in 1:length(Vb)) { y_w$beta.vgene[x]==Vb[j]
+		vb.npppair.19[i,j]_round(100*sum(y)/sum(x), digits=1)
+	}}
+	pct_round(100*n/sum(n),digits=1)
+vb.npppair.19_data.frame(n, pct, vb.npppair.19, stringsAsFactors=F)
+sum(z)
+vb.npppair.19
+
+###where beta2 is unproductive in 19x, irrespective of 19
+z_ dat19x$beta.functionality=="productive" & dat19x$beta2.functionality=="unproductive"
+
+w_dat19x[z,]
+rm(vb.npppair.19x)
+vb.npppair.19x_matrix(0, length(Vb), length(Vb)) 
+colnames(vb.npppair.19x)_rownames(vb.npppair.19x)_Vb
+n_rep(0, length(Vb))
+for ( i in 1:length(Vb)) { x_w$beta2.vgene==Vb[i]
+	n[i]_sum(x)
+	for ( j in 1:length(Vb)) { y_w$beta.vgene[x]==Vb[j]
+		vb.npppair.19x[i,j]_round(100*sum(y)/sum(x), digits=1)
+	}}
+	pct_round(100*n/sum(n),digits=1)
+vb.npppair.19x_data.frame(n, pct, vb.npppair.19x, stringsAsFactors=F)
+sum(z)
+vb.npppair.19x
+
+###where beta2 is unproductive in both 19x and in 19 and 19x and 19 are the same beta2
+z_ dat19x$beta2.functionality=="unproductive" & dat19$beta2.junction==dat19x$beta2.junction
+
+w_dat19x[z,]
+rm(vb.npppair.19x)
+vb.npppair.19x_matrix(0, length(Vb), length(Vb)) 
+colnames(vb.npppair.19x)_rownames(vb.npppair.19x)_Vb
+n_rep(0, length(Vb))
+for ( i in 1:length(Vb)) { x_w$beta2.vgene==Vb[i]
+	n[i]_sum(x)
+	for ( j in 1:length(Vb)) { y_w$beta.vgene[x]==Vb[j]
+		vb.npppair.19x[i,j]_round(100*sum(y)/sum(x), digits=1)
+	}}
+	pct_round(100*n/sum(n),digits=1)
+vb.npppair.19x_data.frame(n, pct, vb.npppair.19x, stringsAsFactors=F)
+sum(z)
+vb.npppair.19x
+
+###where beta2 is unproductive in 19, but different from 19x
+z_ dat19$beta2.functionality=="unproductive" & dat19$beta2.junction!=dat19x$beta2.junction
+
+w_dat19[z,]
+rm(vb.npppair.19)
+vb.npppair.19_matrix(0, length(Vb), length(Vb)) 
+colnames(vb.npppair.19)_rownames(vb.npppair.19)_Vb
+n_rep(0, length(Vb))
+for ( i in 1:length(Vb)) { x_w$beta2.vgene==Vb[i]
+	n[i]_sum(x)
+	for ( j in 1:length(Vb)) { y_w$beta.vgene[x]==Vb[j]
+		vb.npppair.19[i,j]_round(100*sum(y)/sum(x), digits=1)
+	}}
+	pct_round(100*n/sum(n),digits=1)
+vb.npppair.19_data.frame(n, pct, vb.npppair.19, stringsAsFactors=F)
+sum(z)
+vb.npppair.19
+
+###all 19x, dual productives
+z_dat19x$beta.functionality=="productive" & dat19x$beta2.functionality=="productive"
+
+w_dat19x[z,]
+rm(vb.npppair.19x)
+vb.npppair.19x_matrix(0, length(Vb), length(Vb)) 
+colnames(vb.npppair.19x)_rownames(vb.npppair.19x)_Vb
+n_rep(0, length(Vb))
+for ( i in 1:length(Vb)) { x_w$beta2.vgene==Vb[i]
+	n[i]_sum(x)
+	for ( j in 1:length(Vb)) { y_w$beta.vgene[x]==Vb[j]
+		vb.npppair.19x[i,j]_round(100*sum(y)/sum(x), digits=1)
+	}}
+	pct_round(100*n/sum(n),digits=1)
+vb.npppair.19x_data.frame(n, pct, vb.npppair.19x, stringsAsFactors=F)
+sum(z)
+vb.npppair.19x
+
+#test_data.frame(dat19x$IGT.cellID[z], dat19$beta2.junction[z], dat19x[z,x], stringsAsFactors=F)
+test_data.frame(dat19[z,c(1, 21:23, 29:31)], dat19x[z,c(37:39, 44:46)], stringsAsFactors=F)

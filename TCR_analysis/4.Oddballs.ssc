@@ -1,0 +1,169 @@
+# TCRa Oddballs analysis
+#adapted from 0724 scripts
+#Look for other instances of selected combinations like Va11Vj18 or Va1Ja33 (iNKT and MAIT), where the CDR3s are dominated by canonical motifs
+# Searched for at the protein level, nuc level (identities (both chains) attributed to duplication
+# use datc and datntr from 1.Dataprep
+
+# :Use datc, which collapses any Nucleotide-level clonotye expansion (also thymus), and only productive paired cells (so AllClonos is clean)
+
+
+
+### Define all clonotypes (N level,V and junction, a and b
+AllClonos_paste(datc$alpha.vgene, datc$alpha.junction, datc$beta.vgene, datc$beta.junction, sep=".")
+x_table(AllClonos)
+plot(sort(x))
+sum(x>1)
+
+## quantitate N across VaJa pairs - only use the primary alpha 	### DEV: incorporate secondary clonotypes as well, missing some)
+#now restrict to productive to avoid V only and OOF, also to full ab pair
+apair_paste(datc$alpha.vgene, datc$alpha.jgene, sep=".")
+apairs.cnt_table(apair)		#restricts apairs discovery to full productive on both chains
+apairs.cnt[apairs.cnt>1000]_1000		#to keep the iNKT in plotting frame
+apairs_names(apairs.cnt)
+#the proportion represented by the most abundant CDR3 associated with each VaJa pair; the ratio of the main's abundance to the next; the number of diferent junctions for that pair 
+apairs.main3p_apairs.maintonext3p_apairs.n3p_rep(0, length(apairs))		
+for(i in 1:length(apairs)) {y_rev(sort(table(datc$alpha.junction[apair==apairs[i]])))
+									apairs.n3p[i]_length(y)
+									apairs.main3p[i]_round(y[1]/sum(y), digits=3)
+									apairs.maintonext3p[i]_round(y[1]/y[2], digits=3)}
+#plots
+plot(apairs.cnt)
+plot(apairs.cnt, apairs.main3p, pch=".", xlim=c(0, 1200), ylim=c(0,1), xlab="VaJa pair occurence", ylab="Frequency of most abundant CDR3")
+plot(apairs.n3p, apairs.main3p, pch=".", ylim=c(0,1), xlab="Nb of junctions for that VaJa pair", ylab="Frequency of most abundant CDR3")
+plot(apairs.cnt, apairs.n3p, pch=".", xlim=c(0, 1200), xlab="VaJa pair occurence", ylab="Nb of junctions for that VaJa pair")
+
+z_(apairs.cnt>100 & apairs.main3p>0.15) | (apairs.cnt>50 & apairs.main3p>0.3)
+plot(apairs.cnt, apairs.main3p, xlim=c(0, 1200), ylim=c(0,1), pch=".", xlab="VJ pair occurence", ylab="Frequency of most abundant CDR3 for VJ pair")
+text(apairs.cnt[z]+5, apairs.main3p[z], apairs[z], adj=0, cex=0.5)									### Very nice plot. iNKT and MAIT stand out, but also a bunch of cmbinations with biased CDR3 distributions
+plot(apairs.cnt, apairs.n3p, pch=".", xlim=c(0, 1200), xlab="VaJa pair occurence", ylab="Nb of junctions for that VaJa pair")
+text(apairs.cnt[z]+5, apairs.n3p[z], apairs[z], adj=0, cex=0.5)
+
+plot(apairs.cnt, apairs.main3p, pch=".", xlim=c(0, 1200), ylim=c(0,1), xlab="VaJa pair occurence", ylab="Frequency of most abundant CDR3")
+#fit_loess(apairs.main3p~apairs.cnt)
+#points(apairs.cnt, fit$fitted.values, pch=".", col=3)
+fit_supsmu(apairs.cnt, apairs.main3p)
+lines(fit, lwd=2, col=3)
+lines(c(0,1200), c(0.09, 0.09))
+
+plot(apairs.maintonext3p, apairs.main3p, ylim=c(0,1), pch=".", xlab="VaJa First/Second CDR3 ratio", ylab="Frequency of most abundant CDR3")
+plot(apairs.cnt, apairs.maintonext3p, xlim=c(0, 1200),  xlab="VaJa pair occurence", ylab="VaJa First/Second CDR3 ratio")
+plot(apairs.cnt, apairs.maintonext3p, pch=".", xlim=c(0, 1200),  xlab="VaJa pair occurence", ylab="VaJa First/Second CDR3 ratio")
+text(apairs.cnt+5, apairs.maintonext3p, apairs, cex=0.5, adj=0)
+
+#look at CDR3s
+z_apair=="TRAV14-3.TRAJ22"
+x_rev(sort(table(datc$alpha.junction[z])))
+data.frame(names(x), as.numeric(x), stringsAsFactors=F)
+
+## Calculate p.values that each apair has an outlier main3p
+# Since oddballs are only a minority, try a simple pnorm for the ean and SD of all pairs, scanning across quantile ranked windows of occurence, starting with apair>70
+#Only run for >70 occurences (too noisy below)
+apairs.main3pval_rep(0, length(apairs)) 
+sel_apairs.cnt>70
+z_quantile(apairs.cnt[sel], 0:5/5); z[1]_z[1]-1; z[6]_z[6]+1
+for (i in (1:length(apairs))[sel]) {x_apairs.cnt[i]
+							l_max(z[z<x])
+							h_min(z[z>x])
+							comp_apairs.cnt>l & apairs.cnt<h; comp[i]_F		# pairs in same range to compare to
+							w_apairs.main3p[comp]
+							apairs.main3pval[i]_(-log10(1-pnorm(apairs.main3p[i], mean=mean(w), sd=stdev(w))))  }
+							apairs.main3pval[apairs.main3pval==Inf]_15
+							apairs.main3pval_round(apairs.main3pval, digits=1)
+										
+z_apairs.main3pval>2
+plot(apairs.cnt, apairs.main3p, pch=".", xlim=c(0, 1200), ylim=c(0,1), xlab="VaJa pair occurence", ylab="Frequency of most abundant CDR3")
+points(apairs.cnt[z], apairs.main3p[z], pch=16, col=3)
+
+
+
+
+#### Same for beta chain 
+bpair_paste(datc$beta.vgene, datc$beta.jgene, sep=".")
+bpairs.cnt_table(bpair)		
+bpairs_names(bpairs.cnt)
+bpairs.main3p_rep(0, length(bpairs))		#the proportion represented by the main  CDR3 associated with each VaJb pair
+
+for(i in 1:length(bpairs)) {y_table(datc$beta.junction[bpair==bpairs[i]])
+									bpairs.main3p[i]_round(max(y)/sum(y), digits=3)}
+	
+plot(bpairs.cnt)
+plot(bpairs.cnt, bpairs.main3p, ylim=c(0,1), pch=".", xlab="VbJb pair occurence", ylab="Frequency of most abundant CDR3")
+plot(bpairs.cnt, bpairs.main3p, pch=".", ylim=c(0,1), xlab="VbJb pair occurence", ylab="Frequency of most abundant CDR3")
+
+
+z_(bpairs.cnt>100 & bpairs.main3p>0.15) | (bpairs.cnt>50 & bpairs.main3p>0.3)
+plot(bpairs.cnt, bpairs.main3p, ylim=c(0,1), pch=".", xlab="VbJb pair occurence", ylab="Frequency of most abundant CDR3")
+text(bpairs.cnt[z]+20, bpairs.main3p[z], bpairs[z], cex=0.7, adj=0)
+
+#How single Va genes behave
+i_"TRAV14-2"; j_"TRAV12D-3"; k_"TRAV3.3"
+w_regexpr(i, apairs)>0; y_regexpr(j, apairs)>0; z_regexpr(k, apairs)>0
+plot(apairs.cnt, apairs.main3p, xlim=c(0, 1200), ylim=c(0,1), pch=".", xlab="VJ pair occurence", ylab="Frequency of most abundant CDR3 for VJ pair")
+points(apairs.cnt[w], apairs.main3p[w], pch=16, col=3); text(50,1,i, col=3, adj=0)
+points(apairs.cnt[y], apairs.main3p[y], pch=16, col=2); text(50,0.95,j, col=2, adj=0)
+points(apairs.cnt[z], apairs.main3p[z], pch=16, col=4); text(50,0.9,k, col=4, adj=0)
+i_"TRAV11"; j_"TRAV14-3"; k_"TRAV5.4"
+w_regexpr(i, apairs)>0; y_regexpr(j, apairs)>0; z_regexpr(k, apairs)>0
+plot(apairs.cnt, apairs.main3p, xlim=c(0, 1200), ylim=c(0,1), pch=".", xlab="VJ pair occurence", ylab="Frequency of most abundant CDR3 for VJ pair")
+points(apairs.cnt[w], apairs.main3p[w], pch=16, col=3); text(50,1,i, col=3, adj=0)
+points(apairs.cnt[y], apairs.main3p[y], pch=16, col=2); text(50,0.95,j, col=2, adj=0)
+points(apairs.cnt[z], apairs.main3p[z], pch=16, col=4); text(50,0.9,k, col=4, adj=0)
+
+i_"TRAV1.TRAJ"; j_"TRAV11"
+y_regexpr(i, apairs)>0; w_regexpr(j, apairs)>0
+plot(apairs.cnt, apairs.main3p, xlim=c(0, 1200), ylim=c(0,1), pch=".", xlab="VJ pair occurence", ylab="Frequency of most abundant CDR3 for VJ pair")
+points(apairs.cnt[w], apairs.main3p[w], pch=16, col=3); text(50,1,i, col=3, adj=0)
+points(apairs.cnt[y], apairs.main3p[y], pch=16, col=2); text(50,0.95,j, col=2, adj=0)
+
+
+#Make a table of oddballs
+oddballs_apairs[(apairs.cnt>70 & apairs.main3p>0.15) | (apairs.cnt>50 & apairs.main3p>0.3)]
+odb.char0125_data.frame(matrix(0, length(oddballs),7), matrix("---", length(oddballs),3), stringsAsFactors=F)
+colnames(odb.char0125)_c("TotPairOccr", "FreqMainAjunct", "FirstToSecondMain3aRatio", "CD4", "Treg", "CD8", "NonConv", "MainAjunct", "MostFreqVB", "MainOrgan")	##ZZZ add N region, convert to frequencies?
+for (i in 1:length(oddballs)) {
+	odb.char0125[i,1]_sum(apair==oddballs[i])
+	odb.char0125[i,2]_apairs.main3p[apairs==oddballs[i]]
+	odb.char0125[i,3]_apairs.maintonext3p[apairs==oddballs[i]]
+	z_apair==oddballs[i]			#positions of the oddball in datc
+	y_table(datc$alpha.junction[z])
+	odb.char0125[i,8]_names(y)[y==max(y)][1]
+	y_table(datc$beta.vgene[z]); y_y[y==max(y)][1]
+	odb.char0125[i,9]_paste(names(y), round(as.numeric(y)/sum(apair==oddballs[i]), digits=2), sep="/")	
+	y_table(datc$organ[z]);y_y[y==max(y)][1]
+	odb.char0125[i,10]_paste(names(y), as.numeric(y), sep="/")		
+	w_is.element(annot$IGT.cellID, datc$IGT.cellID[z])
+	odb.char0125[i,4]_sum(annot$level1[w]=="CD4")
+	odb.char0125[i,5]_sum(annot$level1[w]=="Treg")
+	odb.char0125[i,6]_sum(annot$level1[w]=="CD8")
+	odb.char0125[i,7]_sum(annot$level1[w]=="nonconv")
+	}
+Ndiv_NbNucj_FreqMainAnuc_rep(0, length(oddballs)); NdivinmainAnuc_MainAnuc_rep(".", length(oddballs))
+for (i in 1:length(oddballs)) {z_is.element(apair, oddballs[i]) & is.element(datc$alpha.junction, odb.char0125$MainAjunct[i])
+									x_datc$alpha.junction.nt[z]
+									y_rev(sort(table(x)))
+									NbNucj[i]_length(y); FreqMainAnuc[i]_round(max(y)/sum(y), digits=2)
+									z_z & datc$alpha.junction.nt==names(y)[1]
+									NdivinmainAnuc[i]_unique(datc$alpha.vj.nregion[z])
+									MainAnuc[i]_names(y)[1]}
+
+
+odb.char0125_data.frame(1:length(oddballs), oddballs, odb.char0125, NbNucj, FreqMainAnuc, NdivinmainAnuc, MainAnuc, stringsAsFactors=F)
+colnames(odb.char0125)[1:2]_c("odbID", "VaJa")
+odb.char0125_odb.char0125[rev(order(odb.char0125$FreqMainAjunct)),]
+
+#add the pnorm p.values to odb.char0125
+z_match(odb.char0125[,2], apairs, nomatch=0)
+odb.char0125_data.frame(odb.char0125, apairs.main3pval[z], stringsAsFactors=F)
+#add Pgen values
+z_match(odb.char0125[,2], apair, nomatch=0)
+z1_match(datc$IGT.cellID[z], pGenAllData$IGT.cellID, nomatch=0)
+Pgen_10^(-pGenAllData$alpha.Pgen.aa[z1])
+odb.char0125_data.frame(odb.char0125, Pgen, stringsAsFactors=F)
+
+for (i in 1) {z_is.element(apair, odb.char0125$VaJa[i]) & is.element(datc$alpha.junction, odb.char0125$MainAjunct[i])
+					print(odb.char0125$VaJa[i])
+					print(rev(sort(table(datc$alpha.junction.nt[z])))) }
+
+
+
+

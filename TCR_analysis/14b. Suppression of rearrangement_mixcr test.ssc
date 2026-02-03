@@ -1,0 +1,106 @@
+#14. Suppression by non-productive rearrangement, check in MIXCR processed data
+#Use IGT19 data, then processed in IMGT-QUEST, same B6 reference, includes all the contigs called by MIXCR
+#Updated 04/15 for the new MIXCR output (only 2 columns of alpha and beta
+
+dat19_dat[dat$IGT=="IGT19",]
+
+##MIXCR data process
+dat19x_IGT19.summary.table.MiXCR.all.contigsv2
+
+#align dat19 and dat19x (one cell missing in 19)
+z_match(dat19x$IGT.cellID, dat19$IGT.cellID, nomatch=0)
+dat19x_dat19x[z>0,]; dat19_dat19[z,]
+sum(dat19x$IGT.cellID==dat19$IGT.cellID)
+
+#trim to productive in dat19 beta
+z_dat19$beta.functionality=="productive"
+dat19_dat19[z,]; dat19x_dat19x[z,]
+n_nrow(dat19)
+
+#compare the productive junctions
+x_regexpr("beta", colnames(dat19x))>0 & regexpr("junction", colnames(dat19x))>0 &  regexpr("nt", colnames(dat19x))<0 
+x_dat19x[,x]; colnames(x)_paste("mixcr", colnames(x), sep=".")
+y_rep(0, nrow(x))
+for (i in 1:length(y)) y[i]_(1:2)[x[i,]==dat19$beta.junction[i]]
+#look at mixcr junction data when the similarity to dat19 is in beta2 (looks like several instances when beta1 is similar)
+res_data.frame(dat19$beta.junction[y==2], x[y==2,], stringsAsFactors=F	); colnames(res)[1]_"cellranger.beta.junction"
+	
+#when y=2, swap into position 1 in dat19x
+x_dat19x[y==2,18:24]
+dat19x[y==2,18:24]_dat19x[y==2,25:31]
+dat19x[y==2,25:31]_x
+
+#compare beta2
+sum(dat19$beta.junction==dat19x$beta.junction)
+sum(dat19$beta2.junction==dat19x$beta2.junction)
+sum(dat19$beta2.functionality=="productive" & dat19$beta2.junction==dat19x$beta2.junction)
+sum(dat19$beta2.functionality=="unproductive" & dat19$beta2.junction==dat19x$beta2.junction)
+
+
+#trim to cells where productives match
+z_dat19$beta.junction==dat19x$beta.junction
+dat19_dat19[z,]; dat19x_dat19x[z,]
+
+
+#trim to dat19 beta2 unproductive
+z_dat19$beta2.functionality=="unproductive"
+dat19_dat19[z,]; dat19x_dat19x[z,]
+n_nrow(dat19)
+
+#compare non-productive joins, in cells where productives are matched in both datasets
+x_regexpr("beta", colnames(dat19x))>0 & regexpr("junction", colnames(dat19x))>0 &  regexpr("nt", colnames(dat19x))<0 
+x_dat19x[,x]; colnames(x)_paste("mixcr", colnames(x), sep=".")
+y_rep(0, nrow(x))
+for (i in 1:length(y)) y[i]_(1:6)[x[i,]==dat19$beta2.junction[i]]
+
+#visuals
+test_data.frame(dat19$IGT.cellID, y, dat19$beta2.junction, x, stringsAsFactors=F); colnames(test)[3]_"CR.beta2.junction"
+
+
+### now map Vb correspondence in the matching dat19x
+
+#w_dat19x[y==2,]		#work from the cells that have matching p and unp in MIXCR calls
+x_regexpr("beta", colnames(dat19x))>0 & regexpr("junction", colnames(dat19x))>0 &  regexpr("nt", colnames(dat19x))<0 
+#z_dat19x$beta.functionality=="productive" & dat19x$beta2.functionality=="unproductive" & dat19$beta2.functionality!="unproductive"
+z_dat19x$beta.functionality=="productive" & dat19x$beta2.functionality=="productive"
+
+#test_data.frame(dat19x$IGT.cellID[z], dat19$beta2.junction[z], dat19x[z,x], stringsAsFactors=F)
+test_data.frame(dat19[z,c(1, 21:23, 29:31)], dat19x[z,c(37:39, 44:46)], stringsAsFactors=F)
+
+w_dat19x[z,]
+
+rm(vb.npppair.19x)
+vb.npppair.19x_matrix(0, length(Vb), length(Vb)) 
+colnames(vb.npppair.19x)_rownames(vb.npppair.19x)_Vb
+n_rep(0, length(Vb))
+for ( i in 1:length(Vb)) { x_w$beta2.vgene==Vb[i]
+	n[i]_sum(x)
+	for ( j in 1:length(Vb)) { y_w$beta.vgene[x]==Vb[j]
+		vb.npppair.19x[i,j]_round(100*sum(y)/sum(x), digits=1)
+	}}
+	pct_round(100*n/sum(n),digits=1)
+vb.npppair.19x_data.frame(n, pct, vb.npppair.19x, stringsAsFactors=F)
+
+
+
+################# PRIOR CODE ######################
+par(fin=c(8,8))
+image(as.matrix(vb.npppair.19x[,-(1:2)]), axes=FALSE)
+text(0, 1:length(Vb), Vb, adj=1, cex=0.7)
+text(1:length(Vb), 0, Vb, adj=1, cex=0.7, crt=90)
+
+#calculate a normalized version of this (divided by the mean usage of each TRBV)
+vb.npppair.19x.norm_as.matrix(vb.npppair.19x[,-c(1:2)])
+for (i in 1:length(Vb)) vb.npppair.19x.norm[,i]_vb.npppair.19x.norm[,i]/colMeans(vb.npppair.19x.norm)[i]
+vb.npppair.19x.norm_round(log2(vb.npppair.19x.norm), digits=2)
+image(vb.npppair.19x.norm, axes=F)
+
+	
+
+
+
+
+
+
+
+

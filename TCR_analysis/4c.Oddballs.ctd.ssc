@@ -1,0 +1,119 @@
+# Oddballs, continued, 0125 release
+
+
+## Lengths of over-represented CDR3a
+y_rep("a",2) #seed
+for (k in oddballs) {x_table(sbdat$alpha.junction[apair==k])
+							y_c(y, names(x)[x/sum(x)>0.2])
+							}
+y_y[-(1:2)]
+plot(density(	nchar(sbdat$alpha.junction)), type="l", xlim=c(5,25), ylim=c(0,0.3), xlab="CDR3a length")
+lines(density(nchar(y)), col=3)
+text(5, 0.2, paste("All CDR3a, mean", round(mean(nchar(sbdat$alpha.junction)), digits=2)), col=1, adj=0)
+text(5, 0.18, paste("Oddball CDR3a, mean", round(mean(nchar(y)), digits=2)), col=3, adj=0)
+
+
+
+## Look at the same in non-productive VaJa joins (biased, since by definition cannot be the same as the oddball one)
+#take the non-productive second chains from datc
+x_datc$alpha2.functionality=="unproductive"
+apair.np_paste(datc$alpha2.vgene[x], datc$alpha.jgene[x], sep=".")
+apairs.np.cnt_table(apair.np)		#restricts apairs.np discovery to full productive on both chains
+apairs.np.cnt[apairs.np.cnt>1000]_1000		#to keep the iNKT in plotting frame
+apairs.np_names(apairs.np.cnt)
+apairs.np.main3p_rep(0, length(apairs.np))		#the proportion represented by the main  CDR3 associated with each VaJa pair
+for(i in 1:length(apairs.np)) {y_table(datc$alpha2.junction[x][apair.np==apairs.np[i]])
+									apairs.np.main3p[i]_round(max(y)/sum(y), digits=3)}
+
+plot(apairs.np.cnt, apairs.np.main3p, pch=".", xlim=c(0, 120), ylim=c(0,1), xlab="VaJa pair occurence in unproductive alpha2", ylab="Frequency of most abundant CDR3, non-productive")
+							
+#plot true oddballs onto the np plot
+x_(apairs.cnt>150 & apairs.main3p>0.1) | (apairs.cnt>50 & apairs.main3p>0.25)
+z_is.element(apairs.np, apairs[x])
+plot(apairs.np.cnt, apairs.np.main3p, xlim=c(0, 120), ylim=c(0,1), pch=".", xlab="VJ pair occurence in unproductive alpha2", ylab="Frequency of most abundant CDR3 for VJ pair")
+points(apairs.np.cnt[z], apairs.np.main3p[z], pch=16)
+
+#compare directly main cdr3 freq in normal and non-productive (both selectied for high reads
+z_match(apairs, apairs.np, nomatch=0)
+plot(apairs.cnt[z>0], apairs.np.cnt[z], pch="."); title(main="VaJa usage in normal vs non-prod alphas")
+plot(apairs.main3p[z>0], apairs.np.main3p[z], pch="."); title(main="dominant cdr3 frequency in normal vs non-prod alpha VJ pairs")
+
+z_match(apairs[apairs.cnt>100], apairs.np[apairs.np.cnt>20], nomatch=0)
+plot(apairs.main3p[apairs.cnt>100][z>0], apairs.np.main3p[apairs.np.cnt>20][z])
+title(main="dominant cdr3 frequency in normal vs non-prod alpha VJ pairs, higher freqs only", cex.main=1)
+lines(c(0.1, 0.1), c(0, 0.6)); lines(c(0, 0.8), c(0.2, 0.2))
+
+
+					
+
+##PAPER examples of CDR3 and TRBV representations
+z_datc$alpha.vgene=="TRAV14-1"  & datc$alpha.jgene=="TRAJ48"
+#z_datc$alpha.vgene=="TRAV14-2"  & datc$alpha.jgene=="TRAJ22"
+#z_datc$alpha.vgene=="TRAV9D-3"  & datc$alpha.jgene=="TRAJ2"
+x_rev(sort(table(datc$beta.vgene[z])))
+y_rev(sort(table(datc$alpha.junction[z])))
+test_data.frame(names(x), x, stringsAsFactors=F)
+test1_data.frame(names(y), y, stringsAsFactors=F)
+
+
+## PAPER  Presence in early DNs
+z_is.element(dat$IGT.cellID, IGT1718.DNs[,1])
+x_dat[z,]
+dim(x)
+sum(x$alpha.functionality=="productive")
+sum(x$beta.functionality=="productive")
+sum(x$alpha.functionality=="productive" & x$beta.functionality=="productive")
+zab_x$alpha.functionality=="productive" & x$beta.functionality=="productive"
+za_x$alpha.functionality=="productive" & x$beta.functionality!="productive"
+
+w_paste(x$alpha.vgene, x$alpha.jgene, sep=".")
+
+y_matrix(0, nrow(odb.char0125),2); colnames(y)_c("Overall", "Aonly")
+for (i in 1:nrow(odb.char0125)) {
+	z_w==odb.char0125$VaJa[i] & x$alpha.junction== odb.char0125$MainAjunct[i]
+	y[i,1]_sum(z)
+	y[i,1]_sum(z&za)
+}
+
+#reverse: plot all oddballs-containing cells from IGT1718 onto those
+odbs.in.thymus_"-"
+w_paste(dat1718$alpha.vgene, dat1718$alpha.jgene, sep=".")
+for (i in 1:nrow(odb.char0125))	{						#start at 3 to leave out iNKT and MAIT
+			z_w==odb.char0125$VaJa[i]    # & dat1718$junction==odb.char0125$MainAjunct[i]
+			print(sum(z))
+			odbs.in.thymus_c(odbs.in.thymus, dat1718$IGT.cellID[z]) }
+			odbs.in.thymus_odbs.in.thymus[-1]
+			
+			
+dat1718[is.element(dat1718$IGT.cellID, odbs.in.thymus), c(5,7,8,9),]
+
+
+## Oddballs in MHC and CD1KO form 102/103
+datc1023_datc[datc$IGT=="IGT102" |datc$IGT=="IGT103",]
+y_paste(datc1023$alpha.vgene, datc1023$alpha.jgene, sep=".")
+odb.cnts.kos_matrix(0, nrow(odb.char0125), 4)
+colnames(odb.cnts.kos)_c("A", "E", "O", "CD1ko")
+for (j in 1:4) {
+	if (j==1) z_datc1023$sample.name=="A"
+	if (j==2) z_datc1023$sample.name=="E"
+	if (j==3) z_datc1023$sample.name=="O"
+	if (j==4) z_is.element(datc1023$sample.name, c("Cd1dKO 1",  "Cd1dKO 2"))
+		for (i in 1:nrow(odb.char0125)) odb.cnts.kos[i,j]_sum(y[z]==odb.char0125$VaJa[i] & datc1023$alpha.junction[z]==odb.char0125$MainAjunct[i])
+}
+
+#Oddballs in PLZF+ cells from IGT88
+test_datc[datc$IGT=="IGT88",]
+test_test[test$sample.name!="spleen control",]
+y_paste(test$alpha.vgene, test$alpha.jgene, sep=".")
+wt.plzf_rep(0, nrow(odb.char0125))
+	for (i in 1:nrow(odb.char0125)) wt.plzf[i]_sum(y[z]==odb.char0125$VaJa[i] & test$alpha.junction[z]==odb.char0125$MainAjunct[i])
+		
+odb.cnts.kos_data.frame(odb.char0125$VaJa, odb.cnts.kos, wt.plzf	, stringsAsFactors=F)	
+
+
+
+			
+			
+
+
+

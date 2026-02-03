@@ -1,0 +1,232 @@
+#Va and Vbfrequencies throughout
+#adapted from 0125 (2a) 
+
+#dat and variants, annot already from 1.Dataprep
+
+## VaVb compositions (from whole datc)
+Va_sort(unique(datc$alpha.vgene))
+Va_Va[is.element(Va, c("TRAV20"))==F]	#remove, never used
+Vb_sort(unique(datc$beta.vgene))
+Vb_Vb[Vb!="TRBV21"]		#take out, pseudogene
+x_sort(table(datc$alpha.vgene))
+main.Va_names(x)[x>4000]		#Va and Vb with robust representation, ranked by total usage
+x_sort(table(datc$beta.vgene))
+main.Vb_names(x)[x>5000]
+#also make Ja Jb tables
+Ja_sort(unique(datc$alpha.jgene))
+Jb_sort(unique(datc$beta.jgene))
+
+##Basic frequency (percentages) vectors in mature cells, from datcb
+n_nrow(datc)
+Vb.freq_rep(0, length(Vb)); names(Vb.freq)_Vb
+for (i in 1:length(Vb)) Vb.freq[i]_round(100*sum(datcb$beta.vgene==Vb[i])/n, digits=1)
+Va.freq_rep(0, length(Va)); names(Va.freq)_Va
+for (i in 1:length(Va)) Va.freq[i]_round(100*sum(datcb$alpha.vgene==Va[i])/n, digits=1)
+
+Jb.freq_rep(0, length(Jb)); names(Jb.freq)_Jb
+for (i in 1:length(Jb)) Jb.freq[i]_round(100*sum(datcb$beta.jgene==Jb[i])/n, digits=1)
+Ja.freq_rep(0, length(Ja)); names(Ja.freq)_Ja
+for (i in 1:length(Ja)) Ja.freq[i]_round(100*sum(datcb$alpha.jgene==Ja[i])/n, digits=1)
+
+# Make TRAVxTRBV matrices (can get everything from there), for 4, 8ab, 8aa, DN, DP and Tregs, also non-productive Va or Vb (for unselected
+VaVb4_matrix(0, length(Va), length(Vb))
+rownames(VaVb4)_Va; colnames(VaVb4)_Vb
+VaVbnpa_VaVbnpb_VaVbDN_VaVbDP_VaVb8_VaVb8aa_VaVbTr_VaVb4
+
+X_datcb[is.element(datcb$IGT.cellID, annot$IGT.cellID[annot$level1=="CD4"]),] 
+for (i in 1:length(Va)) {
+	for (j in 1:length(Vb)) {VaVb4[i,j]_sum(X$alpha.vgene==Va[i] & X$beta.vgene==Vb[j])
+		}}
+X_datcb[is.element(datcb$IGT.cellID, annot$IGT.cellID[annot$level1=="CD8"]),]  
+for (i in 1:length(Va)) {
+	for (j in 1:length(Vb)) {VaVb8[i,j]_sum(X$alpha.vgene==Va[i] & X$beta.vgene==Vb[j])
+		}}
+X_datcb[is.element(datcb$IGT.cellID, annot$IGT.cellID[annot$level1=="CD8aa"]),]  
+for (i in 1:length(Va)) {
+	for (j in 1:length(Vb)) {VaVb8aa[i,j]_sum(X$alpha.vgene==Va[i] & X$beta.vgene==Vb[j])
+		}}
+X_datcb[is.element(datcb$IGT.cellID, annot$IGT.cellID[annot$level1=="Treg"]),]  
+for (i in 1:length(Va)) {
+	for (j in 1:length(Vb)) {VaVbTr[i,j]_sum(X$alpha.vgene==Va[i] & X$beta.vgene==Vb[j])
+		}}
+X_datcb[is.element(datcb$IGT.cellID, annot$IGT.cellID[annot$level1=="DN"]) & datcb$organ!="thymus",]  
+for (i in 1:length(Va)) {
+	for (j in 1:length(Vb)) {VaVbDN[i,j]_sum(X$alpha.vgene==Va[i] & X$beta.vgene==Vb[j])
+	}}		
+X_datcb[is.element(datcb$IGT.cellID, annot$IGT.cellID[annot$level1=="DP"])& datcb$organ!="thymus",]  
+for (i in 1:length(Va)) {
+	for (j in 1:length(Vb)) {VaVbDP[i,j]_sum(X$alpha.vgene==Va[i] & X$beta.vgene==Vb[j])
+	}}		
+		
+## Va and Vb in gdT cells (use whole dat here; doesn't matter if productive or not, and no tg or amplification problem)
+gdVa_rep(0, length(Va))
+X_dat$alpha.vgene[is.element(dat$IGT.cellID, annot$IGT.cellID[annot$level1=="gdT"])]
+for (i in 1:length(Va)) gdVa[i]_sum(X==Va[i])
+gdVa.freq_round(100*gdVa/sum(gdVa), digits=2)
+
+gdVb_rep(0, length(Vb))
+X_dat$beta.vgene[is.element(dat$IGT.cellID, annot$IGT.cellID[annot$level1=="gdT"])]
+for (i in 1:length(Vb)) gdVb[i]_sum(X==Vb[i])
+gdVb.freq_round(100*gdVb/sum(gdVb), digits=2)
+
+	
+## Vb frequencies in DPs, poductive Vb but no Va (should be good preselection)
+z_dat$beta.functionality=="productive" & dat$alpha.functionality!="productive"		#non-productive alphas
+z1_regexpr("3d DP Thymocytes", dat$sample.name)>0 & z
+z2_regexpr("4wk DP Thymocytes", dat$sample.name)>0 & z
+z1_dat$beta.vgene[z1]; z2_dat$beta.vgene[z2] 
+d3DPVb_w4DPVb_TotVb_rep(0, length(Vb))
+for (i in 1:length(Vb)) {d3DPVb[i]_sum(z1==Vb[i])
+							w4DPVb[i]_sum(z2==Vb[i]) 
+							TotVb[i]_sum(d3DPVb[i]+w4DPVb[i])}  #total representation in DPs
+d3DPVb.freq_round(100*d3DPVb/sum(d3DPVb), digits=2)
+w4DPVb.freq_round(100*w4DPVb/sum(w4DPVb), digits=2)
+TotDPVb.freq_round(100*TotVb/sum(TotVb), digits=2)
+
+## Va and Vb in non-productive joins (use both alpha and alpha2, use datntr (no transgenics)
+#don't compute pairs, no sense
+npVa_rep(0, length(Va))
+X_c(datntr$alpha.vgene[datntr$alpha.functionality=="unproductive"], datntr$alpha2.vgene[datntr$alpha2.functionality=="unproductive"])
+for (i in 1:length(Va)) npVa[i]_sum(X==Va[i])
+npVa.freq_round(100*npVa/sum(npVa), digits=2)
+npVb_rep(0, length(Vb))
+X_c(datntr$beta.vgene[datntr$beta.functionality=="unproductive"], datntr$beta2.vgene[datntr$beta2.functionality=="unproductive"])
+for (i in 1:length(Vb)) npVb[i]_sum(X==Vb[i])
+npVb.freq_round(100*npVb/sum(npVb), digits=2)
+
+
+## Vb in DNs, as other reflection of pre-DP selection.
+#Use DN data from IGT17 and 18 , select productive joins
+dnVb_rep(0, length(Vb))
+x_dat[is.element(dat$IGT.cellID, IGT1718.DNs[,1]),]
+X_c(x$beta.vgene[x$beta.functionality=="productive"], x$beta2.vgene[x$beta2.functionality=="productive"])
+for (i in 1:length(Vb)) dnVb[i]_sum(X==Vb[i])
+dnVb.freq_round(100*dnVb/sum(dnVb), digits=2)
+
+						
+## make Va and Vb usage summary tables 
+x_rowSums(VaVb4); x_round(100*x/sum(x), digits=2)
+y_rowSums(VaVbTr); y_round(100*y/sum(y), digits=2)
+w_rowSums(VaVb8); w_round(100*w/sum(w), digits=2)
+z_rowSums(VaVb8aa); z_round(100*z/sum(z), digits=2)
+Va.freq.tab_data.frame(rownames (VaVb4), x,y,w,z,gdVa.freq, npVa.freq, stringsAsFactors=F)
+colnames(Va.freq.tab)_c("Va", "CD4", "Treg", "CD8", "CD8aa", "gdT", "unprod")
+
+# Vb
+x_colSums(VaVb4); x_round(100*x/sum(x), digits=2)
+y_colSums(VaVbTr); y_round(100*y/sum(y), digits=2)
+w_colSums(VaVb8); w_round(100*w/sum(w), digits=2)
+z_colSums(VaVb8aa); z_round(100*z/sum(z), digits=2)
+Vb.freq.tab_data.frame(colnames (VaVb4), x,y,w,z,d3DPVb.freq, w4DPVb.freq, TotDPVb.freq, gdVb.freq, npVb.freq, round(log2(x/w), digits=2), round(log2(x/y), digits=2), round(log2(x/TotDPVb.freq), digits=2), round(log2(w/TotDPVb.freq), digits=2), stringsAsFactors=F)
+colnames(Vb.freq.tab)_c("Vb", "CD4", "Treg", "CD8", "CD8aa", "d3DP", "w4DP", "TotDPs", "gdT", "unprod", "4/8 ratio", "a/Treg ratio", "CD4/DPselec", "CD8/DPselec")
+
+
+
+## Comparative plots    ### PAPER
+par(mfcol=c(2,3))
+plot(Va.freq.tab$CD4, Va.freq.tab$CD8, pch=16, xlim=c(0,8), ylim=c(0,8), xlab="Va in CD4", ylab="Va in CD8"); text(0.5, 7.5, paste("r=", round(cor(Va.freq.tab$CD4, Va.freq.tab$CD8), digits=2)), adj=0, cex=0.7)  ; title(main="Va CD4 vs CD8")
+lines(c(0,8),c(0,8)) 
+plot(Vb.freq.tab$CD4, Vb.freq.tab$CD8, pch=16, xlim=c(0,12), ylim=c(0,12), xlab="Vb in CD4", ylab="Vb in CD8"); text(0.5, 11, max(Vb.freq.tab$CD8)*0.96, paste("r=", round(cor(Vb.freq.tab$CD4, Vb.freq.tab$CD8), digits=2)), adj=0, cex=0.7) ; title(main="Vb CD4 vs CD8")
+lines(c(0,12),c(0,12)) 
+plot(Va.freq.tab$CD4, Va.freq.tab$Treg, pch=16, xlim=c(0,8), ylim=c(0,8), xlab="Va in CD4", ylab="Va in Treg"); text(0.5, 7.5, paste("r=", round(cor(Va.freq.tab$CD4, Va.freq.tab$Treg), digits=2)), adj=0, cex=0.7)  ; title(main="Va CD4 vs Treg")
+lines(c(0,8),c(0,8))
+plot(Vb.freq.tab$CD4, Vb.freq.tab$Treg, pch=16, xlim=c(0,12), ylim=c(0,12), xlab="Vb in CD4", ylab="Vb in Treg"); text(0.5, 11, paste("r=", round(cor(Vb.freq.tab$CD4, Vb.freq.tab$Treg), digits=2)), adj=0, cex=0.7) ; title(main="Vb CD4 vs Treg")
+lines(c(0,12),c(0,12)) 
+plot(Va.freq.tab$CD8, Va.freq.tab$CD8aa, pch=16, xlim=c(0,8), ylim=c(0,8), xlab="Va in CD8", ylab="Va in CD8aa"); text(0.5, 7.5, paste("r=", round(cor(Va.freq.tab$CD8, Va.freq.tab$CD8aa), digits=2)), adj=0, cex=0.7)  ; title(main="Va CD8 vs CD8aa")
+lines(c(0,8),c(0,8))
+plot(Vb.freq.tab$CD8, Vb.freq.tab$CD8aa, pch=16, xlim=c(0,12), ylim=c(0,12), xlab="Vb in CD8", ylab="Vb in CD8aa"); text(0.5, 11, paste("r=", round(cor(Vb.freq.tab$CD8, Vb.freq.tab$CD8aa), digits=2)), adj=0, cex=0.7) ; title(main="Vb CD8 vs CD8aa")
+lines(c(0,12),c(0,12)) 
+
+par(fin=c(8,8))## labels on 4/8
+x_Va.freq.tab$CD4
+y_Va.freq.tab$CD8
+plot(x,y, pch=16, xlim=c(0,8), ylim=c(0,8), xlab="Va in CD4 (%)", ylab="Va in CD8 (%)"); lines(c(0, 8), c(0,8)); title(main="Va CD4 vs CD8")
+plot(x,y, pch=16, xlim=c(0,8), ylim=c(0,8), xlab="Va in CD4 (%)", ylab="Va in CD8 (%)"); lines(c(0, 8), c(0,8)); title(main="Va CD4 vs CD8")
+text(x+0.05,y, Va, adj=0, cex=0.6)
+
+x_Vb.freq.tab$CD4
+y_Vb.freq.tab$CD8
+plot(x,y, pch=16, xlim=c(0,12), ylim=c(0,12), xlab="Vb in CD4 (%)", ylab="Vb in CD8 (%)"); lines(c(0, 12), c(0,12)); title(main="Vb CD4 vs CD8")
+plot(x,y, pch=16, xlim=c(0,12), ylim=c(0,12), xlab="Vb in CD4 (%)", ylab="Vb in CD8 (%)"); lines(c(0, 12), c(0,12)); title(main="Vb CD4 vs CD8")
+text(x+0.1,y, Vb, adj=0, cex=0.6)
+
+par(fin=c(8,8))## labels on 4/Treg
+x_Va.freq.tab$CD4
+y_Va.freq.tab$Treg
+plot(x,y, pch=16, xlim=c(0,8), ylim=c(0,8), xlab="Va in CD4 (%)", ylab="Va in Treg (%)"); lines(c(0, 8), c(0,8)); title(main="Va CD4 vs Treg")
+plot(x,y, pch=16, xlim=c(0,8), ylim=c(0,8), xlab="Va in CD4 (%)", ylab="Va in Treg (%)"); lines(c(0, 8), c(0,8)); title(main="Va CD4 vs Treg")
+text(x+0.05,y, Va, adj=0, cex=0.6)
+
+x_Vb.freq.tab$CD4 ## CD4 s Treg
+y_Vb.freq.tab$Treg
+plot(x,y, pch=16, xlim=c(0,12), ylim=c(0,12), xlab="Vb in CD4 (%)", ylab="Vb in Treg (%)"); lines(c(0, 12), c(0,12)); title(main="Vb CD4 vs Treg")
+plot(x,y, pch=16, xlim=c(0,12), ylim=c(0,12), xlab="Vb in CD4 (%)", ylab="Vb in Treg (%)"); lines(c(0, 12), c(0,12)); title(main="Vb CD4 vs Treg")
+text(x+0.1,y, Vb, adj=0, cex=0.6)
+
+#with labels on 8 vs 8aa
+par(fin=c(8,8))
+x_Va.freq.tab$CD8
+y_Va.freq.tab$CD8aa
+plot(x,y, pch=16, xlim=c(0,8), ylim=c(0,8), xlab="Va in CD8 (%)", ylab="Va in CD8aa (%)"); lines(c(0, 8), c(0,8)); title(main="Va CD8 vs CD8aa")
+text(x+0.05,y, Va, adj=0, cex=0.6)
+
+x_Vb.freq.tab$CD8
+y_Vb.freq.tab$CD8aa
+plot(x,y, pch=16, xlim=c(0,12.5), ylim=c(0,12.5), xlab="Vb in CD8 (%)", ylab="Vb in CDaa8 (%)"); lines(c(0, 12.5), c(0,12.5)); title(main="Vb CD8 vs CD8aa")
+text(x+0.1,y, Vb, adj=0, cex=0.6)
+
+
+
+## Plot effects of 4/8 selection on Vb, relative to DPs
+par(fin=c(8,8))
+x_Vb.freq.tab$TotDPs
+y_Vb.freq.tab$CD4
+z4_Vb.freq.tab[,11]>1; z8_Vb.freq.tab[,11]<(-1)
+#plot(x,y, pch=16, xlab="Vb in TotDPs (%)", ylab="Vb in CD4 (%)"); lines(c(0, 8), c(0,8)); title(main="Vb in pre-selection DPs vs CD4")
+plot(x,y, pch=".", xlab="Vb in TotDPs (%)", ylab="Vb in CD4 (%)"); lines(c(0, 8), c(0,8)); title(main="Vb in pre-selection DPs vs CD4")
+points(x[z4], y[z4], col=2, pch=16); points(x[z8], y[z8], col=3, pch=16)
+text(x+0.1, y, Vb, adj=0, cex=0.6)
+
+x_Vb.freq.tab$TotDPs
+y_Vb.freq.tab$CD8
+#plot(x,y, pch=16, xlab="Vb in TotDPs (%)", ylab="Vb in CD8 (%)"); lines(c(0, 8), c(0,8)); title(main="Vb in pre-selection DPs vs CD8")
+plot(x,y, pch=".", xlab="Vb in TotDPs (%)", ylab="Vb in CD8 (%)"); lines(c(0, 8), c(0,8)); title(main="Vb in pre-selection DPs vs CD8")
+points(x[z4], y[z4], col=2, pch=16); points(x[z8], y[z8], col=3, pch=16)
+text(x+0.1, y, Vb, adj=0, cex=0.6)
+
+## Plot effects of beta-selection on Vb, unprod vs DP
+par(fin=c(8,8))
+x_Vb.freq.tab$unprod
+y_Vb.freq.tab$TotDPs
+plot(x,y, pch=".", xlab="Vb in unproductive joins (%)", xlim=c(0,12), ylim=c(0,12), ylab="Vb in DPs (%)"); lines(c(0, 12), c(0,12)); title(main="Vb in unproductive vs pre-selection DPs")
+text(x+0.1, y, Vb, adj=0, cex=0.6)
+
+
+	
+## Plot of Va and Vb frequencies in gdT
+x_Vb.freq.tab$TotDPs
+y_Vb.freq.tab$gdT
+plot(x,y, pch=".", xlab="Vb in DPs joins (%)", xlim=c(0,12), ylim=c(0,12), ylab="Vb in gdT (%)"); lines(c(0, 12), c(0,12)); title(main="Vb in DPs vs gdT")
+text(x+0.1, y, Vb, adj=0, cex=0.6)
+
+## unprod vs gdT
+x_Va.freq.tab$unprod
+y_Va.freq.tab$gdT
+plot(x,y, pch=".", xlab="Va in unprod joins (%)", xlim=c(0,8), ylim=c(0,8), ylab="Va in gdT (%)"); lines(c(0, 12), c(0,8)); title(main="Va in unprod vs gdT")
+text(x+0.1, y, Va, adj=0, cex=0.6)
+
+x_Vb.freq.tab$unprod
+y_Vb.freq.tab$gdT
+plot(x,y, pch=".", xlab="Vb in unprod joins (%)", xlim=c(0,14), ylim=c(0,14), ylab="Vb in gdT (%)"); lines(c(0, 14), c(0,14)); title(main="Vb in unprod vs gdT")
+text(x+0.1, y, Vb, adj=0, cex=0.6)
+
+
+
+
+
+	
+
+
+
+
+

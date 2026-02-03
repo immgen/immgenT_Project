@@ -1,0 +1,124 @@
+#14. Suppression by non-productive rearrangement
+#Noticed by chance, following up on allelic inclusion preferences
+#that a non-productive Vb strongly reduced the same Vb in the productive allele
+
+vb.npppair.mat_matrix(0, length(Vb), length(Vb)) 
+colnames(vb.npppair.mat)_rownames(vb.npppair.mat)_Vb
+n_mtch_rep(0, length(Vb))
+
+w_datntr[datntr$beta2.functionality!="productive" & datntr$beta2.vgene!="",]		#work from all the cells with a non productive beta2
+
+for ( i in 1:length(Vb)) { x_w$beta2.vgene==Vb[i]
+	n[i]_sum(x)
+	for ( j in 1:length(Vb)) { y_w$beta.vgene[x]==Vb[j]
+		vb.npppair.mat[i,j]_round(100*sum(y)/sum(x), digits=1)
+	}}
+	for (i in 1:length(Vb)) mtch[i]_vb.npppair.mat[i,i]
+	pct_round(100*n/sum(n),digits=1)
+#p.value on the lower frequenies of matching in unproductive and productive, paired t.test on the observed "self" pairing pct vs the expected (colMeans)
+testb_t.test(mtch, colMeans(	vb.npppair.mat), paired=T)
+	
+vb.npppair.mat_data.frame(n, pct, vb.npppair.mat, stringsAsFactors=F)
+
+
+par(fin=c(8,8))
+image(as.matrix(vb.npppair.mat[,-(1:2)]), axes=FALSE)
+text(0, 1:length(Vb), Vb, adj=1, cex=0.7)
+text(1:length(Vb), 0, Vb, adj=1, cex=0.7, crt=90)
+
+#calculate a normalized version of this (divided by the mean usage of each TRBV)
+vb.npppair.mat.norm_as.matrix(vb.npppair.mat[,-c(1:2)])
+for (i in 1:length(Vb)) vb.npppair.mat.norm[,i]_vb.npppair.mat.norm[,i]/colMeans(vb.npppair.mat.norm)[i]
+vb.npppair.mat.norm_round(log2(vb.npppair.mat.norm), digits=2)
+image(vb.npppair.mat.norm, axes=F)
+
+
+
+###Same, alpha ? Also present ####DEV CHECK ALPHA CODE, NORM SEEMS OFF
+va.npppair.mat_matrix(0, length(Va), length(Va)) 
+colnames(va.npppair.mat)_rownames(va.npppair.mat)_Va
+n_mtch_rep(0, length(Va))
+
+w_datntr[datntr$alpha2.functionality!="productive" & datntr$alpha2.vgene!="",]		#work from all the cells with a non productive alpha2
+for ( i in 1:length(Va)) { x_w$alpha2.vgene==Va[i]
+	n[i]_sum(x)
+	for ( j in 1:length(Va)) { y_w$alpha.vgene[x]==Va[j]
+		va.npppair.mat[i,j]_round(100*sum(y)/sum(x), digits=1)
+	}}
+	pct_round(100*n/sum(n),digits=1)
+	for (i in 1:length(Vb)) mtch[i]_va.npppair.mat[i,i]
+	testa_t.test(mtch, colMeans(va.npppair.mat), paired=T)	
+	
+va.npppair.mat_data.frame(n, pct, va.npppair.mat, stringsAsFactors=F)
+
+par(fin=c(8,8))
+image(as.matrix(va.npppair.mat[,-(1:2)]), axes=FALSE)
+text(0, 1:length(Va), Va, adj=1, cex=0.7)
+text(1:length(Va), 0, Va, adj=1, cex=0.7, crt=90)
+
+#trim to take only the alphas with non-productive N>1000
+z_va.npppair.mat$n>800 & (colMeans(va.npppair.mat))[-(1:2)]>1
+va.npppair.mat_va.npppair.mat[z,c(1,2,(3:ncol(va.npppair.mat))[z])]
+
+#calculate a normalized version of this (divided by the mean usage of each TRAV)
+va.npppair.mat.norm_as.matrix(va.npppair.mat[,-c(1:2)]) +0.02
+va.npppair.mat.norm_t(t(va.npppair.mat.norm)/colMeans(va.npppair.mat.norm))
+va.npppair.mat.norm_round(log2(va.npppair.mat.norm), digits=2)
+
+## test in thymic DPs
+vb.npppair.mat.dp7172_matrix(0, length(Vb), length(Vb)) 
+colnames(vb.npppair.mat.dp7172)_rownames(vb.npppair.mat.dp7172)_Vb
+n_rep(0, length(Vb))
+w_datntr[datntr$beta2.functionality!="productive" & datntr$beta2.vgene!="" & is.element(datntr$IGT, c("IGT71", "IGT72")),]		#thymic DPs, d3 and adult
+for ( i in 1:length(Vb)) { x_w$beta2.vgene==Vb[i]
+	n[i]_sum(x)
+	for ( j in 1:length(Vb)) { y_w$beta.vgene[x]==Vb[j]
+		vb.npppair.mat.dp7172[i,j]_round(100*sum(y)/sum(x), digits=1)
+	}}
+	pct_round(100*n/sum(n),digits=1)
+vb.npppair.mat.dp7172_data.frame(n, pct, vb.npppair.mat.dp7172, stringsAsFactors=F)
+# in d3 DPs only
+vb.npppair.mat.dp7172.d3_matrix(0, length(Vb), length(Vb)) 
+colnames(vb.npppair.mat.dp7172.d3)_rownames(vb.npppair.mat.dp7172.d3)_Vb
+n_rep(0, length(Vb))
+w_datntr[datntr$beta2.functionality!="productive" & datntr$beta2.vgene!="" & is.element(datntr$IGT, c("IGT71", "IGT72")) & is.element(datntr$sample.name, c("3d DP Thymocytes F", "3d DP Thymocytes M")),]		#thymic DPs, d3 
+for ( i in 1:length(Vb)) { x_w$beta2.vgene==Vb[i]
+	n[i]_sum(x)
+	for ( j in 1:length(Vb)) { y_w$beta.vgene[x]==Vb[j]
+		vb.npppair.mat.dp7172.d3[i,j]_round(100*sum(y)/sum(x), digits=1)
+	}}
+	pct_round(100*n/sum(n),digits=1)
+vb.npppair.mat.dp7172.d3_data.frame(n, pct, vb.npppair.mat.dp7172.d3, stringsAsFactors=F)
+
+## Frequency of non productive rearrangements
+#Seems pretty different from mature/selected
+#all cells with p and np pairs
+par(fin=c(8,8))
+plot(vb.npppair.mat$pct, colMeans(vb.npppair.mat[,-(1:2)]), pch=".", xlab="Vb frequency in non-productive", ylab="Vb frequency in matched productive")
+text(vb.npppair.mat$pct+0.1, colMeans(vb.npppair.mat[,-(1:2)]), Vb, adj=0, cex=0.7)
+#np vs overall productive
+y_rep(0, length(Vb))
+for (i in 1:length(Vb)) y[i]_sum(datntr$beta.vgene==Vb[i])
+	y_round(100*y/sum(y), digits=1)
+plot(vb.npppair.mat$pct, y, pch=".", xlab="Vb frequency in non-productive", ylab="Vb frequency in productive TCRs overall")
+text(vb.npppair.mat$pct+0.1, y, Vb, adj=0, cex=0.7)
+# in DPs
+y_rep(0, length(Vb))
+for (i in 1:length(Vb)) y[i]_sum(datntr$beta.vgene==Vb[i] & is.element(datntr$IGT, c("IGT71", "IGT72")) )
+	y_round(100*y/sum(y), digits=1)
+plot(vb.npppair.mat.dp7172$pct, y, pch=".", xlab="Vb frequency in DP non-productive", ylab="Vb frequency in DP productive", xlim=c(0,14), ylim=c(0,14))
+text(vb.npppair.mat.dp7172$pct+0.1, y, Vb, adj=0, cex=0.7)
+
+	
+	
+	
+	
+	
+
+
+
+
+
+
+
+

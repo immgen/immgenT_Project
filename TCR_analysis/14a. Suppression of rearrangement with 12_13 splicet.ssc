@@ -1,0 +1,54 @@
+#14a. Suppression by non-productive rearrangement
+#Like 14, but incorporate the interV splicing (12-2 onto 13-2) which may explain
+
+Vbsp_c(Vb[1:3], "TRBV12-2-13-2", Vb[4:21]) #Vbsp vector with an extra
+
+##create datntrsp, where the spliced hybrids are named as such (only corect when beta or beta2 are 13-2
+datntrsp_datntr[,1:35]
+x_Splicing.TRBV12.2TRBV13.2.CellIDs
+z_is.element(datntrsp$IGT.cellID, x$IGT.cellID[x$Splicing.L.PART1.TRBV12.2...V.EXON.TRBV13.2=="beta"])
+datntrsp$beta.vgene[z]_"TRBV12-2-13-2"
+z_is.element(datntrsp$IGT.cellID, x$IGT.cellID[x$Splicing.L.PART1.TRBV12.2...V.EXON.TRBV13.2=="beta2"])
+datntrsp$beta2.vgene[z]_"TRBV12-2-13-2"
+
+vb.npppairsp.mat_matrix(0, length(Vbsp), length(Vbsp)) 
+colnames(vb.npppairsp.mat)_rownames(vb.npppairsp.mat)_Vbsp
+n_rep(0, length(Vbsp))
+
+w_datntrsp[datntrsp$beta2.functionality!="productive" & datntrsp$beta2.vgene!="",]		#work from all the cells with a non productive beta2
+
+for ( i in 1:length(Vbsp)) { x_w$beta2.vgene==Vbsp[i]
+	n[i]_sum(x)
+	for ( j in 1:length(Vbsp)) { y_w$beta.vgene[x]==Vbsp[j]
+		vb.npppairsp.mat[i,j]_round(100*sum(y)/sum(x), digits=1)
+	}}
+	pct_round(100*n/sum(n),digits=1)
+vb.npppairsp.mat_data.frame(n, pct, vb.npppairsp.mat, stringsAsFactors=F)
+
+par(fin=c(8,8))
+image(as.matrix(vb.npppairsp.mat[,-(1:2)]), axes=FALSE)
+text(0, 1:length(Vbsp), Vbsp, adj=1, cex=0.7)
+text(1:length(Vbsp), 0, Vbsp, adj=1, cex=0.7, crt=90)
+
+#calculate a normalized version of this (divided by the mean usage of each TRBV)
+vb.npppairsp.mat.norm_as.matrix(vb.npppairsp.mat[,-c(1:2)])
+for (i in 1:length(Vbsp)) vb.npppairsp.mat.norm[,i]_vb.npppairsp.mat.norm[,i]/colMeans(vb.npppairsp.mat.norm)[i]
+vb.npppairsp.mat.norm_round(log2(vb.npppairsp.mat.norm), digits=2)
+image(vb.npppairsp.mat.norm, axes=F)
+
+
+
+
+	
+	
+	
+	
+	
+
+
+
+
+
+
+
+
