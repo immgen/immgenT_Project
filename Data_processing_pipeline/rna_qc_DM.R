@@ -35,7 +35,7 @@ message(sprintf("Cells outliers_nGenes with > %s genes: %s of %s total cells", t
 
 message("Flag outliers_deadcells with percent_mito > 20%")
 so$percent_mito = Matrix::colSums(so@assays$RNA@counts[rownames(so) %in% rownames(so)[grep("^MT\\-|^Mt\\-|^mt\\-", rownames(so))], ]) / Matrix::colSums(so@assays$RNA@counts) *100
-so$outliers_deadcells = so$percent_mito > 20
+so$outliers_deadcells = so$percent_mito > th_percent_mito
 message(sprintf("Flag outliers_deadcells with percent_mito > %s percent: %s / %s total cells", th_percent_mito, length(which(so$outliers_deadcells ==  T)), ncol(so) ))
 
 message("Plot QC")
