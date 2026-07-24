@@ -1,6 +1,6 @@
 # ImmGenT-CD8 analysis companion
 
-This repository is the complete, ready-to-run companion code and data package for the **ImmGenT-CD8** CITE-seq analysis (CD8 T-cell atlas). It includes the curated MuData object, supporting matrices and gene lists, and a single Jupyter notebook that reproduces the main figures and Extended Data figures.
+This repository is the complete, ready-to-run companion code and data package for the **ImmGenT-CD8** CITE-seq analysis (CD8 T-cell atlas). It includes the curated MuData object, supporting matrices and gene lists, and three Jupyter notebooks that reproduce the main figures and Extended Data figures.
 
 ## Contents
 
@@ -17,7 +17,9 @@ immgenT-CD8/
 │   ├── TRM_Crowl.txt
 │   ├── TRM_Mackay.txt
 │   └── TRM_Milner.txt
-├── immgenT-CD8.ipynb         # Full analysis + figure notebook
+├── immgenT-CD8_1.ipynb       # Analysis notebook (part 1)
+├── immgenT-CD8_2.ipynb       # Analysis notebook (part 2)
+├── immgenT-CD8_3.ipynb       # Analysis notebook (part 3)
 ├── environment.yml           # Conda environment specification
 ├── README.md
 └── .gitignore
@@ -46,8 +48,8 @@ Key packages include `muon`, `scanpy`, `gseapy`, `pandas`, `numpy`, `scipy`, `ma
 ## How to run
 
 1. Activate the environment (`conda activate immgenT-CD8`).
-2. From this directory (project root), open `immgenT-CD8.ipynb` with any Jupyter-compatible frontend that uses the active conda environment (for example VS Code / Cursor, or JupyterLab if installed separately).
-3. Select the `immgenT-CD8` kernel and run cells top to bottom. The notebook itself contains detailed instructions, figure annotations, and analysis notes.
+2. From this directory (project root), open the notebooks with any Jupyter-compatible frontend that uses the active conda environment (for example VS Code / Cursor, or JupyterLab if installed separately).
+3. Select the `immgenT-CD8` kernel and run the notebooks in order: `immgenT-CD8_1.ipynb` → `immgenT-CD8_2.ipynb` → `immgenT-CD8_3.ipynb`. Run cells top to bottom within each notebook. The notebooks themselves contain detailed instructions, figure annotations, and analysis notes.
 
 To register the kernel for Jupyter frontends:
 
