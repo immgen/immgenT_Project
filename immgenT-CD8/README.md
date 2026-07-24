@@ -9,7 +9,7 @@ immgenT-CD8/
 ├── data/                     # All required input files
 │   ├── immgenT-CD8.h5mu      # Curated MuData (RNA + ADT)
 │   ├── immgenT-CD8.xlsx      # Sample-level metadata / proportions
-│   ├── cell_factor_matrix.txt
+│   ├── cell_factor_matrix.txt.gz
 │   ├── gene_factor_matrix.txt
 │   ├── ttlist_OneVsAll.txt
 │   ├── CD5hi_Fulton.txt
