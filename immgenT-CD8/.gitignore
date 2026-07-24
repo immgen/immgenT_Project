@@ -37,6 +37,7 @@ cluster_level_correlations/
 *_results.csv
 *_selected_samples.csv
 exhaustion_min*_markers_positive.tsv
+Extended Data Table *.csv
 
 # Large intermediate / temp
 *.tmp
