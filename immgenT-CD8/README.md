@@ -2,6 +2,11 @@
 
 This repository is the complete, ready-to-run companion code and data package for the **ImmGenT-CD8** CITE-seq analysis (CD8 T-cell atlas). It includes the curated MuData object, supporting matrices and gene lists, and three Jupyter notebooks that reproduce the main figures and Extended Data figures.
 
+## Data availability
+
+The complete data package is available here on GitHub and on Zenodo:  
+**https://zenodo.org/records/21839963/files/immgenT-CD8.zip**
+
 ## Contents
 
 ```
