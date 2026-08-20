@@ -1,0 +1,61 @@
+# Conda environment for the combined scRNA-seq QC pipeline (filter_empty_droplets.R onward).
+#
+# This covers the R side only. Cell Ranger, bcl2fastq, and IMGT/HighV-QUEST
+# are NOT installable via conda/pip - see the notes at the bottom.
+#
+# Build with:
+#   conda env create -f environment.yml
+#   conda activate immgent-qc
+#
+# Seurat is pinned to a 4.x release on purpose: several scripts in this
+# pipeline access assay data with the Seurat v4 slot syntax
+# (so@assays$RNA@counts, so@assays$ADT@data, etc.), which Seurat v5's default
+# Assay5 object does not support the same way. Do not upgrade to Seurat 5.x
+# without also updating those slot accesses.
+name: immgent-qc
+channels:
+  - conda-forge
+  - bioconda
+dependencies:
+  - r-base=4.1.2
+  - r-seurat=4.4.0
+  - r-ggplot2
+  - r-gridextra
+  - r-dplyr
+  - r-rcolorbrewer
+  - r-reshape2
+  - r-fitdistrplus
+  - r-ggextra
+  - r-scales
+  - r-ggrastr
+  - r-gatepoints
+  - r-rafalib
+  - r-inflection
+  - r-seqinr
+  - r-matrix
+  - bioconductor-dropletutils
+  - bioconductor-singler
+  - bioconductor-celldex
+  - bioconductor-ucell
+  - bioconductor-singlecellexperiment
+  - bioconductor-biocgenerics
+  - sra-tools          # only needed for the GSE311344 use-case (downloading FASTQs from SRA)
+
+# ---------------------------------------------------------------------------
+# NOT covered by this environment (install separately, see README.md):
+#
+#   Cell Ranger (>= 7.x; pipeline was written against 8.0.1)
+#     -> proprietary 10x Genomics software, requires a free license/download
+#        from https://www.10xgenomics.com/support/software/cell-ranger/downloads
+#
+#   bcl2fastq2 (>= 2.20)
+#     -> proprietary Illumina software, requires a free registration/download
+#        from Illumina's support site
+#
+#   IMGT/HighV-QUEST
+#     -> web tool only (https://www.imgt.org/HighV-QUEST/), no local install
+#
+#   Cell Ranger transcriptome + VDJ references
+#     -> download separately from 10x Genomics (or build your own with
+#        `cellranger mkref` / `cellranger mkvdjref`)
+# ---------------------------------------------------------------------------

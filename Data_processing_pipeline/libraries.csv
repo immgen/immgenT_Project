@@ -1,0 +1,3 @@
+fastqs,sample,library_type
+path/to/your/fastqs/,GEX,Gene Expression
+path/to/your/fastqs/,FBC,Antibody Capture

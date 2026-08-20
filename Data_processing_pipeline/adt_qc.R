@@ -1,13 +1,13 @@
 ### David Zemmour
 # R/4.0.1
-# usage: Rscript adt_qc.R [path to seuratobject_withHTOADT_singlet_postRNAfiltering_withSingleR.Rds] [path_to_metadata_adt] [th_nCount_ADT_lo] [n_isotype_ctrl_signal_to_flag]
+# usage: Rscript adt_qc.R [path to seuratobject_singlet_postRNAfiltering.Rds] [path_to_metadata_adt] [th_nCount_ADT_lo] [n_isotype_ctrl_signal_to_flag]
 
 args = commandArgs(TRUE)
 path_to_so = args[1]
 path_to_metadata_adt = args[2]
 th_nCount_ADT_lo = as.numeric(args[3])
 n_isotype_ctrl_signal_to_flag = as.numeric(args[4])
-#path_to_so = "seuratobject_withHTOADT_singlet_postRNAfiltering_withSingleR.Rds"
+#path_to_so = "seuratobject_singlet_postRNAfiltering.Rds"
 #path_to_metadata_adt = "adt_hash_seq_file_April2021_panel_metadata.csv"#"adt_hash_seq_file_feb20panel.csv"
 #th_nCount_ADT_lo = 500
 #n_isotype_ctrl_signal_to_flag = 2
@@ -169,6 +169,9 @@ Seurat_adt_umap_clustering = function(seurat_object = so, VariableFeatures =  ro
 ##Pipeline
 message("Loading the data...")
 so = readRDS(path_to_so)
+# No HTO flag is passed to this script, so detect it directly from the
+# object - nCount_HTO only exists when an HTO assay was actually created.
+HTO_present = "HTO" %in% Assays(so)
 
 tmp = sort(log10(rowSums(so@assays$ADT@counts)), decreasing = T)
 tmp = tmp[!is.na(tmp) & !is.infinite(tmp)]
@@ -233,10 +236,6 @@ png("adt_qc_plot3_UMAP_clustering_prefiltering-1.png",width=1600, height=1600)
 #print(LabelClusters(p, id = "ADT_snn_res.1", size = 5))
 #print(p + facet_wrap(~HTO_classification))
 
-#p = ggplot(tmp) + geom_point(aes(dim1, dim2, color = singler_immgen), size = I(1), alpha = I(1)) + scale_color_manual(values = mypal) + theme_bw() + theme(axis.text.x  = element_text(size=15), axis.text.y  = element_text(size=15), legend.text=element_text(size=20), axis.title.x = element_text(size=20) , axis.title.y = element_text(size=20), legend.title = element_blank()) + ggtitle(sprintf("%s, %s",reduction.name.umap, "singler_immgen"))
-#LabelClusters(p, id = "ADT_snn_res.1", size = 5)
-#print(p + facet_wrap(~HTO_classification))
-
 message(sprintf("Flag cells with ADT coverage less than %s", th_nCount_ADT_lo))
 so$lowCountADT = so$nCount_ADT < th_nCount_ADT_lo
 message(sprintf("Cells with < %s nCount_ADT: %s of %s total cells", th_nCount_ADT_lo, length(which(so$lowCountADT)), ncol(so)))
@@ -251,7 +250,6 @@ p = ggplot(tmp) + geom_point(aes(nCount_RNA, nCount_ADT, color = HTO_classificat
   theme_bw()
 #print(p)
 print(p + facet_wrap(~HTO_classification))
-#print(p + facet_wrap(~singler_immgen))
 dev.off()
 
 png("adt_qc_plot3_UMAP_clustering_prefiltering-2.png",width=1600, height=1600)
@@ -289,19 +287,18 @@ p = ggplot(tmp) + geom_point_rast(aes(dim1, dim2), size = I(1), alpha = I(0.5), 
   geom_point(data = tmp[tmp$gate == T, ], aes(dim1, dim2), color = "red", size = 2) +
   theme_bw() + theme(axis.text.x  = element_text(size=15), axis.text.y  = element_text(size=15), legend.text=element_text(size=20), axis.title.x = element_text(size=20) , axis.title.y = element_text(size=20), legend.title = element_blank()) + ggtitle("Gated cells")
 print(p)
-p = ggplot(tmp) + geom_point(aes(dim1, dim2, color = singler_immgen), size = I(1), alpha = I(0.5)) +
-  scale_color_manual(values = mypal) +
-  theme_bw() + theme(axis.text.x  = element_text(size=15), axis.text.y  = element_text(size=15), legend.text=element_text(size=50), axis.title.x = element_text(size=20) , axis.title.y = element_text(size=20), legend.title = element_blank()) + ggtitle("singler_immgen")
-print(LabelClusters(p, id = "singler_immgen", size = 20))
 dev.off()
 
 ncells_prefiltering = ncol(so)
 tmp = data.frame(so@meta.data)
-tmp = tmp %>% group_by(HTO_classification) %>% summarize(ncells = n(),  mean_nCount_RNA = round(mean(nCount_RNA)), mean_nFeature_RNA = round(mean(nFeature_RNA)), mean_nCount_HTO = round(mean(nCount_HTO)), mean_nCount_ADT = round(mean(nCount_ADT)),  ncells_outliers_lowCountADT = length(which(lowCountADT)), ncells_outliers_autofluorescence = length(which(autofluo))) %>% as.data.frame()
-write.table(x = tmp, file = "seuratobject_withHTOADT_singlet_postRNAfiltering_withSingleR_preADTfiltering.txt", quote = F, sep = "\t", row.names = F, col.names = T)
+if (HTO_present) {
+  tmp = tmp %>% group_by(HTO_classification) %>% summarize(ncells = n(),  mean_nCount_RNA = round(mean(nCount_RNA)), mean_nFeature_RNA = round(mean(nFeature_RNA)), mean_nCount_HTO = round(mean(nCount_HTO)), mean_nCount_ADT = round(mean(nCount_ADT)),  ncells_outliers_lowCountADT = length(which(lowCountADT)), ncells_outliers_autofluorescence = length(which(autofluo))) %>% as.data.frame()
+} else {
+  tmp = tmp %>% group_by(HTO_classification) %>% summarize(ncells = n(),  mean_nCount_RNA = round(mean(nCount_RNA)), mean_nFeature_RNA = round(mean(nFeature_RNA)), mean_nCount_ADT = round(mean(nCount_ADT)),  ncells_outliers_lowCountADT = length(which(lowCountADT)), ncells_outliers_autofluorescence = length(which(autofluo))) %>% as.data.frame()
+}
+write.table(x = tmp, file = "seuratobject_singlet_postRNAfiltering_preADTfiltering.txt", quote = F, sep = "\t", row.names = F, col.names = T)
 
-so@assays$qc_stats_4_preADTfiltering = tmp
-saveRDS(so, file = "seuratobject_withHTOADT_singlet_postRNAfiltering_withSingleR_preADTfiltering.Rds")
+saveRDS(so, file = "seuratobject_singlet_postRNAfiltering_preADTfiltering.Rds")
 
 ##Postfiltering analysis
 
@@ -350,19 +347,18 @@ tmp = data.frame(so@meta.data, dim1 = so@reductions[[reduction.name.umap]]@cell.
 p = ggplot(tmp) + geom_point(aes(dim1, dim2, color = ADT_snn_res.1), size = I(1), alpha = I(1)) + scale_color_manual(values = mypal) + theme_bw() + theme(axis.text.x  = element_text(size=15), axis.text.y  = element_text(size=15), legend.text=element_text(size=20), axis.title.x = element_text(size=20) , axis.title.y = element_text(size=20), legend.title = element_blank()) + ggtitle(sprintf("%s, %s",reduction.name.umap, "ADT_snn_res.1"))
 LabelClusters(p, id = "ADT_snn_res.1", size = 5)
 print(p + facet_wrap(~HTO_classification))
-
-p = ggplot(tmp) + geom_point(aes(dim1, dim2, color = singler_immgen), size = I(1), alpha = I(1)) + scale_color_manual(values = mypal) + theme_bw() + theme(axis.text.x  = element_text(size=15), axis.text.y  = element_text(size=15), legend.text=element_text(size=20), axis.title.x = element_text(size=20) , axis.title.y = element_text(size=20), legend.title = element_blank()) + ggtitle(sprintf("%s, %s",reduction.name.umap, "singler_immgen"))
-LabelClusters(p, id = "singler_immgen", size = 5)
-print(p + facet_wrap(~HTO_classification))
 dev.off()
 
 ncells_postfiltering = ncol(so)
 tmp = data.frame(so@meta.data)
-tmp = tmp %>% group_by(HTO_classification) %>% summarize(ncells = n(),  mean_nCount_RNA = round(mean(nCount_RNA)), mean_nFeature_RNA = round(mean(nFeature_RNA)), mean_nCount_HTO = round(mean(nCount_HTO)), mean_nCount_ADT = round(mean(nCount_ADT))) %>% as.data.frame()
-write.table(x = tmp, file = "seuratobject_withHTOADT_singlet_postRNAfiltering_withSingleR_postADTfiltering.txt", quote = F, sep = "\t", row.names = F, col.names = T)
+if (HTO_present) {
+  tmp = tmp %>% group_by(HTO_classification) %>% summarize(ncells = n(),  mean_nCount_RNA = round(mean(nCount_RNA)), mean_nFeature_RNA = round(mean(nFeature_RNA)), mean_nCount_HTO = round(mean(nCount_HTO)), mean_nCount_ADT = round(mean(nCount_ADT))) %>% as.data.frame()
+} else {
+  tmp = tmp %>% group_by(HTO_classification) %>% summarize(ncells = n(),  mean_nCount_RNA = round(mean(nCount_RNA)), mean_nFeature_RNA = round(mean(nFeature_RNA)), mean_nCount_ADT = round(mean(nCount_ADT))) %>% as.data.frame()
+}
+write.table(x = tmp, file = "seuratobject_singlet_postRNAfiltering_postADTfiltering.txt", quote = F, sep = "\t", row.names = F, col.names = T)
 
-so@assays$qc_stats_4_postADTfiltering = tmp
-saveRDS(so, file = "seuratobject_withHTOADT_singlet_postRNAfiltering_withSingleR_postADTfiltering.Rds")
+saveRDS(so, file = "seuratobject_singlet_postRNAfiltering_postADTfiltering.Rds")
 
 #DotPlot
 tmp = data.frame(t(as.matrix(so@assays$ADT@data)), cluster = so$ADT_snn_res.1)
@@ -373,9 +369,4 @@ dev.off()
 tmp = data.frame(t(as.matrix(so@assays$ADT@data)), cluster = so$RNA_snn_res.1)
 pdf(file = "adt_qc_plot8_Dotplot_ADT_RNAclusters.pdf", 25, 7, useDingbats=FALSE)
 DotPlotHeatmap(data = tmp, title = "RNA_snn_res.1")
-dev.off()
-
-tmp = data.frame(t(as.matrix(so@assays$ADT@data)), cluster = so$singler_immgen)
-pdf(file = "adt_qc_plot9_Dotplot_ADT_SingleRImmgen.pdf", 25, 7, useDingbats=FALSE)
-DotPlotHeatmap(data = tmp, title = "singler_immgen")
 dev.off()
