@@ -221,6 +221,7 @@ if (Method == 'Manual') {
 ## Diagnostic scatter plot: cells vs. empty droplets, RNA UMIs vs FBC UMIs (or RNA UMIs vs rank if no FBC)
 
 data1 <- Read10X(data.dir = path_to_data)
+data1_rna <- if (is.list(data1)) data1$`Gene Expression` else data1
 
 if (FBC) {
 
@@ -265,7 +266,7 @@ if (FBC) {
 
 } else {
 
-  umicount_gene <- as.matrix(colSums(data1))
+  umicount_gene <- as.matrix(colSums(data1_rna))
   data <- as.data.frame(umicount_gene)
   colnames(data) <- "V1"
   data$rank <- rank(-data$V1)
