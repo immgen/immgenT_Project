@@ -1,0 +1,4866 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+
+<title>Treg_Workflow.knit.md</title>
+
+<script src="site_libs/header-attrs-2.31/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/jqueryui-1.13.2/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+
+<link rel="icon" href="https://github.com/workflowr/workflowr-assets/raw/main/img/reproducible.png">
+<!-- Add a small amount of space between sections. -->
+<style type="text/css">
+div.section {
+  padding-top: 12px;
+}
+</style>
+
+
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark the anchor link active (and if it's in a dropdown, also mark that active)
+  var dropdown = menuAnchor.closest('li.dropdown');
+  if (window.bootstrap) { // Bootstrap 4+
+    menuAnchor.addClass('active');
+    dropdown.find('> .dropdown-toggle').addClass('active');
+  } else { // Bootstrap 3
+    menuAnchor.parent().addClass('active');
+    dropdown.addClass('active');
+  }
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "\e259";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "\e258";
+  font-family: 'Glyphicons Halflings';
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">treg_github</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+<li>
+  <a href="about.html">About</a>
+</li>
+<li>
+  <a href="license.html">License</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+
+
+
+</div>
+
+
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-report" data-toggle="collapse" data-target="#workflowr-report">
+<span class="glyphicon glyphicon-list" aria-hidden="true"></span>
+workflowr <span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span>
+</button>
+</p>
+<div id="workflowr-report" class="collapse">
+<ul class="nav nav-tabs">
+<li class="active">
+<a data-toggle="tab" href="#summary">Summary</a>
+</li>
+<li>
+<a data-toggle="tab" href="#checks"> Checks <span
+class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
+</a>
+</li>
+<li>
+<a data-toggle="tab" href="#versions">Past versions</a>
+</li>
+</ul>
+<div class="tab-content">
+<div id="summary" class="tab-pane fade in active">
+<p>
+<strong>Last updated:</strong> 2026-08-31
+</p>
+<p>
+<strong>Checks:</strong> <span
+class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7
+<span class="glyphicon glyphicon-exclamation-sign text-danger"
+aria-hidden="true"></span> 0
+</p>
+<p>
+<strong>Knit directory:</strong> <code>treg_github/</code> <span
+class="glyphicon glyphicon-question-sign" aria-hidden="true"
+title="This is the local directory in which the code in this file was executed.">
+</span>
+</p>
+<p>
+This reproducible <a href="https://rmarkdown.rstudio.com">R Markdown</a>
+analysis was created with <a
+  href="https://github.com/workflowr/workflowr">workflowr</a> (version
+1.7.2). The <em>Checks</em> tab describes the reproducibility checks
+that were applied when the results were created. The <em>Past
+versions</em> tab lists the development history.
+</p>
+<hr>
+</div>
+<div id="checks" class="tab-pane fade">
+<div id="workflowr-checks" class="panel-group">
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguptodate">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>R Markdown file:</strong> up-to-date
+</a>
+</p>
+</div>
+<div id="strongRMarkdownfilestronguptodate"
+class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great! Since the R Markdown file has been committed to the Git
+repository, you know the exact version of the code that produced these
+results.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongEnvironmentstrongempty">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Environment:</strong> empty </a>
+</p>
+</div>
+<div id="strongEnvironmentstrongempty" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! The global environment was empty. Objects defined in the
+global environment can affect the analysis in your R Markdown file in
+unknown ways. For reproduciblity it’s best to always run the code in an
+empty environment.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSeedstrongcodesetseed20260831code">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Seed:</strong>
+<code>set.seed(20260831)</code> </a>
+</p>
+</div>
+<div id="strongSeedstrongcodesetseed20260831code"
+class="panel-collapse collapse">
+<div class="panel-body">
+<p>The command <code>set.seed(20260831)</code> was run prior to running
+the code in the R Markdown file. Setting a seed ensures that any results
+that rely on randomness, e.g. subsampling or permutations, are
+reproducible.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSessioninformationstrongrecorded">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Session information:</strong>
+recorded </a>
+</p>
+</div>
+<div id="strongSessioninformationstrongrecorded"
+class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Recording the operating system, R version, and package
+versions is critical for reproducibility.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongCachestrongnone">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Cache:</strong> none </a>
+</p>
+</div>
+<div id="strongCachestrongnone" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Nice! There were no cached chunks for this analysis, so you can be
+confident that you successfully produced the results during this
+run.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongFilepathsstrongrelative">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>File paths:</strong> relative </a>
+</p>
+</div>
+<div id="strongFilepathsstrongrelative" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Using relative paths to the files within your workflowr
+project makes it easier to run your code on other machines.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomnityamehrtreggithubtree630a2f5b2c762cbeb496cc11bc6325bd2238410etargetblank630a2f5a">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Repository version:</strong>
+<a href="https://github.com/nityamehr/treg_github/tree/630a2f5b2c762cbeb496cc11bc6325bd2238410e" target="_blank">630a2f5</a>
+</a>
+</p>
+</div>
+<div
+id="strongRepositoryversionstrongahrefhttpsgithubcomnityamehrtreggithubtree630a2f5b2c762cbeb496cc11bc6325bd2238410etargetblank630a2f5a"
+class="panel-collapse collapse">
+<div class="panel-body">
+<p>
+Great! You are using Git for version control. Tracking code development
+and connecting the code version to the results is critical for
+reproducibility.
+</p>
+<p>
+The results in this page were generated with repository version
+<a href="https://github.com/nityamehr/treg_github/tree/630a2f5b2c762cbeb496cc11bc6325bd2238410e" target="_blank">630a2f5</a>.
+See the <em>Past versions</em> tab to see a history of the changes made
+to the R Markdown and HTML files.
+</p>
+<p>
+Note that you need to be careful to ensure that all relevant files for
+the analysis have been committed to Git prior to generating the results
+(you can use <code>wflow_publish</code> or
+<code>wflow_git_commit</code>). workflowr only checks the R Markdown
+file, but you know if there are other scripts or data files that it
+depends on. Below is the status of the Git repository when the results
+were generated:
+</p>
+<pre><code>
+Ignored files:
+    Ignored:    .DS_Store
+    Ignored:    .Rproj.user/
+
+Untracked files:
+    Untracked:  mde_centroids.csv
+    Untracked:  ptregs_mapped.pdf
+    Untracked:  treg_mde.csv
+
+</code></pre>
+<p>
+Note that any generated files, e.g. HTML, png, CSS, etc., are not
+included in this status report because it is ok for generated content to
+have uncommitted changes.
+</p>
+</div>
+</div>
+</div>
+</div>
+<hr>
+</div>
+<div id="versions" class="tab-pane fade">
+<p>
+These are the previous versions of the repository in which changes were
+made to the R Markdown (<code>analysis/Treg_Workflow.Rmd</code>) and
+HTML (<code>docs/Treg_Workflow.html</code>) files. If you’ve configured
+a remote Git repository (see <code>?wflow_git_remote</code>), click on
+the hyperlinks in the table below to view the files as they were in that
+past version.
+</p>
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+File
+</th>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+<th>
+Message
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/nityamehr/treg_github/blob/630a2f5b2c762cbeb496cc11bc6325bd2238410e/analysis/Treg_Workflow.Rmd" target="_blank">630a2f5</a>
+</td>
+<td>
+Nitya Mehrotra
+</td>
+<td>
+2026-08-31
+</td>
+<td>
+Publish Treg workflow
+</td>
+</tr>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/nityamehr/treg_github/blob/f3a2095f8fd8a2486d745c0a951bde63108a4b2e/analysis/Treg_Workflow.Rmd" target="_blank">f3a2095</a>
+</td>
+<td>
+Nitya Mehrotra
+</td>
+<td>
+2026-08-31
+</td>
+<td>
+Add Treg analysis workflow
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<hr>
+</div>
+</div>
+</div>
+<pre class="r"><code>#setup
+library(tidyverse) #v2.0.0</code></pre>
+<pre><code>── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
+✔ dplyr     1.2.1     ✔ readr     2.1.6
+✔ forcats   1.0.1     ✔ stringr   1.6.0
+✔ ggplot2   4.0.2     ✔ tibble    3.3.1
+✔ lubridate 1.9.4     ✔ tidyr     1.3.2
+✔ purrr     1.2.1     
+── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
+✖ dplyr::filter() masks stats::filter()
+✖ dplyr::lag()    masks stats::lag()
+ℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors</code></pre>
+<pre class="r"><code>library(stringr) #v1.6.0
+library(ggrastr) #v1.0.2
+library(dplyr) #v1.2.1
+library(Seurat) #v5.4.0</code></pre>
+<pre><code>Loading required package: SeuratObject
+Loading required package: sp
+
+Attaching package: &#39;SeuratObject&#39;
+
+The following objects are masked from &#39;package:base&#39;:
+
+    intersect, t</code></pre>
+<pre class="r"><code>library(scales) #1.4.0</code></pre>
+<pre><code>
+Attaching package: &#39;scales&#39;
+
+The following object is masked from &#39;package:purrr&#39;:
+
+    discard
+
+The following object is masked from &#39;package:readr&#39;:
+
+    col_factor</code></pre>
+<pre class="r"><code>library(cowplot) #v1.2.0</code></pre>
+<pre><code>
+Attaching package: &#39;cowplot&#39;
+
+The following object is masked from &#39;package:lubridate&#39;:
+
+    stamp</code></pre>
+<pre class="r"><code>library(fmsb) #v0.7.6</code></pre>
+<pre><code>Registered S3 method overwritten by &#39;fmsb&#39;:
+  method   from            
+  plot.roc spatstat.explore</code></pre>
+<pre class="r"><code>library(fgsea) #v1.36.0
+library(ZemmourLib) #v0.1.1</code></pre>
+<pre><code>
+Attaching package: &#39;ZemmourLib&#39;
+
+The following objects are masked from &#39;package:Seurat&#39;:
+
+    NoGrid, NoLegend</code></pre>
+<pre class="r"><code>library(pheatmap) #v1.0.13
+library(RColorBrewer) #v1.1-3
+library(ggrepel) #v0.9.8
+library(msigdbr) #v25.1.1
+library(viridis) #v0.6.5</code></pre>
+<pre><code>Loading required package: viridisLite
+
+Attaching package: &#39;viridis&#39;
+
+The following object is masked from &#39;package:scales&#39;:
+
+    viridis_pal</code></pre>
+<pre class="r"><code>library(viridisLite) #v0.4.3
+library(ggpubr) #v0.5.9</code></pre>
+<pre><code>
+Attaching package: &#39;ggpubr&#39;
+
+The following object is masked from &#39;package:cowplot&#39;:
+
+    get_legend</code></pre>
+<pre class="r"><code>setwd(&quot;/Users/nityamehrotra/Library/CloudStorage/Box-Box/ZemmourLab_Nitya/Tregs&quot;)</code></pre>
+<pre class="r"><code>#Loading Data
+treg_object &lt;- readRDS(&quot;/Users/nityamehrotra/Library/CloudStorage/Box-Box/ZemmourLab_Nitya/Tregs/Treg_igt1_96_withtotalvi20260206_clean.Rds&quot;)
+color_palette &lt;- read.csv(&quot;/Users/nityamehrotra/Library/CloudStorage/Box-Box/ZemmourLab_Nitya/Tregs/immgent_color_palettes_level2_1.csv&quot;, header = FALSE)
+palette_vector &lt;- setNames(as.character(color_palette$V2), as.character(color_palette$V1))
+organ_palette &lt;- read.csv(&quot;/Users/nityamehrotra/Library/CloudStorage/Box-Box/ZemmourLab_Nitya/Tregs/immgent_color_palettes_organ_simplified.csv&quot;, header = FALSE)
+palette_vector_organ &lt;- setNames(organ_palette$V2, organ_palette$V1)
+onevsall_cluster &lt;- read.table(&quot;/Users/nityamehrotra/Library/CloudStorage/Box-Box/ZemmourLab_Nitya/Tregs/ttlist_OneVsAll.txt&quot;, header = TRUE)
+adt_so &lt;- readRDS(&quot;/Users/nityamehrotra/Library/CloudStorage/Box-Box/ZemmourLab_Nitya/Tregs/igt1_96_withtotalvi20250710_clean_ADTonly.Rds&quot;)
+L1 &lt;- readRDS(&quot;/Users/nityamehrotra/Library/CloudStorage/Box-Box/ZemmourLab_Nitya/Tregs/L1.Rds&quot;)
+F1 &lt;- readRDS(&quot;/Users/nityamehrotra/Library/CloudStorage/Box-Box/ZemmourLab_Nitya/Tregs/F1.Rds&quot;)
+line_pairs_All &lt;- read.csv(&quot;/Users/nityamehrotra/Library/CloudStorage/Box-Box/ZemmourLab_Nitya/Tregs/testAll.csv&quot;)
+igt_flow &lt;- read.csv(&quot;/Users/nityamehrotra/Library/CloudStorage/Box-Box/ZemmourLab_Nitya/Tregs/igt_flow3.csv&quot;, row.names = 1)
+main_trbi &lt;- read.csv(&quot;/Users/nityamehrotra/Library/CloudStorage/Box-Box/ZemmourLab_Nitya/Tregs/radarplot012626.csv&quot;)
+tcr &lt;- read.csv(&quot;/Users/nityamehrotra/Library/CloudStorage/Box-Box/ZemmourLab_Nitya/Tregs/all_igts_summary.csv.gz&quot;)
+ptregs &lt;- readRDS(&quot;/Users/nityamehrotra/Library/CloudStorage/Box-Box/ZemmourLab_Nitya/Tregs/ptreg_so.Rds&quot;)
+trbi_supp &lt;- read.csv(&quot;/Users/nityamehrotra/Library/CloudStorage/Box-Box/ZemmourLab_Nitya/Tregs/all_data_suppl.csv&quot;)</code></pre>
+<pre class="r"><code>#preprocessing necessary objects
+
+treg_object &lt;- NormalizeData(treg_object,assay = &quot;RNA&quot;, normalization.method = &quot;LogNormalize&quot;,layer.name = &quot;data&quot;)</code></pre>
+<pre><code>Normalizing layer: counts</code></pre>
+<pre><code>Warning: The following arguments are not used: layer.name</code></pre>
+<pre class="r"><code>treg_object_clean &lt;- subset(treg_object, subset = !annotation_level2 %in% c(&quot;Treg.P&quot;, &quot;Treg.wM&quot;))
+
+healthy_subset_inc &lt;- subset(treg_object, subset = condition_broad == &quot;healthy&quot;)
+
+sample_counts &lt;- treg_object@meta.data %&gt;%
+  count(sample_code, name = &quot;cell_count&quot;) %&gt;%
+  filter(cell_count &gt; 20)
+
+treg_object_filtered &lt;- subset(treg_object, subset = sample_code %in% sample_counts$sample_code)
+
+
+treg_rna &lt;- subset(treg_object, subset = !annotation_level2 %in% c(&quot;Treg.wM&quot;))</code></pre>
+<pre class="r"><code>#for david</code></pre>
+<pre class="r"><code>#for david</code></pre>
+<pre class="r"><code>#for david</code></pre>
+<pre class="r"><code>DimPlot(treg_object, reduction = &quot;mde_incremental&quot;, group.by = &quot;annotation_level2&quot;, cols = palette_vector, label = FALSE, raster = TRUE, raster.dpi = c(1024, 1024)) + ggtitle(&quot;Treg Cells in All Populations&quot;) + NoAxes() + NoLegend() + theme(legend.position = &quot;none&quot;) + coord_cartesian(xlim = c(-2.5, 4), ylim = c(-2.5, 2.5))</code></pre>
+<p><img src="figure/Treg_Workflow.Rmd/1d%20-%20overall%20Treg%20mde-1.png" alt="" width="768" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>p = FeaturePlot(treg_object, slot = &quot;data&quot;, features = &quot;Foxp3&quot;, reduction = &quot;mde_incremental&quot;, pt.size = 1.5, order = TRUE, raster = T, raster.dpi = c(512, 512))
+p + NoLegend()</code></pre>
+<p><img src="figure/Treg_Workflow.Rmd/1e%20-%20feature%20plots%20of%20selected%20genes%20-1.png" alt="" width="768" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>p = FeaturePlot(treg_object, slot = &quot;data&quot;, features = &quot;Il2ra&quot;, reduction = &quot;mde_incremental&quot;, pt.size = 1.5, order = TRUE, raster = T, raster.dpi = c(512, 512))
+p + NoLegend()</code></pre>
+<p><img src="figure/Treg_Workflow.Rmd/1e%20-%20feature%20plots%20of%20selected%20genes%20-2.png" alt="" width="768" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>p = FeaturePlot(treg_object, slot = &quot;data&quot;, features = &quot;Ctla4&quot;, reduction = &quot;mde_incremental&quot;, pt.size = 1.5, order = TRUE, raster = T, raster.dpi = c(512, 512))
+p + NoLegend()</code></pre>
+<p><img src="figure/Treg_Workflow.Rmd/1e%20-%20feature%20plots%20of%20selected%20genes%20-3.png" alt="" width="768" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>p = FeaturePlot(treg_object, slot = &quot;data&quot;, features = &quot;Ccr7&quot;, reduction = &quot;mde_incremental&quot;, pt.size = 1.5, order = TRUE, raster = T, raster.dpi = c(512, 512))
+p + NoLegend()</code></pre>
+<p><img src="figure/Treg_Workflow.Rmd/1e%20-%20feature%20plots%20of%20selected%20genes%20-4.png" alt="" width="768" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>p = FeaturePlot(treg_object, slot = &quot;data&quot;, features = &quot;Nr4a1&quot;, reduction = &quot;mde_incremental&quot;, pt.size = 1.5, order = TRUE, raster = T, raster.dpi = c(512, 512))
+p + NoLegend()</code></pre>
+<p><img src="figure/Treg_Workflow.Rmd/1e%20-%20feature%20plots%20of%20selected%20genes%20-5.png" alt="" width="768" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>p = FeaturePlot(treg_object, slot = &quot;data&quot;, features = &quot;Cxcr5&quot;, reduction = &quot;mde_incremental&quot;, pt.size = 1.5, order = TRUE, raster = T, raster.dpi = c(512, 512))
+p + NoLegend()</code></pre>
+<p><img src="figure/Treg_Workflow.Rmd/1e%20-%20feature%20plots%20of%20selected%20genes%20-6.png" alt="" width="768" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>p = FeaturePlot(treg_object, slot = &quot;data&quot;, features = &quot;Il1rl1&quot;, reduction = &quot;mde_incremental&quot;, pt.size = 1.5, order = TRUE, raster = T, raster.dpi = c(512, 512))
+p + NoLegend()</code></pre>
+<p><img src="figure/Treg_Workflow.Rmd/1e%20-%20feature%20plots%20of%20selected%20genes%20-7.png" alt="" width="768" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>p = FeaturePlot(treg_object, slot = &quot;data&quot;, features = &quot;Rorc&quot;, reduction = &quot;mde_incremental&quot;, pt.size = 1.5, order = TRUE, raster = T, raster.dpi = c(512, 512))
+p + NoLegend()</code></pre>
+<p><img src="figure/Treg_Workflow.Rmd/1e%20-%20feature%20plots%20of%20selected%20genes%20-8.png" alt="" width="768" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>p = FeaturePlot(treg_object, slot = &quot;data&quot;, features = &quot;Tbx21&quot;, reduction = &quot;mde_incremental&quot;, pt.size = 1.5, order = TRUE, raster = T, raster.dpi = c(512, 512))
+p + NoLegend()</code></pre>
+<p><img src="figure/Treg_Workflow.Rmd/1e%20-%20feature%20plots%20of%20selected%20genes%20-9.png" alt="" width="768" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>p = FeaturePlot(treg_object, slot = &quot;data&quot;, features = &quot;Cxcr3&quot;, reduction = &quot;mde_incremental&quot;, pt.size = 0.5, order = TRUE)
+p + NoLegend()</code></pre>
+<p><img src="figure/Treg_Workflow.Rmd/1e%20-%20feature%20plots%20of%20selected%20genes%20-10.png" alt="" width="768" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>logfc_cols &lt;- grep(&quot;^log2FC_&quot;, names(onevsall_cluster), value = TRUE)
+
+col_order &lt;- c(
+  &quot;log2FC_Treg_cl1_vs_All&quot;,&quot;log2FC_Treg_cl3_vs_All&quot;,&quot;log2FC_Treg_cl6_vs_All&quot;,
+  &quot;log2FC_Treg_cl2_vs_All&quot;,&quot;log2FC_Treg_cl8_vs_All&quot;,&quot;log2FC_Treg_cl4_vs_All&quot;
+)
+
+hm_df &lt;- onevsall_cluster %&gt;% select(SYMBOL, all_of(logfc_cols))
+rownames(hm_df) &lt;- hm_df$SYMBOL
+hm_mat &lt;- hm_df %&gt;% select(-SYMBOL) %&gt;% as.matrix()
+hm_mat &lt;- hm_mat[, match(col_order, colnames(hm_mat)), drop = FALSE]
+
+top_n &lt;- 10
+get_topn &lt;- function(mat, colname, n = 10) {
+  v &lt;- mat[, colname]
+  ord &lt;- order(v, decreasing = TRUE, na.last = NA)
+  head(rownames(mat)[ord], n)
+}
+tops_list &lt;- lapply(col_order, function(cn) get_topn(hm_mat, cn, top_n))
+names(tops_list) &lt;- col_order
+
+rows_dup &lt;- unlist(tops_list, use.names = FALSE)
+group_tag_dup &lt;- rep(col_order, times = lengths(tops_list))
+keep_idx &lt;- !duplicated(rows_dup)
+rows_unique &lt;- rows_dup[keep_idx]
+group_tag_unique &lt;- group_tag_dup[keep_idx]
+
+sizes_unique &lt;- as.integer(table(factor(group_tag_unique, levels = col_order)))
+gaps_row_unique &lt;- cumsum(sizes_unique)
+
+hm_mat_unique &lt;- hm_mat[rows_unique, , drop = FALSE]
+hm_mat_unique &lt;- t(scale(t(hm_mat_unique)))
+max_abs &lt;- max(abs(hm_mat_unique), na.rm = TRUE)
+breaks  &lt;- seq(-max_abs, max_abs, length.out = 101)
+cols    &lt;- colorRampPalette(c(&quot;darkblue&quot;, &quot;white&quot;, &quot;red&quot;))(100)
+
+colnames(hm_mat_unique) &lt;- c(
+  &quot;Treg.A&quot;,
+  &quot;Treg.C&quot;,
+  &quot;Treg.E&quot;,
+  &quot;Treg.B&quot;,
+  &quot;Treg.F&quot;,
+  &quot;Treg.D&quot;
+)
+
+
+
+pheatmap(
+  hm_mat_unique,
+  color = cols,
+  breaks = breaks,
+  cluster_rows = FALSE,
+  cluster_cols = FALSE,
+  border_color = &quot;lightgray&quot;,
+  fontsize_row = 8,
+  fontsize_col = 9,
+  cellwidth = 8,
+  cellheight = 8,
+  main = &quot;Top 10 Genes per Column (Scaled Across Rows)&quot;
+)</code></pre>
+<p><img src="figure/Treg_Workflow.Rmd/1f%20-%20heatmap%20of%20top%2010%20DGE/cluster-1.png" alt="" width="768" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>mypal_level2_all &lt;- ZemmourLib::immgent_colors$level2
+
+names(mypal_level2_all)[names(mypal_level2_all) == &quot;Treg_cl1&quot;] &lt;- &quot;Treg.A&quot;
+names(mypal_level2_all)[names(mypal_level2_all) == &quot;Treg_cl2&quot;] &lt;- &quot;Treg.D&quot;
+names(mypal_level2_all)[names(mypal_level2_all) == &quot;Treg_cl3&quot;] &lt;- &quot;Treg.B&quot;
+names(mypal_level2_all)[names(mypal_level2_all) == &quot;Treg_cl4&quot;] &lt;- &quot;Treg.F&quot;
+names(mypal_level2_all)[names(mypal_level2_all) == &quot;Treg_cl6&quot;] &lt;- &quot;Treg.C&quot;
+names(mypal_level2_all)[names(mypal_level2_all) == &quot;Treg_cl8&quot;] &lt;- &quot;Treg.E&quot;
+
+
+treg_mde &lt;- as.data.frame(
+  treg_object_clean@reductions$mde_incremental@cell.embeddings
+)
+
+treg_mde$level2 &lt;- treg_object_clean$annotation_level2
+
+
+write.csv(
+  treg_mde,
+  &quot;treg_mde.csv&quot;,
+  row.names = TRUE,
+  quote = FALSE
+)
+
+
+mde_centroids &lt;- treg_mde %&gt;%
+  group_by(level2) %&gt;%
+  summarise(
+    mdeincremental_1 = mean(mdeincremental_1),
+    mdeincremental_2 = mean(mdeincremental_2),
+    .groups = &quot;drop&quot;
+  ) %&gt;%
+  column_to_rownames(&quot;level2&quot;)
+
+mde_centroids$level2 &lt;- rownames(mde_centroids)
+
+
+mde_centroids[&quot;Treg.A&quot;, &quot;mdeincremental_1&quot;] &lt;- -0.50
+mde_centroids[&quot;Treg.A&quot;, &quot;mdeincremental_2&quot;] &lt;- -1.19
+
+mde_centroids[&quot;Treg.B&quot;, &quot;mdeincremental_1&quot;] &lt;- -0.03
+mde_centroids[&quot;Treg.B&quot;, &quot;mdeincremental_2&quot;] &lt;- -0.05
+
+mde_centroids[&quot;Treg.C&quot;, &quot;mdeincremental_1&quot;] &lt;- 0.003
+mde_centroids[&quot;Treg.C&quot;, &quot;mdeincremental_2&quot;] &lt;- 0.72
+
+mde_centroids[&quot;Treg.D&quot;, &quot;mdeincremental_1&quot;] &lt;- 0.87
+mde_centroids[&quot;Treg.D&quot;, &quot;mdeincremental_2&quot;] &lt;- -0.35
+
+mde_centroids[&quot;Treg.E&quot;, &quot;mdeincremental_1&quot;] &lt;- 1.10
+mde_centroids[&quot;Treg.E&quot;, &quot;mdeincremental_2&quot;] &lt;- -0.92
+
+mde_centroids[&quot;Treg.F&quot;, &quot;mdeincremental_1&quot;] &lt;- 0.43
+mde_centroids[&quot;Treg.F&quot;, &quot;mdeincremental_2&quot;] &lt;- -0.05
+
+
+write.csv(
+  mde_centroids,
+  &quot;mde_centroids.csv&quot;,
+  row.names = TRUE,
+  quote = FALSE
+)
+
+
+points_centroids &lt;- ggplot() +
+
+  geom_point_rast(
+    data = treg_mde,
+    aes(
+      x = mdeincremental_1,
+      y = mdeincremental_2,
+      colour = level2
+    ),
+    size = 0.5,
+    alpha = 0.7
+  ) +
+
+  geom_point(
+    data = mde_centroids,
+    aes(
+      x = mdeincremental_1,
+      y = mdeincremental_2
+    ),
+    size = 10,
+    colour = &quot;black&quot;
+  ) +
+
+  geom_point(
+    data = mde_centroids,
+    aes(
+      x = mdeincremental_1,
+      y = mdeincremental_2,
+      colour = level2
+    ),
+    size = 8
+  ) +
+
+  scale_colour_manual(
+    values = mypal_level2_all
+  ) +
+
+  theme_classic() +
+
+  NoLegend()
+
+
+points_centroids</code></pre>
+<p><img src="figure/Treg_Workflow.Rmd/1h%20-%20clonotype%20sharing%20MDE-1.png" alt="" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>line_pairs_All &lt;- line_pairs_All %&gt;%
+  mutate(
+    X1 = trimws(as.character(X1)),
+    X2 = trimws(as.character(X2)),
+    X3 = as.numeric(X3)
+  ) %&gt;%
+  filter(
+    X1 != X2,
+    X3 &gt; 0.1
+  )
+
+
+centroids_x &lt;- mde_centroids %&gt;%
+  as.data.frame() %&gt;%
+  mutate(
+    level2 = trimws(as.character(level2))
+  ) %&gt;%
+  select(
+    level2,
+    mdeincremental_1,
+    mdeincremental_2
+  ) %&gt;%
+  rename(
+    X1 = level2,
+    x = mdeincremental_1,
+    y = mdeincremental_2
+  )
+
+
+centroids_y &lt;- mde_centroids %&gt;%
+  as.data.frame() %&gt;%
+  mutate(
+    level2 = trimws(as.character(level2))
+  ) %&gt;%
+  select(
+    level2,
+    mdeincremental_1,
+    mdeincremental_2
+  ) %&gt;%
+  rename(
+    X2 = level2,
+    xend = mdeincremental_1,
+    yend = mdeincremental_2
+  )
+
+
+line_pairs_All &lt;- line_pairs_All %&gt;%
+  left_join(
+    centroids_x,
+    by = &quot;X1&quot;
+  ) %&gt;%
+  left_join(
+    centroids_y,
+    by = &quot;X2&quot;
+  ) %&gt;%
+  filter(
+    !is.na(x),
+    !is.na(y),
+    !is.na(xend),
+    !is.na(yend)
+  )
+
+
+line_pairs_All$log2 &lt;- log2(
+  line_pairs_All$X3
+)
+
+
+print(
+  line_pairs_All %&gt;%
+    select(
+      X1,
+      X2,
+      X3,
+      x,
+      y,
+      xend,
+      yend
+    )
+)</code></pre>
+<pre><code>[1] X1   X2   X3   x    y    xend yend
+&lt;0 rows&gt; (or 0-length row.names)</code></pre>
+<pre class="r"><code>cat(
+  &quot;Number of Jaccard lines to plot:&quot;,
+  nrow(line_pairs_All),
+  &quot;\n&quot;
+)</code></pre>
+<pre><code>Number of Jaccard lines to plot: 0 </code></pre>
+<pre class="r"><code>centroids_plot &lt;- mde_centroids %&gt;%
+  as.data.frame() %&gt;%
+  filter(
+    level2 %in% union(
+      line_pairs_All$X1,
+      line_pairs_All$X2
+    )
+  )
+
+
+All_plot_legend &lt;- ggplot() +
+
+  geom_point_rast(
+    data = treg_mde,
+    aes(
+      x = mdeincremental_1,
+      y = mdeincremental_2,
+      colour = level2
+    ),
+    size = 0.5,
+    alpha = 0.7
+  ) +
+
+  geom_segment(
+    data = line_pairs_All,
+    aes(
+      x = x,
+      y = y,
+      xend = xend,
+      yend = yend,
+      linewidth = X3
+    ),
+    colour = &quot;black&quot;,
+    lineend = &quot;round&quot;
+  ) +
+
+  geom_point(
+    data = centroids_plot,
+    aes(
+      x = mdeincremental_1,
+      y = mdeincremental_2
+    ),
+    size = 10,
+    colour = &quot;black&quot;
+  ) +
+
+  geom_point(
+    data = centroids_plot,
+    aes(
+      x = mdeincremental_1,
+      y = mdeincremental_2,
+      colour = level2
+    ),
+    size = 8
+  ) +
+
+  scale_colour_manual(
+    values = mypal_level2_all
+  ) +
+
+  scale_linewidth(
+    range = c(0.5, 4)
+  ) +
+
+  theme_classic()
+
+
+All_plot_legend</code></pre>
+<p><img src="figure/Treg_Workflow.Rmd/1h%20-%20clonotype%20sharing%20MDE-2.png" alt="" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>vol_sub &lt;- subset(adt_so, subset = annotation_level1 %in% c(&quot;CD4&quot;, &quot;Treg&quot;))
+vol_sub &lt;- subset(vol_sub, subset = !(annotation_level2 %in% c(&quot;Treg_cl1&quot;, &quot;Treg_cl7&quot;)))
+metadata &lt;- vol_sub@meta.data
+
+CD4 &lt;- metadata$annotation_level1 == &quot;CD4&quot;
+Treg &lt;- metadata$annotation_level1 == &quot;Treg&quot;
+cd4 &lt;- CD4
+treg &lt;- Treg
+Idents(vol_sub) = &quot;annotation_level1&quot;
+treg_vol= NormalizeData(vol_sub, assay = &quot;ADT&quot;, normalization.method = &quot;LogNormalize&quot;)
+markers &lt;- FindMarkers(
+  treg_vol,
+  ident.1 = &quot;CD4&quot;,
+  ident.2 = &quot;Treg&quot;
+)</code></pre>
+<pre><code>For a (much!) faster implementation of the Wilcoxon Rank Sum Test,
+(default method for FindMarkers) please install the presto package
+--------------------------------------------
+install.packages(&#39;devtools&#39;)
+devtools::install_github(&#39;immunogenomics/presto&#39;)
+--------------------------------------------
+After installation of presto, Seurat will automatically use the more 
+efficient implementation (no further action necessary).
+This message will be shown once per session</code></pre>
+<pre class="r"><code>lfc_cutoff &lt;- 1.2 
+p_cutoff   &lt;- 0.05
+
+volc_df &lt;- markers %&gt;%
+  rownames_to_column(&quot;feature&quot;) %&gt;%
+  mutate(
+    neg_log10_padj = -log10(p_val_adj + 1e-300),
+    direction = case_when(
+      avg_log2FC &gt;  lfc_cutoff &amp; p_val_adj &lt; p_cutoff ~ &quot;Tconv_enriched&quot;,
+      avg_log2FC &lt; -lfc_cutoff &amp; p_val_adj &lt; p_cutoff ~ &quot;Treg_enriched&quot;,
+      TRUE                                            ~ &quot;ns&quot;
+    )
+  )
+
+label_genes &lt;- volc_df %&gt;%
+  filter(p_val_adj &lt; p_cutoff, abs(avg_log2FC) &gt; 1.5) %&gt;%
+  pull(feature)
+
+
+ggplot(volc_df, aes(x = avg_log2FC, y = neg_log10_padj, color = direction)) +
+  geom_point(alpha = 0.7, size = 1.8) +
+  geom_text_repel(
+    data = subset(volc_df, feature %in% label_genes),
+    aes(label = feature),
+    size = 2,
+    max.overlaps = Inf,
+    box.padding = 0.3,
+    point.padding = 0.1
+  ) +
+  scale_color_manual(
+    values = c(
+      &quot;Tconv_enriched&quot;  = &quot;darkblue&quot;,
+      &quot;Treg_enriched&quot; = &quot;darkred&quot;,
+      &quot;ns&quot;            = &quot;darkgray&quot;
+    ),
+    breaks = c(&quot;Tconv_enriched&quot;, &quot;Treg_enriched&quot;, &quot;ns&quot;),
+    name   = &quot;Direction&quot;
+  ) +
+  geom_vline(xintercept = c(-lfc_cutoff, lfc_cutoff),
+             linetype = &quot;dashed&quot;, color = &quot;black&quot;) +
+  geom_hline(yintercept = -log10(p_cutoff),
+             linetype = &quot;dashed&quot;, color = &quot;black&quot;) +
+  theme_classic() +
+  labs(
+    title = &quot;Tconvs vs Activated Tregs (ADT) – Differential surface markers&quot;,
+    subtitle = &quot;Right = higher in Tconv, Left = higher in Treg&quot;,
+    x = &quot;avg log2FC (Tconv vs Treg, ADT)&quot;,
+    y = &quot;-log10(adj p-value)&quot;
+  )</code></pre>
+<p><img src="figure/Treg_Workflow.Rmd/2a%20-%20Treg%20vs%20Tconv%20protein%20expression-1.png" alt="" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>adt_markers &lt;- c(&quot;CD62L&quot;, &quot;FR4&quot;, &quot;NEUROPILIN1.CD304&quot;, &quot;CD69&quot;, &quot;KLRG1&quot;, &quot;SCA1&quot;, &quot;CD44&quot;, &quot;CD29&quot;, &quot;CD49B&quot;)
+
+cluster_order &lt;- c(&quot;Treg.A&quot;, &quot;Treg.B&quot;, &quot;Treg.C&quot;,&quot;Treg.D&quot;, &quot;Treg.E&quot;,&quot;Treg.F&quot;)
+
+DefaultAssay(treg_object) &lt;- &quot;ADT&quot;
+treg_object &lt;- NormalizeData(treg_object, assay = &quot;ADT&quot;, normalization.method = &quot;LogNormalize&quot;)
+adt_avg &lt;- AverageExpression(
+  treg_object,
+  assays = &quot;ADT&quot;,
+  features = adt_markers,
+  group.by = &quot;annotation_level2&quot;,
+  layer = &quot;data&quot;
+)$ADT</code></pre>
+<pre><code>As of Seurat v5, we recommend using AggregateExpression to perform pseudo-bulk analysis.
+This message is displayed once per session.</code></pre>
+<pre class="r"><code>adt_avg &lt;- adt_avg[
+  adt_markers,
+  cluster_order,
+  drop = FALSE
+]
+
+adt_scaled &lt;- t(
+  scale(
+    t(adt_avg)
+  )
+)
+
+# Plot
+pheatmap(
+  adt_scaled,
+  cluster_rows = FALSE,
+  cluster_cols = FALSE,
+  border_color = &quot;darkgray&quot;,
+  color = colorRampPalette(
+    c(&quot;#313695&quot;, &quot;white&quot;, &quot;#F21A1A&quot;)
+  )(100),
+  breaks = seq(
+    -2,
+    2,
+    length.out = 101
+  ),
+  show_rownames = TRUE,
+  show_colnames = TRUE,
+  cellwidth = 12,
+  cellheight = 12,
+  fontsize = 10,
+  angle_col = 45,
+  legend = FALSE
+)</code></pre>
+<p><img src="figure/Treg_Workflow.Rmd/2b%20-%20citeseq%20heatmap%20of%20selected%20markers-1.png" alt="" width="384" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>MyDimPlotHighlightDensity &lt;- function(
+  seurat_object = so,
+  umap_to_plot = &quot;mde_incremental&quot;,
+  group.by = NULL,
+  split.by = NULL,
+  raster = TRUE,
+  highlight_size = 2.0,
+  highlight_alpha = 1.0,
+  cols = rocket(100)
+) {
+  requireNamespace(&quot;scattermore&quot;, quietly = TRUE)
+  requireNamespace(&quot;ggplot2&quot;, quietly = TRUE)
+
+  if (is.null(group.by)) {
+    stop(&quot;Please provide a valid column name in `group.by`.&quot;)
+  }
+  df &lt;- data.frame(
+    feature1 = seurat_object[[umap_to_plot]]@cell.embeddings[, 1],
+    feature2 = seurat_object[[umap_to_plot]]@cell.embeddings[, 2],
+    group.by = seurat_object@meta.data[[group.by]]
+  )
+
+  if (!is.null(split.by)) {
+    df$split.by &lt;- seurat_object@meta.data[[split.by]]
+  }
+
+  df2 &lt;- df[df$group.by == TRUE, ]
+
+  df2$density &lt;- densCols(
+    df2$feature1,
+    df2$feature2,
+    colramp = colorRampPalette(cols),
+    nbin = 500
+  )
+
+  p1 &lt;- ggplot(df) +
+    scattermore::geom_scattermore(
+      aes(feature1, feature2),
+      color = &quot;grey&quot;,
+      pixels = c(512, 512)
+    )
+
+  if (raster) {
+    p2 &lt;- scattermore::geom_scattermore(
+      data = df2,
+      aes(feature1, feature2, color = density),
+      pixels = c(216, 216)
+    )
+  } else {
+    p2 &lt;- geom_point(
+      data = df2,
+      aes(feature1, feature2, color = density),
+      size = highlight_size,
+      alpha = highlight_alpha
+    )
+  }
+
+  p3 &lt;- p1 + p2 +
+    scale_colour_identity() +
+    theme_bw() +
+    theme(
+      axis.text.x = element_text(size = 15),
+      axis.text.y = element_text(size = 15),
+      legend.text = element_text(size = 10),
+      axis.title.x = element_text(size = 20),
+      axis.title.y = element_text(size = 20),
+      legend.title = element_blank(),
+      panel.grid.major = element_blank(),
+      panel.grid.minor = element_blank()
+    )
+
+  if (!is.null(split.by)) {
+    p3 &lt;- p3 + facet_wrap(~split.by)
+  }
+
+  return(p3)
+}
+
+treg_object_clean &lt;- NormalizeData(treg_object_clean, assay = &quot;ADT&quot;, normalization.method = &quot;LogNormalize&quot;)
+adt_data &lt;- GetAssayData(treg_object_clean, assay = &quot;ADT&quot;, layer = &quot;data&quot;)
+
+phenotype_annotation &lt;- case_when(
+   adt_data[&quot;CD62L&quot;, ] &gt; 4 ~ &quot;Treg.A&quot;,
+   adt_data[&quot;CD62L&quot;, ] &lt; 4 &amp; adt_data[&quot;KLRG1&quot;, ] &gt; 4 &amp; adt_data[&quot;CD49B&quot;, ] &lt; 4 &amp; adt_data[&quot;CD44&quot;,] &gt; 5 ~ &quot;Treg.D&quot;,
+  adt_data[&quot;CD62L&quot;, ] &lt; 4 &amp; adt_data[&quot;CD49B&quot;, ] &lt; 4 &amp; adt_data[&quot;NEUROPILIN1.CD304&quot;, ] &gt; 5 &amp; adt_data[&quot;FR4&quot;, ] &gt; 6 &amp; adt_data[&quot;KLRG1&quot;, ] &lt; 4 &amp; adt_data[&quot;CD29&quot;, ] &lt; 5 ~ &quot;Treg.B&quot;,
+  adt_data[&quot;CD62L&quot;, ] &lt; 4 &amp; adt_data[&quot;CD49B&quot;, ] &gt; 4 &amp;
+    adt_data[&quot;KLRG1&quot;, ] &lt; 4 &amp; adt_data[&quot;CD69&quot;, ] &lt; 4 &amp; adt_data[&quot;CD29&quot;, ] &gt; 5 &amp; adt_data[&quot;CD44&quot;, ] &gt; 5 ~ &quot;Treg.F&quot;,
+  adt_data[&quot;CD62L&quot;, ] &lt; 4 &amp; adt_data[&quot;KLRG1&quot;, ] &lt; 4 &amp;
+    adt_data[&quot;CD49B&quot;, ] &lt; 4 &amp; adt_data[&quot;CD69&quot;, ] &gt; 4 &amp; adt_data[&quot;CD29&quot;, ] &lt; 5 ~ &quot;Treg.C&quot;,
+  adt_data[&quot;CD62L&quot;, ] &lt;= 4 &amp; adt_data[&quot;KLRG1&quot;, ] &lt; 4 &amp;
+    adt_data[&quot;CD49B&quot;, ] &lt; 4 &amp; adt_data[&quot;SCA1&quot;, ] &gt; 4 &amp; adt_data[&quot;NEUROPILIN1.CD304&quot;, ] &lt; 5 &amp; adt_data[&quot;CD44&quot;, ] &gt; 5 ~ &quot;Treg.E&quot;,
+  TRUE ~ &quot;Other&quot;
+)
+treg_object_clean$citeseq &lt;- phenotype_annotation
+treg_object_clean$is_TregA &lt;- treg_object_clean$citeseq == &quot;Treg.A&quot;
+MyDimPlotHighlightDensity(
+  seurat_object = treg_object_clean,
+  umap_to_plot = &quot;mde_incremental&quot;,
+  group.by = &quot;is_TregA&quot;,
+  split.by = NULL,
+  raster = TRUE,
+  highlight_size = 2,
+  highlight_alpha = 0.75,
+  cols = rocket(100)
+)</code></pre>
+<p><img src="figure/Treg_Workflow.Rmd/2d%20-%20citeseq%20sorted%20MDEs%20highlighting%20clusters-1.png" alt="" width="768" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>treg_object_clean$is_TregB &lt;- treg_object_clean$citeseq == &quot;Treg.B&quot;
+MyDimPlotHighlightDensity(
+  seurat_object = treg_object_clean,
+  umap_to_plot = &quot;mde_incremental&quot;,
+  group.by = &quot;is_TregB&quot;,
+  split.by = NULL,
+  raster = TRUE,
+  highlight_size = 2,
+  highlight_alpha = 0.75,
+  cols = rocket(100))</code></pre>
+<p><img src="figure/Treg_Workflow.Rmd/2d%20-%20citeseq%20sorted%20MDEs%20highlighting%20clusters-2.png" alt="" width="768" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>treg_object_clean$is_TregD &lt;- treg_object_clean$citeseq == &quot;Treg.D&quot;
+MyDimPlotHighlightDensity(
+  seurat_object = treg_object_clean,
+  umap_to_plot = &quot;mde_incremental&quot;,
+  group.by = &quot;is_TregD&quot;,
+  split.by = NULL,
+  raster = TRUE,
+  highlight_size = 2,
+  highlight_alpha = 0.75,
+  cols = rocket(100))</code></pre>
+<p><img src="figure/Treg_Workflow.Rmd/2d%20-%20citeseq%20sorted%20MDEs%20highlighting%20clusters-3.png" alt="" width="768" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>treg_object_clean$is_TregE &lt;- treg_object_clean$citeseq == &quot;Treg.E&quot;
+MyDimPlotHighlightDensity(
+  seurat_object = treg_object_clean,
+  umap_to_plot = &quot;mde_incremental&quot;,
+  group.by = &quot;is_TregE&quot;,
+  split.by = NULL,
+  raster = TRUE,
+  highlight_size = 6,
+  highlight_alpha = 1.0,
+  cols = rocket(100))</code></pre>
+<p><img src="figure/Treg_Workflow.Rmd/2d%20-%20citeseq%20sorted%20MDEs%20highlighting%20clusters-4.png" alt="" width="768" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>treg_object_clean$is_TregF &lt;- treg_object_clean$citeseq == &quot;Treg.F&quot;
+MyDimPlotHighlightDensity(
+  seurat_object = treg_object_clean,
+  umap_to_plot = &quot;mde_incremental&quot;,
+  group.by = &quot;is_TregF&quot;,
+  split.by = NULL,
+  raster = TRUE,
+  highlight_size = 2,
+  highlight_alpha = 1.0,
+  cols = rocket(100))</code></pre>
+<p><img src="figure/Treg_Workflow.Rmd/2d%20-%20citeseq%20sorted%20MDEs%20highlighting%20clusters-5.png" alt="" width="768" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>library(Seurat)
+library(dplyr)
+library(tidyr)
+library(Matrix)</code></pre>
+<pre><code>
+Attaching package: &#39;Matrix&#39;</code></pre>
+<pre><code>The following objects are masked from &#39;package:tidyr&#39;:
+
+    expand, pack, unpack</code></pre>
+<pre class="r"><code>library(fmsb)
+
+adt_features &lt;- c(
+  &quot;CD44&quot;,
+  &quot;CD62L&quot;,
+  &quot;NEUROPILIN1.CD304&quot;,
+  &quot;FR4&quot;,
+  &quot;SCA1&quot;,
+  &quot;CD49B&quot;,
+  &quot;KLRG1&quot;
+)
+
+meta_all &lt;- treg_object@meta.data
+
+cells_keep &lt;- rownames(meta_all)[
+  !is.na(meta_all$cite_seq) &amp;
+    meta_all$cite_seq == &quot;TRUE&quot; &amp;
+    !is.na(meta_all$annotation_level2) &amp;
+    !(meta_all$annotation_level2 %in% c(&quot;Treg.P&quot;, &quot;Treg.wM&quot;)) &amp;
+    !is.na(meta_all$condition_broad) &amp;
+    meta_all$condition_broad == &quot;healthy&quot; &amp;
+    !is.na(meta_all$sample_code)
+]
+
+sample_counts &lt;- meta_all[cells_keep, , drop = FALSE] %&gt;%
+  count(sample_code, name = &quot;cell_count&quot;) %&gt;%
+  filter(cell_count &gt; 20)
+
+cells_keep &lt;- cells_keep[
+  meta_all[cells_keep, &quot;sample_code&quot;] %in%
+    sample_counts$sample_code
+]
+
+meta &lt;- meta_all[cells_keep, , drop = FALSE] %&gt;%
+  mutate(
+    organ_simplified = case_when(
+      organ_simplified %in% c(
+        &quot;colon epi&quot;,
+        &quot;colon LP&quot;
+      ) ~ &quot;colon&quot;,
+      organ_simplified %in% c(
+        &quot;small intestine epi&quot;,
+        &quot;small intestine LP&quot;
+      ) ~ &quot;small intestine&quot;,
+      TRUE ~ organ_simplified
+    )
+  )
+
+organs_keep &lt;- c(
+  &quot;thymus&quot;,
+  &quot;bone marrow&quot;,
+  &quot;blood&quot;,
+  &quot;spleen&quot;,
+  &quot;LN&quot;,
+  &quot;lung&quot;,
+  &quot;colon&quot;,
+  &quot;small intestine&quot;,
+  &quot;peritoneal cavity&quot;,
+  &quot;liver&quot;
+)
+
+cells_keep &lt;- rownames(meta)[
+  meta$organ_simplified %in% organs_keep
+]
+
+meta &lt;- meta[
+  cells_keep,
+  ,
+  drop = FALSE
+]
+
+adt &lt;- GetAssayData(
+  treg_object,
+  assay = &quot;ADT&quot;,
+  layer = &quot;data&quot;
+)[
+  adt_features,
+  cells_keep,
+  drop = FALSE
+]
+
+cd44_feat  &lt;- &quot;CD44&quot;
+cd62l_feat &lt;- &quot;CD62L&quot;
+nrp1_feat  &lt;- &quot;NEUROPILIN1.CD304&quot;
+fr4_feat   &lt;- &quot;FR4&quot;
+sca1_feat  &lt;- &quot;SCA1&quot;
+cd49b_feat &lt;- &quot;CD49B&quot;
+klrg1_feat &lt;- &quot;KLRG1&quot;
+
+sca1_thresh  &lt;- 5
+nrp1_thresh  &lt;- 5
+fr4_thresh   &lt;- 6
+cd44_thresh  &lt;- 5
+cd62l_thresh &lt;- 4
+cd49b_thresh &lt;- 4
+klrg1_thresh &lt;- 4
+
+meta$is_cla_citeseq &lt;-
+  (adt[cd44_feat, ] &lt; cd44_thresh) &amp;
+  (adt[cd62l_feat, ] &gt; cd62l_thresh)
+
+meta$is_cld_citeseq &lt;-
+  (adt[cd44_feat, ] &gt; cd44_thresh) &amp;
+  (adt[cd62l_feat, ] &lt; cd62l_thresh) &amp;
+  (adt[cd49b_feat, ] &lt; cd49b_thresh) &amp;
+  (adt[klrg1_feat, ] &gt; klrg1_thresh)
+
+meta$is_clf_citeseq &lt;-
+  (adt[cd44_feat, ] &gt; cd44_thresh) &amp;
+  (adt[cd62l_feat, ] &lt; cd62l_thresh) &amp;
+  (adt[cd49b_feat, ] &gt; cd49b_thresh) &amp;
+  (adt[klrg1_feat, ] &lt; klrg1_thresh)
+
+meta$is_clb_citeseq &lt;-
+  (adt[cd44_feat, ] &gt; cd44_thresh) &amp;
+  (adt[cd62l_feat, ] &lt; cd62l_thresh) &amp;
+  (adt[cd49b_feat, ] &lt; cd49b_thresh) &amp;
+  (adt[klrg1_feat, ] &lt; klrg1_thresh) &amp;
+  (adt[nrp1_feat, ] &gt; nrp1_thresh) &amp;
+  (adt[fr4_feat, ] &gt; fr4_thresh)
+
+meta$is_cle_citeseq &lt;-
+  (adt[cd44_feat, ] &gt; cd44_thresh) &amp;
+  (adt[cd62l_feat, ] &lt; cd62l_thresh) &amp;
+  (adt[cd49b_feat, ] &lt; cd49b_thresh) &amp;
+  (adt[klrg1_feat, ] &lt; klrg1_thresh) &amp;
+  (adt[nrp1_feat, ] &lt; nrp1_thresh) &amp;
+  (adt[sca1_feat, ] &gt; sca1_thresh)
+
+meta &lt;- meta %&gt;%
+  mutate(
+    Treg.A = is_cla_citeseq,
+    Treg.D = is_cld_citeseq,
+    Treg.B = is_clb_citeseq,
+    Treg.F = is_clf_citeseq,
+    Treg.E = is_cle_citeseq
+  )
+
+colnames(igt_flow) &lt;- colnames(igt_flow) %&gt;%
+  gsub(&quot;^Cl1\\.&quot;, &quot;Treg.A.&quot;, .) %&gt;%
+  gsub(&quot;^Cl2\\.&quot;, &quot;Treg.D.&quot;, .) %&gt;%
+  gsub(&quot;^Cl3\\.&quot;, &quot;Treg.B.&quot;, .) %&gt;%
+  gsub(&quot;^Cl4\\.&quot;, &quot;Treg.F.&quot;, .) %&gt;%
+  gsub(&quot;^Cl6\\.&quot;, &quot;Treg.C.&quot;, .) %&gt;%
+  gsub(&quot;^Cl8\\.&quot;, &quot;Treg.E.&quot;, .)
+
+rownames(igt_flow) &lt;- c(
+  &quot;thymus&quot;,
+  &quot;bone marrow&quot;,
+  &quot;blood&quot;,
+  &quot;spleen&quot;,
+  &quot;LN&quot;,
+  &quot;lung&quot;,
+  &quot;colon&quot;,
+  &quot;small intestine&quot;,
+  &quot;peritoneal cavity&quot;,
+  &quot;liver&quot;
+)
+
+cluster_order &lt;- c(
+  &quot;Treg.A&quot;,
+  &quot;Treg.D&quot;,
+  &quot;Treg.B&quot;,
+  &quot;Treg.E&quot;,
+  &quot;Treg.F&quot;
+)
+
+gate_cols &lt;- cluster_order
+
+sample_totals &lt;- meta %&gt;%
+  group_by(
+    sample_code,
+    organ_simplified
+  ) %&gt;%
+  summarise(
+    total = n(),
+    .groups = &quot;drop&quot;
+  )
+
+cite_counts &lt;- meta %&gt;%
+  select(
+    sample_code,
+    organ_simplified,
+    all_of(gate_cols)
+  ) %&gt;%
+  pivot_longer(
+    cols = all_of(gate_cols),
+    names_to = &quot;annotation_level2&quot;,
+    values_to = &quot;is_in_gate&quot;
+  ) %&gt;%
+  group_by(
+    sample_code,
+    organ_simplified,
+    annotation_level2
+  ) %&gt;%
+  summarise(
+    count = sum(
+      is_in_gate,
+      na.rm = TRUE
+    ),
+    .groups = &quot;drop&quot;
+  ) %&gt;%
+  left_join(
+    sample_totals,
+    by = c(
+      &quot;sample_code&quot;,
+      &quot;organ_simplified&quot;
+    )
+  ) %&gt;%
+  mutate(
+    percent = 100 * count / total
+  )
+
+cite_summary &lt;- cite_counts %&gt;%
+  group_by(
+    organ_simplified,
+    annotation_level2
+  ) %&gt;%
+  summarise(
+    med_cite = median(
+      percent,
+      na.rm = TRUE
+    ),
+    .groups = &quot;drop&quot;
+  )
+
+rna_counts &lt;- meta %&gt;%
+  filter(
+    annotation_level2 %in% cluster_order
+  ) %&gt;%
+  count(
+    sample_code,
+    organ_simplified,
+    annotation_level2,
+    name = &quot;count&quot;
+  ) %&gt;%
+  left_join(
+    sample_totals,
+    by = c(
+      &quot;sample_code&quot;,
+      &quot;organ_simplified&quot;
+    )
+  ) %&gt;%
+  mutate(
+    percent = 100 * count / total
+  )
+
+rna_summary &lt;- rna_counts %&gt;%
+  group_by(
+    organ_simplified,
+    annotation_level2
+  ) %&gt;%
+  summarise(
+    med_rna = median(
+      percent,
+      na.rm = TRUE
+    ),
+    .groups = &quot;drop&quot;
+  )
+
+flow_A &lt;- igt_flow %&gt;%
+  select(
+    starts_with(&quot;Treg.A.&quot;)
+  )
+
+flow_D &lt;- igt_flow %&gt;%
+  select(
+    starts_with(&quot;Treg.D.&quot;)
+  )
+
+flow_B &lt;- igt_flow %&gt;%
+  select(
+    starts_with(&quot;Treg.B.&quot;)
+  )
+
+flow_E &lt;- igt_flow %&gt;%
+  select(
+    starts_with(&quot;Treg.E.&quot;)
+  )
+
+flow_F &lt;- igt_flow %&gt;%
+  select(
+    starts_with(&quot;Treg.F.&quot;)
+  )
+
+flow_summary_A &lt;- data.frame(
+  organ_simplified = rownames(flow_A),
+  annotation_level2 = &quot;Treg.A&quot;,
+  med_flow = apply(
+    flow_A,
+    1,
+    median,
+    na.rm = TRUE
+  )
+)
+
+flow_summary_D &lt;- data.frame(
+  organ_simplified = rownames(flow_D),
+  annotation_level2 = &quot;Treg.D&quot;,
+  med_flow = apply(
+    flow_D,
+    1,
+    median,
+    na.rm = TRUE
+  )
+)
+
+flow_summary_B &lt;- data.frame(
+  organ_simplified = rownames(flow_B),
+  annotation_level2 = &quot;Treg.B&quot;,
+  med_flow = apply(
+    flow_B,
+    1,
+    median,
+    na.rm = TRUE
+  )
+)
+
+flow_summary_E &lt;- data.frame(
+  organ_simplified = rownames(flow_E),
+  annotation_level2 = &quot;Treg.E&quot;,
+  med_flow = apply(
+    flow_E,
+    1,
+    median,
+    na.rm = TRUE
+  )
+)
+
+flow_summary_F &lt;- data.frame(
+  organ_simplified = rownames(flow_F),
+  annotation_level2 = &quot;Treg.F&quot;,
+  med_flow = apply(
+    flow_F,
+    1,
+    median,
+    na.rm = TRUE
+  )
+)
+
+flow_summary &lt;- bind_rows(
+  flow_summary_A,
+  flow_summary_D,
+  flow_summary_B,
+  flow_summary_E,
+  flow_summary_F
+)
+
+total_plot_df &lt;- flow_summary %&gt;%
+  full_join(
+    cite_summary,
+    by = c(
+      &quot;organ_simplified&quot;,
+      &quot;annotation_level2&quot;
+    )
+  ) %&gt;%
+  full_join(
+    rna_summary,
+    by = c(
+      &quot;organ_simplified&quot;,
+      &quot;annotation_level2&quot;
+    )
+  ) %&gt;%
+  mutate(
+    annotation_level2 = factor(
+      annotation_level2,
+      levels = cluster_order
+    ),
+    organ_simplified = factor(
+      organ_simplified,
+      levels = organs_keep
+    )
+  ) %&gt;%
+  arrange(
+    organ_simplified,
+    annotation_level2
+  )
+
+organs &lt;- unique(
+  as.character(
+    total_plot_df$organ_simplified
+  )
+)
+
+organs &lt;- organs[
+  !is.na(organs)
+]
+
+for (org in organs) {
+
+  sub_df &lt;- total_plot_df %&gt;%
+    filter(
+      organ_simplified == org
+    ) %&gt;%
+    arrange(
+      annotation_level2
+    )
+
+  annotations &lt;- as.character(
+    sub_df$annotation_level2
+  )
+
+  flow_med &lt;- setNames(
+    sub_df$med_flow,
+    annotations
+  )
+
+  cite_med &lt;- setNames(
+    sub_df$med_cite,
+    annotations
+  )
+
+  rna_med &lt;- setNames(
+    sub_df$med_rna,
+    annotations
+  )
+
+  radar_data &lt;- rbind(
+    max = rep(
+      100,
+      length(annotations)
+    ),
+    min = rep(
+      0,
+      length(annotations)
+    ),
+    Flow = flow_med,
+    CITEseq = cite_med,
+    RNAseq = rna_med
+  )
+
+  radar_data &lt;- as.data.frame(
+    radar_data
+  )
+
+  colnames(radar_data) &lt;- annotations
+
+  radar_data[
+    is.na(radar_data)
+  ] &lt;- 0
+
+  par(
+    mar = c(3, 3, 4, 3),
+    xpd = TRUE
+  )
+
+  radarchart(
+    radar_data,
+    axistype = 1,
+    pcol = c(
+      &quot;blue&quot;,
+      &quot;red&quot;,
+      &quot;darkgray&quot;
+    ),
+    plwd = c(
+      2,
+      2,
+      2
+    ),
+    plty = c(
+      1,
+      1,
+      1
+    ),
+    cglcol = &quot;grey&quot;,
+    cglty = 1,
+    axislabcol = &quot;grey&quot;,
+    vlcex = 0.8,
+    title = paste(
+      &quot;Flow vs CITE-seq vs RNA-seq proportions -&quot;,
+      org
+    )
+  )
+
+  legend(
+    &quot;topleft&quot;,
+    inset = c(
+      0,
+      -0.15
+    ),
+    horiz = TRUE,
+    legend = c(
+      &quot;Flow&quot;,
+      &quot;CITE-seq&quot;,
+      &quot;RNA-seq&quot;
+    ),
+    col = c(
+      &quot;blue&quot;,
+      &quot;red&quot;,
+      &quot;darkgray&quot;
+    ),
+    lty = 1,
+    lwd = 2,
+    bty = &quot;n&quot;,
+    xpd = TRUE,
+    cex = 0.8
+  )
+}</code></pre>
+<p><img src="figure/Treg_Workflow.Rmd/2f%20-%20radar%20plots%20comparing%20cluster%20distributions%20between%20flow/citeseq/scrnaseq%20across%20organs-1.png" alt="" width="768" style="display: block; margin: auto;" /><img src="figure/Treg_Workflow.Rmd/2f%20-%20radar%20plots%20comparing%20cluster%20distributions%20between%20flow/citeseq/scrnaseq%20across%20organs-2.png" alt="" width="768" style="display: block; margin: auto;" /><img src="figure/Treg_Workflow.Rmd/2f%20-%20radar%20plots%20comparing%20cluster%20distributions%20between%20flow/citeseq/scrnaseq%20across%20organs-3.png" alt="" width="768" style="display: block; margin: auto;" /><img src="figure/Treg_Workflow.Rmd/2f%20-%20radar%20plots%20comparing%20cluster%20distributions%20between%20flow/citeseq/scrnaseq%20across%20organs-4.png" alt="" width="768" style="display: block; margin: auto;" /><img src="figure/Treg_Workflow.Rmd/2f%20-%20radar%20plots%20comparing%20cluster%20distributions%20between%20flow/citeseq/scrnaseq%20across%20organs-5.png" alt="" width="768" style="display: block; margin: auto;" /><img src="figure/Treg_Workflow.Rmd/2f%20-%20radar%20plots%20comparing%20cluster%20distributions%20between%20flow/citeseq/scrnaseq%20across%20organs-6.png" alt="" width="768" style="display: block; margin: auto;" /><img src="figure/Treg_Workflow.Rmd/2f%20-%20radar%20plots%20comparing%20cluster%20distributions%20between%20flow/citeseq/scrnaseq%20across%20organs-7.png" alt="" width="768" style="display: block; margin: auto;" /><img src="figure/Treg_Workflow.Rmd/2f%20-%20radar%20plots%20comparing%20cluster%20distributions%20between%20flow/citeseq/scrnaseq%20across%20organs-8.png" alt="" width="768" style="display: block; margin: auto;" /><img src="figure/Treg_Workflow.Rmd/2f%20-%20radar%20plots%20comparing%20cluster%20distributions%20between%20flow/citeseq/scrnaseq%20across%20organs-9.png" alt="" width="768" style="display: block; margin: auto;" /><img src="figure/Treg_Workflow.Rmd/2f%20-%20radar%20plots%20comparing%20cluster%20distributions%20between%20flow/citeseq/scrnaseq%20across%20organs-10.png" alt="" width="768" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>selected_organs &lt;- c(&quot;small intestine&quot;, &quot;colon&quot;, &quot;skin&quot;, &quot;liver&quot;, &quot;placenta&quot;, &quot;lung&quot;)
+
+ivneg_gating &lt;- c(&quot;IV- CD3+&quot;, &quot;IV- CD45.2+ CD3e+&quot;, &quot;IV- CD45+ CD3e+&quot;,&quot;IV- CD45+ CD3e+ Thy1.1- and Thy1.1+ (OT1)&quot;)
+
+treg_object$nlta_highlight &lt;- &quot;Other&quot;
+
+treg_object$nlta_highlight[
+  treg_object$annotation_level2 == &quot;Treg.A&quot; &amp;
+    treg_object$organ_simplified %in% selected_organs
+] &lt;- &quot;Treg.A selected organs&quot;
+
+treg_object$nlta_highlight[
+  treg_object$annotation_level2 == &quot;Treg.A&quot; &amp;
+    treg_object$organ_simplified %in% selected_organs &amp;
+    treg_object$gating_strategy %in% ivneg_gating
+] &lt;- &quot;IV-&quot;
+
+treg_object$nlta_highlight &lt;- factor(
+  treg_object$nlta_highlight,
+  levels = c(
+    &quot;Treg.A selected organs&quot;,
+    &quot;IV-&quot;
+  )
+)
+
+cells_nlta &lt;- colnames(treg_object)[
+  treg_object$nlta_highlight != &quot;Other&quot;
+]
+
+
+
+#layering red on top
+treg_object$nlta_highlight &lt;- &quot;Other&quot;
+
+treg_object$nlta_highlight[
+  treg_object$annotation_level2 == &quot;Treg.A&quot; &amp;
+    treg_object$organ_simplified %in% selected_organs
+] &lt;- &quot;Treg.A selected organs&quot;
+
+treg_object$nlta_highlight[
+  treg_object$annotation_level2 == &quot;Treg.A&quot; &amp;
+    treg_object$organ_simplified %in% selected_organs &amp;
+    treg_object$gating_strategy %in% ivneg_gating
+] &lt;- &quot;IV-&quot;
+
+
+
+plot &lt;- FetchData(
+  treg_object,
+  vars = c(
+    &quot;mdeincremental_1&quot;,
+    &quot;mdeincremental_2&quot;,
+    &quot;nlta_highlight&quot;
+  )
+)
+
+plot &lt;- plot %&gt;%
+  mutate(
+    plot_order = case_when(
+      nlta_highlight == &quot;Other&quot; ~ 1,
+      nlta_highlight == &quot;Treg.A selected organs&quot; ~ 2,
+      nlta_highlight == &quot;IV-&quot; ~ 3
+    )
+  ) %&gt;%
+  arrange(plot_order)
+
+ggplot(plot, aes(mdeincremental_1, mdeincremental_2)) +
+  geom_point(
+    data = subset(plot, nlta_highlight == &quot;Other&quot;),
+    color = &quot;lightgray&quot;,
+    size = 1.0
+  ) +
+  geom_point(
+    data = subset(plot,
+                  nlta_highlight == &quot;Treg.A selected organs&quot;),
+    color = &quot;black&quot;,
+    size = 1.5
+  ) +
+  geom_point(
+    data = subset(plot,
+                  nlta_highlight == &quot;IV-&quot;),
+    color = &quot;red&quot;,
+    size = 2.5
+  ) +
+  NoAxes() +
+  NoGrid()</code></pre>
+<p><img src="figure/Treg_Workflow.Rmd/3b%20-%20mde%20highlighting%20Extravascular%20Treg.A%20in%20NLTs-1.png" alt="" width="768" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>top_n &lt;- 50
+
+organ_col &lt;- &quot;organ_simplified&quot;
+cluster_col &lt;- &quot;annotation_level2&quot;
+
+trega_label &lt;- &quot;Treg.A&quot;
+baseline_org &lt;- &quot;spleen&quot;
+org_to_compare &lt;- c(&quot;LN&quot;, &quot;small intestine LP&quot;, &quot;colon LP&quot;, &quot;lung&quot;, &quot;liver&quot;)
+min_cells &lt;- 10
+
+genetics_keep &lt;- c(&quot;wt&quot;, &quot;B6-Foxp3-GFP (B6.Cg-Foxp3tm1Kuch/J)&quot;)
+
+remove_gene_pattern &lt;- &quot;^Gm|^mt-|^Rpl|^Rps|^Snor|^Mir|^Linc|^Rp[sl]|-ps|Rik$|^Hbb&quot;
+
+mdata_use &lt;- treg_object@meta.data %&gt;%
+  filter(
+    # igt_number == &quot;67&quot;,
+    organ_simplified != &quot;thymus&quot;,
+    condition_detailed_simplified == &quot;baseline&quot;,
+    genetics %in% genetics_keep
+  )
+
+org_to_compare &lt;- intersect(org_to_compare, unique(mdata_use[[organ_col]]))
+
+group2 &lt;- mdata_use %&gt;%
+  filter(
+    .data[[cluster_col]] == trega_label,
+    .data[[organ_col]] == baseline_org
+  ) %&gt;%
+  pull(cellID)
+
+message(&quot;Treg.A spleen cells: &quot;, length(group2))</code></pre>
+<pre><code>Treg.A spleen cells: 2049</code></pre>
+<pre class="r"><code>if (length(group2) &lt; min_cells) {
+  stop(&quot;Not enough Treg.A spleen cells.&quot;)
+}
+
+res_list &lt;- list()
+
+for (org in org_to_compare) {
+  
+  group1 &lt;- mdata_use %&gt;%
+    filter(
+      .data[[cluster_col]] == trega_label,
+      .data[[organ_col]] == org
+    ) %&gt;%
+    pull(cellID)
+  
+  message(org, &quot;: group1 cells = &quot;, length(group1),
+          &quot; | spleen cells = &quot;, length(group2))
+  
+  if (length(group1) &lt; min_cells) {
+    warning(&quot;Skipping &quot;, org, &quot; because group1 has &lt; &quot;, min_cells, &quot; cells.&quot;)
+    next
+  }
+  
+  org_label &lt;- gsub(&quot;[^A-Za-z0-9._-]+&quot;, &quot;_&quot;, org)
+  
+  res_list[[org_label]] &lt;- FlashierDGE(
+    F1,
+    L1,
+    group1,
+    group2,
+    title_plot = sprintf(&quot;Treg.A %s vs Treg.A spleen&quot;, org)
+  )
+}</code></pre>
+<pre><code>LN: group1 cells = 2563 | spleen cells = 2049</code></pre>
+<pre><code>small intestine LP: group1 cells = 296 | spleen cells = 2049</code></pre>
+<pre><code>colon LP: group1 cells = 138 | spleen cells = 2049</code></pre>
+<pre><code>lung: group1 cells = 470 | spleen cells = 2049</code></pre>
+<pre><code>liver: group1 cells = 19 | spleen cells = 2049</code></pre>
+<pre class="r"><code>if (!length(res_list)) {
+  stop(&quot;No FlashierDGE results generated.&quot;)
+}
+
+diff_list &lt;- lapply(names(res_list), function(nm) {
+  
+  res_list[[nm]]$diff_genes %&gt;%
+    as.data.frame() %&gt;%
+    filter(
+      !is.na(SYMBOL),
+      !grepl(remove_gene_pattern, SYMBOL, ignore.case = TRUE),
+      is.finite(log2FC), 
+      abs(log2FC) &gt; 0.5
+    ) %&gt;%
+    group_by(SYMBOL) %&gt;%
+    slice_max(abs(log2FC), n = 1, with_ties = FALSE) %&gt;%
+    ungroup() %&gt;%
+    mutate(comparison = nm)
+})
+
+names(diff_list) &lt;- names(res_list)
+
+combined &lt;- bind_rows(diff_list)
+
+genes_to_plot &lt;- combined %&gt;%
+  group_by(comparison) %&gt;%
+  slice_max(abs(log2FC), n = top_n, with_ties = FALSE) %&gt;%
+  ungroup() %&gt;%
+  pull(SYMBOL) %&gt;%
+  unique()
+
+heatmap_df &lt;- combined %&gt;%
+  filter(SYMBOL %in% genes_to_plot) %&gt;%
+  select(SYMBOL, comparison, log2FC) %&gt;%
+  pivot_wider(
+    id_cols = SYMBOL,
+    names_from = comparison,
+    values_from = log2FC,
+    values_fill = 0
+  )
+heatmap_df[,&quot;LN&quot;] = res_list[[&quot;LN&quot;]]$diff_genes[rownames(heatmap_df),&quot;log2FC&quot;]
+heatmap_df[is.na(heatmap_df)] = 0
+
+heatmap_mat &lt;- heatmap_df %&gt;%
+  column_to_rownames(&quot;SYMBOL&quot;) %&gt;%
+  as.matrix()
+
+heatmap_mat[!is.finite(heatmap_mat)] &lt;- 0
+
+col_order &lt;- gsub(&quot;[^A-Za-z0-9._-]+&quot;, &quot;_&quot;, org_to_compare)
+present_cols &lt;- intersect(col_order, colnames(heatmap_mat))
+heatmap_mat &lt;- heatmap_mat[, present_cols, drop = FALSE]
+
+gene_order_df &lt;- combined %&gt;%
+  filter(SYMBOL %in% rownames(heatmap_mat)) %&gt;%
+  group_by(SYMBOL) %&gt;%
+  slice_max(abs(log2FC), n = 1, with_ties = FALSE) %&gt;%
+  ungroup() %&gt;%
+  mutate(
+    comparison = factor(comparison, levels = present_cols)
+  ) %&gt;%
+  arrange(comparison, desc(abs(log2FC)))
+
+heatmap_mat &lt;- heatmap_mat[
+  gene_order_df$SYMBOL[gene_order_df$SYMBOL %in% rownames(heatmap_mat)],
+  ,
+  drop = FALSE
+]
+
+colnames(heatmap_mat) &lt;- gsub(&quot;_&quot;, &quot; &quot;, colnames(heatmap_mat))
+
+ColorRamp &lt;- rev(colorRampPalette(c(&quot;red&quot;, &quot;white&quot;, &quot;blue&quot;))(100))
+
+pheatmap(
+  mat = heatmap_mat,
+  scale = &quot;none&quot;,
+  cluster_rows = T,
+  cluster_cols = T,
+  show_rownames = TRUE,
+  show_colnames = TRUE,
+  cellheight = 6,
+  cellwidth = 12,
+  fontsize_row = 8,
+  fontsize_col = 10,
+  breaks = seq(-5, 5, length.out = length(ColorRamp) + 1),
+  color = ColorRamp,
+  border_color = &quot;darkgray&quot;,
+  main = &quot;Treg.A tissue vs spleen FlashierDGE log2FC&quot;
+)</code></pre>
+<p><img src="figure/Treg_Workflow.Rmd/3f%20-%20heatmap%20comparing%20Treg.A%20in%20spleen%20to%20selected%20organs-1.png" alt="" width="480" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>emb_all &lt;- Embeddings(healthy_subset_inc, &quot;mde_incremental&quot;) %&gt;% as.data.frame()
+emb_all$cluster &lt;- healthy_subset_inc$annotation_level2
+emb_all$organ   &lt;- healthy_subset_inc$organ_simplified
+
+emb_colon &lt;- subset(emb_all, organ == &quot;colon LP&quot;)
+emb_skin &lt;- subset(emb_all, organ == &quot;skin&quot;)
+emb_si &lt;- subset(emb_all, organ == &quot;small intestine LP&quot;)
+
+ggplot(emb_all, aes(x = mdeincremental_1, y = mdeincremental_2)) +
+  rasterise(geom_point(color = &quot;lightgray&quot;, size = 0.25, alpha = 0.25), dpi = 300) +
+  rasterise(
+    geom_point(data = emb_colon, aes(color = cluster), size = 1.0),
+    dpi = 300
+  ) +
+  scale_color_manual(values = palette_vector) +
+  theme_minimal() +
+  ggtitle(&quot;Colon Cells Highlighted by Cluster Color&quot;) +
+  NoAxes() + NoGrid()</code></pre>
+<p><img src="figure/Treg_Workflow.Rmd/4d%20-%20mdes%20highlighting%20Treg%20cluster%20distributions%20in%20healthy%20NLTS-1.png" alt="" width="768" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>ggplot(emb_all, aes(x = mdeincremental_1, y = mdeincremental_2)) +
+  rasterise(geom_point(color = &quot;lightgray&quot;, size = 0.25, alpha = 0.25), dpi = 300) +
+  rasterise(
+    geom_point(data = emb_skin, aes(color = cluster), size = 1.0),
+    dpi = 300
+  ) +
+  scale_color_manual(values = palette_vector) +
+  theme_minimal() +
+  ggtitle(&quot;Skin Cells Highlighted by Cluster Color&quot;) +
+  NoAxes() + NoGrid()</code></pre>
+<p><img src="figure/Treg_Workflow.Rmd/4d%20-%20mdes%20highlighting%20Treg%20cluster%20distributions%20in%20healthy%20NLTS-2.png" alt="" width="768" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>ggplot(emb_all, aes(x = mdeincremental_1, y = mdeincremental_2)) +
+  rasterise(geom_point(color = &quot;lightgray&quot;, size = 0.25, alpha = 0.25), dpi = 300) +
+  rasterise(
+    geom_point(data = emb_si, aes(color = cluster), size = 1.0),
+    dpi = 300
+  ) +
+  scale_color_manual(values = palette_vector) +
+  theme_minimal() +
+  ggtitle(&quot;Small Intestine Cells Highlighted by Cluster Color&quot;) +
+  NoAxes() + NoGrid()</code></pre>
+<p><img src="figure/Treg_Workflow.Rmd/4d%20-%20mdes%20highlighting%20Treg%20cluster%20distributions%20in%20healthy%20NLTS-3.png" alt="" width="768" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>#mg_kidney_combined
+emb_mg_kidney &lt;- subset(emb_all, organ %in% c(&quot;mammary gland&quot;, &quot;kidney&quot;))
+ggplot(emb_all, aes(x = mdeincremental_1, y = mdeincremental_2)) +
+  rasterise(geom_point(color = &quot;lightgray&quot;, size = 0.25, alpha = 0.25), dpi = 300) +
+  rasterise(
+    geom_point(data = emb_mg_kidney, aes(color = cluster), size = 1.0),
+    dpi = 300
+  ) +
+  scale_color_manual(values = palette_vector) +
+  theme_minimal() +
+  ggtitle(&quot;Mammary Gland and Kidney Cells Highlighted by Cluster Color&quot;) +
+  NoAxes() + NoGrid()</code></pre>
+<p><img src="figure/Treg_Workflow.Rmd/4d%20-%20mdes%20highlighting%20Treg%20cluster%20distributions%20in%20healthy%20NLTS-4.png" alt="" width="768" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>emb_all &lt;- Embeddings(healthy_subset_inc, &quot;mde_incremental&quot;) %&gt;% as.data.frame()
+emb_all$cluster &lt;- healthy_subset_inc$annotation_level2
+emb_all$organ   &lt;- healthy_subset_inc$organ_simplified
+
+emb_spleen &lt;- subset(emb_all, organ == &quot;spleen&quot;)
+emb_ln &lt;- subset(emb_all, organ == &quot;LN&quot;)
+
+ggplot(emb_all, aes(x = mdeincremental_1, y = mdeincremental_2)) +
+  rasterise(geom_point(color = &quot;lightgray&quot;, size = 0.25, alpha = 0.25), dpi = 300) +
+  rasterise(
+    geom_point(data = emb_spleen, aes(color = cluster), size = 0.75),
+    dpi = 300
+  ) +
+  scale_color_manual(values = palette_vector) +
+  theme_minimal() +
+  ggtitle(&quot;Spleen Cells Highlighted by Cluster Color&quot;) +
+  NoAxes() + NoGrid()</code></pre>
+<p><img src="figure/Treg_Workflow.Rmd/4e%20-%20mde%20highlighting%20healthy%20spleen%20and%20LN%20cluster%20distribution-1.png" alt="" width="768" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>ggplot(emb_all, aes(x = mdeincremental_1, y = mdeincremental_2)) +
+  rasterise(geom_point(color = &quot;lightgray&quot;, size = 0.25, alpha = 0.25), dpi = 300) +
+  rasterise(
+    geom_point(data = emb_ln, aes(color = cluster), size = 0.75),
+    dpi = 300
+  ) +
+  scale_color_manual(values = palette_vector) +
+  theme_minimal() +
+  ggtitle(&quot;LN Cells Highlighted by Cluster Color&quot;) +
+  NoAxes() + NoGrid()</code></pre>
+<p><img src="figure/Treg_Workflow.Rmd/4e%20-%20mde%20highlighting%20healthy%20spleen%20and%20LN%20cluster%20distribution-2.png" alt="" width="768" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>mdata_orig &lt;- treg_object@meta.data
+genetics_keep &lt;- c(&quot;wt&quot;, &quot;B6-Foxp3-GFP (B6.Cg-Foxp3tm1Kuch/J)&quot;)
+
+organs_selected &lt;- mdata_orig %&gt;%
+  filter(annotation_level2 == &quot;Treg.E&quot;,
+         condition_detailed_simplified == &quot;baseline&quot;,
+         genetics %in% genetics_keep) %&gt;%
+  count(organ_simplified) %&gt;%
+  filter(n &gt; 20) %&gt;%
+  pull(organ_simplified)
+
+res_list_E &lt;- list()
+
+group1 &lt;- mdata_orig %&gt;%
+  filter(annotation_level2 == &quot;Treg.E&quot;,
+         condition_detailed_simplified == &quot;baseline&quot;,
+         genetics %in% genetics_keep,
+         organ_simplified %in% organs_selected) %&gt;%
+  pull(cellID)
+
+group2 &lt;- mdata_orig %&gt;%
+  filter(!annotation_level2 %in% c(&quot;Treg.E&quot;, &quot;Treg.P&quot;, &quot;Treg.wM&quot;),
+         condition_detailed_simplified == &quot;baseline&quot;,
+         genetics %in% genetics_keep,
+         organ_simplified %in% organs_selected) %&gt;%
+  pull(cellID)
+
+res_list_E[[&quot;Treg.E_vs_all&quot;]] &lt;- FlashierDGE(
+  F1, L1, group1, group2,
+  title_plot = &quot;Treg.E vs other Tregs&quot;
+)
+
+orgs &lt;- list(
+  c(&quot;spleen&quot;, &quot;LN&quot;),
+  &quot;colon LP&quot;,
+  &quot;small intestine LP&quot;,
+  &quot;lung&quot;,
+  &quot;bone marrow&quot;,
+  &quot;skin&quot;
+)
+
+group2 &lt;- mdata_orig %&gt;%
+  filter(annotation_level2 == &quot;Treg.A&quot;,
+         condition_detailed_simplified == &quot;baseline&quot;,
+         genetics %in% genetics_keep,
+         organ_simplified == &quot;spleen&quot;) %&gt;%
+  pull(cellID)
+
+for (org in orgs) {
+  org_label &lt;- paste(org, collapse = &quot;_&quot;)
+  org_title &lt;- paste(org, collapse = &quot; + &quot;)
+
+  group1 &lt;- mdata_orig %&gt;%
+    filter(annotation_level2 == &quot;Treg.E&quot;,
+           condition_detailed_simplified == &quot;baseline&quot;,
+           genetics %in% genetics_keep,
+           organ_simplified %in% org) %&gt;%
+    pull(cellID)
+
+  message(&quot;Running: Treg.E &quot;, org_title, &quot; vs Treg.A spleen&quot;)
+  message(&quot;group1 cells: &quot;, length(group1), &quot; | group2 cells: &quot;, length(group2))
+
+  if (length(group1) &gt; 0 &amp;&amp; length(group2) &gt; 0) {
+    res_list_E[[paste0(&quot;Treg.E_&quot;, org_label, &quot;_vs_Treg.ASpleen&quot;)]] &lt;- FlashierDGE(
+      F1, L1, group1, group2,
+      title_plot = paste0(&quot;Treg.E &quot;, org_title, &quot; vs Treg.A spleen&quot;)
+    )
+  }
+}</code></pre>
+<pre><code>Running: Treg.E spleen + LN vs Treg.A spleen</code></pre>
+<pre><code>group1 cells: 292 | group2 cells: 2049</code></pre>
+<pre><code>Running: Treg.E colon LP vs Treg.A spleen</code></pre>
+<pre><code>group1 cells: 599 | group2 cells: 2049</code></pre>
+<pre><code>Running: Treg.E small intestine LP vs Treg.A spleen</code></pre>
+<pre><code>group1 cells: 331 | group2 cells: 2049</code></pre>
+<pre><code>Running: Treg.E lung vs Treg.A spleen</code></pre>
+<pre><code>group1 cells: 23 | group2 cells: 2049</code></pre>
+<pre><code>Running: Treg.E bone marrow vs Treg.A spleen</code></pre>
+<pre><code>group1 cells: 23 | group2 cells: 2049</code></pre>
+<pre><code>Running: Treg.E skin vs Treg.A spleen</code></pre>
+<pre><code>group1 cells: 279 | group2 cells: 2049</code></pre>
+<pre class="r"><code>genes_to_plot_E &lt;- lapply(res_list_E, function(x) {
+  x$diff_genes %&gt;%
+    filter(!is.na(log2FC), abs(log2FC) &gt; 1) %&gt;%
+    arrange(desc(abs(log2FC))) %&gt;%
+    pull(SYMBOL)
+})
+
+res_merged_E &lt;- imap(res_list_E, ~ .x$diff_genes %&gt;%
+                       select(SYMBOL, log2FC) %&gt;%
+                       distinct(SYMBOL, .keep_all = TRUE) %&gt;%
+                       rename(!!.y := log2FC)) %&gt;%
+  reduce(full_join, by = &quot;SYMBOL&quot;)
+
+heatmap_E &lt;- res_merged_E %&gt;%
+  filter(SYMBOL %in% unique(unlist(genes_to_plot_E))) %&gt;%
+  column_to_rownames(&quot;SYMBOL&quot;) %&gt;%
+  as.matrix()
+
+ColorRamp &lt;- rev(colorRampPalette(c(&quot;red&quot;, &quot;white&quot;, &quot;blue&quot;))(100))
+
+pheatmap(
+  heatmap_E,
+  breaks = seq(-5, 5, length.out = length(ColorRamp) + 1),
+  cellwidth = 12,
+  cellheight = 6,
+  fontsize = 7,
+  color = ColorRamp
+)</code></pre>
+<p><img src="figure/Treg_Workflow.Rmd/heatmaps%20comparing%20Treg.D/E%20to%20Treg.A%20in%20spleen-1.png" alt="" width="480" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>organs_selected &lt;- mdata_orig %&gt;%
+  filter(annotation_level2 == &quot;Treg.D&quot;,
+         condition_detailed_simplified == &quot;baseline&quot;,
+         genetics %in% genetics_keep) %&gt;%
+  count(organ_simplified) %&gt;%
+  filter(n &gt; 20) %&gt;%
+  pull(organ_simplified)
+
+res_list_D &lt;- list()
+
+group1 &lt;- mdata_orig %&gt;%
+  filter(annotation_level2 == &quot;Treg.D&quot;,
+         condition_detailed_simplified == &quot;baseline&quot;,
+         genetics %in% genetics_keep,
+         organ_simplified %in% organs_selected) %&gt;%
+  pull(cellID)
+
+group2 &lt;- mdata_orig %&gt;%
+  filter(!annotation_level2 %in% c(&quot;Treg.D&quot;, &quot;Treg.P&quot;, &quot;Treg.wM&quot;),
+         condition_detailed_simplified == &quot;baseline&quot;,
+         genetics %in% genetics_keep,
+         organ_simplified %in% organs_selected) %&gt;%
+  pull(cellID)
+
+res_list_D[[&quot;Treg.D_vs_all&quot;]] &lt;- FlashierDGE(
+  F1, L1, group1, group2,
+  title_plot = &quot;Treg.D vs other Tregs&quot;
+)
+
+group2 &lt;- mdata_orig %&gt;%
+  filter(annotation_level2 == &quot;Treg.A&quot;,
+         condition_detailed_simplified == &quot;baseline&quot;,
+         genetics %in% genetics_keep,
+         organ_simplified == &quot;spleen&quot;) %&gt;%
+  pull(cellID)
+
+for (org in orgs) {
+  org_label &lt;- paste(org, collapse = &quot;_&quot;)
+  org_title &lt;- paste(org, collapse = &quot; + &quot;)
+
+  group1 &lt;- mdata_orig %&gt;%
+    filter(annotation_level2 == &quot;Treg.D&quot;,
+           condition_detailed_simplified == &quot;baseline&quot;,
+           genetics %in% genetics_keep,
+           organ_simplified %in% org) %&gt;%
+    pull(cellID)
+
+  message(&quot;Running: Treg.D &quot;, org_title, &quot; vs Treg.A spleen&quot;)
+  message(&quot;group1 cells: &quot;, length(group1), &quot; | group2 cells: &quot;, length(group2))
+
+  if (length(group1) &gt; 0 &amp;&amp; length(group2) &gt; 0) {
+    res_list_D[[paste0(&quot;Treg.D_&quot;, org_label, &quot;_vs_Treg.ASpleen&quot;)]] &lt;- FlashierDGE(
+      F1, L1, group1, group2,
+      title_plot = paste0(&quot;Treg.D &quot;, org_title, &quot; vs Treg.A spleen&quot;)
+    )
+  }
+}</code></pre>
+<pre><code>Running: Treg.D spleen + LN vs Treg.A spleen</code></pre>
+<pre><code>group1 cells: 647 | group2 cells: 2049</code></pre>
+<pre><code>Running: Treg.D colon LP vs Treg.A spleen</code></pre>
+<pre><code>group1 cells: 543 | group2 cells: 2049</code></pre>
+<pre><code>Running: Treg.D small intestine LP vs Treg.A spleen</code></pre>
+<pre><code>group1 cells: 782 | group2 cells: 2049</code></pre>
+<pre><code>Running: Treg.D lung vs Treg.A spleen</code></pre>
+<pre><code>group1 cells: 49 | group2 cells: 2049</code></pre>
+<pre><code>Running: Treg.D bone marrow vs Treg.A spleen</code></pre>
+<pre><code>group1 cells: 146 | group2 cells: 2049</code></pre>
+<pre><code>Running: Treg.D skin vs Treg.A spleen</code></pre>
+<pre><code>group1 cells: 628 | group2 cells: 2049</code></pre>
+<pre class="r"><code>genes_to_plot_D &lt;- lapply(res_list_D, function(x) {
+  x$diff_genes %&gt;%
+    filter(!is.na(log2FC), abs(log2FC) &gt; 1) %&gt;%
+    arrange(desc(abs(log2FC))) %&gt;%
+    pull(SYMBOL)
+})
+
+res_merged_D &lt;- imap(res_list_D, ~ .x$diff_genes %&gt;%
+                       select(SYMBOL, log2FC) %&gt;%
+                       distinct(SYMBOL, .keep_all = TRUE) %&gt;%
+                       rename(!!.y := log2FC)) %&gt;%
+  reduce(full_join, by = &quot;SYMBOL&quot;)
+
+heatmap_D &lt;- res_merged_D %&gt;%
+  filter(SYMBOL %in% unique(unlist(genes_to_plot_D))) %&gt;%
+  column_to_rownames(&quot;SYMBOL&quot;) %&gt;%
+  as.matrix()
+
+pheatmap(
+  heatmap_D,
+  breaks = seq(-5, 5, length.out = length(ColorRamp) + 1),
+  cellwidth = 12,
+  cellheight = 6,
+  fontsize = 7,
+  color = ColorRamp
+)</code></pre>
+<p><img src="figure/Treg_Workflow.Rmd/heatmaps%20comparing%20Treg.D/E%20to%20Treg.A%20in%20spleen-2.png" alt="" width="480" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>treg_object_filtered@meta.data &lt;- treg_object_filtered@meta.data %&gt;%
+  mutate(condition_detailed_simplified = case_when(
+    condition_detailed_simplified %in% c(&quot;CtrachomatisD&quot;, &quot;CtrachomatisL2&quot;) ~ &quot;Ctrachomatis&quot;,
+    TRUE ~ condition_detailed_simplified
+  ))
+
+treg_object_filtered@meta.data &lt;- treg_object_filtered@meta.data %&gt;%
+  mutate(condition_detailed_simplified = case_when(
+    condition_detailed_simplified %in% c(&quot;B16_ACT&quot;, &quot;B16_ACTaPD1a41BB&quot;) ~ &quot;B16&quot;,
+    condition_detailed_simplified %in% c(&quot;PDAC_FishHFD&quot;, &quot;PDAC_SoyHFD&quot;, &quot;PDAC&quot;, &quot;PDAC_aPD1aCTLA4&quot;) ~ &quot;PDAC&quot;,
+    condition_detailed_simplified %in% c(&quot;GBMmes&quot;, &quot;GBMmes_aPD1aCTLA4&quot;, &quot;GBMpron_aPD1aCTLA4&quot;) ~ &quot;GBM&quot;,
+    TRUE ~ condition_detailed_simplified
+  ))
+
+annotation_counts_cond &lt;- treg_object_filtered@meta.data %&gt;%
+  group_by(sample_code, organ_simplified, annotation_level2, condition_detailed_simplified) %&gt;%
+  summarise(count = n(), .groups = &quot;drop&quot;)
+
+total_sample_data_cond &lt;- annotation_counts_cond %&gt;%
+  pivot_wider(
+    names_from = annotation_level2,
+    values_from = count,
+    values_fill = 0,
+    id_cols = c(sample_code, organ_simplified, condition_detailed_simplified)
+  )
+total_sample_data_cond$total &lt;- rowSums(total_sample_data_cond[, 4:9])
+
+total_sample_data_cond &lt;- total_sample_data_cond %&gt;%
+  mutate(across(
+    .cols = starts_with(&quot;Treg.&quot;),
+    .fns = ~ .x / total,
+    .names = &quot;prop_{.col}&quot;
+  ))
+
+total_sample_data_cond &lt;- subset(total_sample_data_cond, subset = ! condition_detailed_simplified == &quot;other&quot;)
+
+prop_long &lt;- total_sample_data_cond %&gt;%
+  select(condition_detailed_simplified, organ_simplified, starts_with(&quot;prop_&quot;)) %&gt;%
+  pivot_longer(
+    cols = starts_with(&quot;prop_&quot;),
+    names_to = &quot;annotation_level2&quot;,
+    values_to = &quot;proportion&quot;
+  ) %&gt;%
+  mutate(annotation_level2 = sub(&quot;prop_&quot;, &quot;&quot;, annotation_level2))
+
+
+prop_long$percent &lt;- prop_long$proportion * 100
+
+prop_summary_ann &lt;- prop_long %&gt;%
+  group_by(organ_simplified, annotation_level2, condition_detailed_simplified) %&gt;%
+  summarise(
+    med = median(percent, na.rm = TRUE),
+    sem = sd(percent, na.rm = TRUE) / sqrt(n()),
+    .groups = &quot;drop&quot;
+  )
+
+#uterus
+
+uterus_radar &lt;- prop_summary_ann %&gt;%
+  filter(
+    organ_simplified == &quot;uterus&quot;,
+    annotation_level2 %in% c(&quot;Treg.A&quot;, &quot;Treg.B&quot;, &quot;Treg.D&quot;, &quot;Treg.F&quot;, &quot;Treg.E&quot;, &quot;Treg.P&quot;)
+  ) %&gt;%
+  mutate(
+    annotation_level2 = factor(
+      annotation_level2,
+      levels = c(&quot;Treg.A&quot;, &quot;Treg.B&quot;, &quot;Treg.D&quot;, &quot;Treg.F&quot;, &quot;Treg.E&quot;, &quot;Treg.P&quot;)
+    )
+  )
+
+all_annotations &lt;- levels(uterus_radar$annotation_level2)
+
+uterus_radar_complete &lt;- uterus_radar %&gt;%
+  complete(
+    annotation_level2 = all_annotations,
+    condition_detailed_simplified,
+    fill = list(med = 0)
+  )
+
+uterus_radar_wide &lt;- uterus_radar_complete %&gt;%
+  pivot_wider(
+    names_from = annotation_level2,
+    values_from = med,
+    values_fill = 0,
+    id_cols = condition_detailed_simplified
+  ) %&gt;%
+  select(
+    condition_detailed_simplified,
+    Treg.A, Treg.B, Treg.D, Treg.F, Treg.E, Treg.P
+  ) %&gt;%
+  column_to_rownames(&quot;condition_detailed_simplified&quot;) %&gt;%
+  as.data.frame()
+
+radar_data &lt;- rbind(
+  max = rep(100, ncol(uterus_radar_wide)),
+  min = rep(0, ncol(uterus_radar_wide)),
+  uterus_radar_wide
+)
+
+n_conditions &lt;- nrow(uterus_radar_wide)
+condition_colors &lt;- c(&quot;black&quot;, colorRampPalette(brewer.pal(9, &quot;Set1&quot;))(n_conditions - 1))
+fill_colors &lt;- c(alpha(&quot;black&quot;, 0.2), rep(NA, n_conditions - 1))
+
+par(mar = c(2, 2, 4, 2))
+
+radarchart(
+  radar_data,
+  axistype = 1,
+  pcol = condition_colors,
+  plwd = 2,
+  plty = 1,
+  pfcol = fill_colors,
+  cglcol = &quot;grey&quot;,
+  cglty = 1,
+  axislabcol = &quot;grey30&quot;,
+  caxislabels = seq(0, 100, 20),
+  calcex = 0.7,
+  vlcex = 0.8,
+  title = &quot;Treg Cluster Composition by Condition (Uterus)&quot;
+)
+
+legend(
+  &quot;bottomleft&quot;,
+  legend = rownames(uterus_radar_wide),
+  col = condition_colors,
+  lty = 1,
+  lwd = 2,
+  bty = &quot;n&quot;,
+  cex = 0.8
+)</code></pre>
+<p><img src="figure/Treg_Workflow.Rmd/5a%20-%20radar%20plots%20of%20organs%20comparing%20baseline%20to%20conditions-1.png" alt="" width="768" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>#lung
+lung_radar &lt;- prop_summary_ann %&gt;%
+  filter(
+    organ_simplified == &quot;lung&quot;,
+    annotation_level2 %in% c(&quot;Treg.A&quot;, &quot;Treg.B&quot;, &quot;Treg.D&quot;, &quot;Treg.F&quot;, &quot;Treg.E&quot;, &quot;Treg.P&quot;)
+  ) %&gt;%
+  mutate(
+    annotation_level2 = factor(
+      annotation_level2,
+      levels = c(&quot;Treg.A&quot;, &quot;Treg.B&quot;, &quot;Treg.D&quot;, &quot;Treg.F&quot;, &quot;Treg.E&quot;, &quot;Treg.P&quot;)
+    )
+  )
+
+all_annotations &lt;- levels(lung_radar$annotation_level2)
+
+lung_radar_complete &lt;- lung_radar %&gt;%
+  complete(
+    annotation_level2 = all_annotations,
+    condition_detailed_simplified,
+    fill = list(med = 0)
+  )
+
+lung_radar_wide &lt;- lung_radar_complete %&gt;%
+  pivot_wider(
+    names_from = annotation_level2,
+    values_from = med,
+    values_fill = 0,
+    id_cols = condition_detailed_simplified
+  ) %&gt;%
+  select(
+    condition_detailed_simplified,
+    Treg.A, Treg.B, Treg.D, Treg.F, Treg.E, Treg.P
+  ) %&gt;%
+  column_to_rownames(&quot;condition_detailed_simplified&quot;) %&gt;%
+  as.data.frame()
+
+radar_data &lt;- rbind(
+  max = rep(100, ncol(lung_radar_wide)),
+  min = rep(0, ncol(lung_radar_wide)),
+  lung_radar_wide
+)
+
+n_conditions &lt;- nrow(lung_radar_wide)
+condition_colors &lt;- c(&quot;black&quot;, colorRampPalette(brewer.pal(9, &quot;Set1&quot;))(n_conditions - 1))
+fill_colors &lt;- c(alpha(&quot;black&quot;, 0.2), rep(NA, n_conditions - 1))
+
+par(mar = c(2, 2, 4, 2))
+
+radarchart(
+  radar_data,
+  axistype = 1,
+  pcol = condition_colors,
+  plwd = 2,
+  plty = 1,
+  pfcol = fill_colors,
+  cglcol = &quot;grey&quot;,
+  cglty = 1,
+  axislabcol = &quot;grey30&quot;,
+  caxislabels = seq(0, 100, 20),
+  calcex = 0.7,
+  vlcex = 0.8,
+  title = &quot;Treg Cluster Composition by Condition (Lung)&quot;
+)
+
+legend(
+  &quot;bottomleft&quot;,
+  legend = rownames(lung_radar_wide),
+  col = condition_colors,
+  lty = 1,
+  lwd = 2,
+  bty = &quot;n&quot;,
+  cex = 0.8
+)</code></pre>
+<p><img src="figure/Treg_Workflow.Rmd/5a%20-%20radar%20plots%20of%20organs%20comparing%20baseline%20to%20conditions-2.png" alt="" width="768" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>#spleen
+spleen_radar &lt;- prop_summary_ann %&gt;%
+  filter(
+    organ_simplified == &quot;spleen&quot;,
+    annotation_level2 %in% c(&quot;Treg.A&quot;, &quot;Treg.B&quot;, &quot;Treg.D&quot;, &quot;Treg.F&quot;, &quot;Treg.E&quot;, &quot;Treg.P&quot;),
+    !condition_detailed_simplified %in% c(
+      &quot;KbDbKO&quot;, &quot;MHCIIhet&quot;, &quot;MHCIIKO&quot;, &quot;SFB_pregnancy&quot;,
+      &quot;MHCIIKO_Ea16&quot;, &quot;MHCIIhet_Ea16&quot;, &quot;KbDbQa1KO&quot;, &quot;KbDbQa1KO_MCMV&quot;, &quot;Foxp3mutant&quot;, &quot;KbDbKO_MCMV&quot;
+    )
+  ) %&gt;%
+  mutate(
+    annotation_level2 = factor(
+      annotation_level2,
+      levels = c(&quot;Treg.A&quot;, &quot;Treg.B&quot;, &quot;Treg.D&quot;, &quot;Treg.F&quot;, &quot;Treg.E&quot;, &quot;Treg.P&quot;)
+    )
+  )
+
+all_annotations &lt;- levels(spleen_radar$annotation_level2)
+
+spleen_radar_complete &lt;- spleen_radar %&gt;%
+  complete(
+    annotation_level2 = all_annotations,
+    condition_detailed_simplified,
+    fill = list(med = 0)
+  )
+
+spleen_radar_wide &lt;- spleen_radar_complete %&gt;%
+  pivot_wider(
+    names_from = annotation_level2,
+    values_from = med,
+    values_fill = 0,
+    id_cols = condition_detailed_simplified
+  ) %&gt;%
+  select(
+    condition_detailed_simplified,
+    Treg.A, Treg.B, Treg.D, Treg.F, Treg.E, Treg.P
+  ) %&gt;%
+  mutate(
+    condition_detailed_simplified = factor(
+      condition_detailed_simplified,
+      levels = c(
+        &quot;baseline&quot;,
+        setdiff(condition_detailed_simplified, &quot;baseline&quot;)
+      )
+    )
+  ) %&gt;%
+  arrange(condition_detailed_simplified) %&gt;%
+  column_to_rownames(&quot;condition_detailed_simplified&quot;) %&gt;%
+  as.data.frame()
+
+radar_data &lt;- rbind(
+  max = rep(100, ncol(spleen_radar_wide)),
+  min = rep(0, ncol(spleen_radar_wide)),
+  spleen_radar_wide
+)
+
+n_conditions &lt;- nrow(spleen_radar_wide)
+
+condition_colors &lt;- c(
+  &quot;black&quot;,
+  colorRampPalette(brewer.pal(9, &quot;Set1&quot;))(n_conditions - 1)
+)
+
+fill_colors &lt;- c(
+  alpha(&quot;black&quot;, 0.2),
+  rep(NA, n_conditions - 1)
+)
+
+par(mar = c(2, 2, 4, 2))
+
+radarchart(
+  radar_data,
+  axistype = 1,
+  pcol = condition_colors,
+  plwd = 2,
+  plty = 1,
+  pfcol = fill_colors,
+  cglcol = &quot;grey&quot;,
+  cglty = 1,
+  axislabcol = &quot;grey30&quot;,
+  caxislabels = seq(0, 100, 20),
+  calcex = 0.7,
+  vlcex = 0.8,
+  title = &quot;Treg Cluster Composition by Condition (Spleen)&quot;
+)
+
+legend(
+  &quot;bottomleft&quot;,
+  legend = rownames(spleen_radar_wide),
+  col = condition_colors,
+  lty = 1,
+  lwd = 2,
+  bty = &quot;n&quot;,
+  cex = 0.8
+)</code></pre>
+<p><img src="figure/Treg_Workflow.Rmd/5a%20-%20radar%20plots%20of%20organs%20comparing%20baseline%20to%20conditions-3.png" alt="" width="768" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>#colon
+colon_radar &lt;- prop_summary_ann %&gt;%
+  filter(
+    organ_simplified == &quot;colon LP&quot;,
+    annotation_level2 %in% c(&quot;Treg.A&quot;, &quot;Treg.B&quot;, &quot;Treg.D&quot;, &quot;Treg.F&quot;, &quot;Treg.E&quot;, &quot;Treg.P&quot;),
+    !condition_detailed_simplified %in% c(&quot;SFB_pregnancy&quot;, &quot;Foxp3mutant&quot;)
+  ) %&gt;%
+  mutate(
+    annotation_level2 = factor(
+      annotation_level2,
+      levels = c(&quot;Treg.A&quot;, &quot;Treg.B&quot;, &quot;Treg.D&quot;, &quot;Treg.F&quot;, &quot;Treg.E&quot;, &quot;Treg.P&quot;)
+    )
+  )
+
+all_annotations &lt;- levels(colon_radar$annotation_level2)
+
+colon_radar_complete &lt;- colon_radar %&gt;%
+  complete(
+    annotation_level2 = all_annotations,
+    condition_detailed_simplified,
+    fill = list(med = 0)
+  )
+
+colon_radar_wide &lt;- colon_radar_complete %&gt;%
+  pivot_wider(
+    names_from = annotation_level2,
+    values_from = med,
+    values_fill = 0,
+    id_cols = condition_detailed_simplified
+  ) %&gt;%
+  select(
+    condition_detailed_simplified,
+    Treg.A, Treg.B, Treg.D, Treg.F, Treg.E, Treg.P
+  ) %&gt;%
+  mutate(
+    condition_detailed_simplified = factor(
+      condition_detailed_simplified,
+      levels = c(
+        &quot;baseline&quot;,
+        setdiff(condition_detailed_simplified, &quot;baseline&quot;)
+      )
+    )
+  ) %&gt;%
+  arrange(condition_detailed_simplified) %&gt;%
+  column_to_rownames(&quot;condition_detailed_simplified&quot;) %&gt;%
+  as.data.frame()
+
+radar_data &lt;- rbind(
+  max = rep(100, ncol(colon_radar_wide)),
+  min = rep(0, ncol(colon_radar_wide)),
+  colon_radar_wide
+)
+
+n_conditions &lt;- nrow(colon_radar_wide)
+condition_colors &lt;- c(
+  &quot;black&quot;,
+  colorRampPalette(brewer.pal(9, &quot;Set1&quot;))(n_conditions - 1)
+)
+
+fill_colors &lt;- c(
+  alpha(&quot;black&quot;, 0.2),
+  rep(NA, n_conditions - 1)
+)
+
+par(mar = c(2, 2, 4, 2))
+
+radarchart(
+  radar_data,
+  axistype = 1,
+  pcol = condition_colors,
+  plwd = 2,
+  plty = 1,
+  pfcol = fill_colors,
+  cglcol = &quot;grey&quot;,
+  cglty = 1,
+  axislabcol = &quot;grey30&quot;,
+  caxislabels = seq(0, 100, 20),
+  calcex = 0.7,
+  vlcex = 0.8,
+  title = &quot;Treg Cluster Composition by Condition (Colon)&quot;
+)
+
+legend(
+  &quot;bottomleft&quot;,
+  legend = rownames(colon_radar_wide),
+  col = condition_colors,
+  lty = 1,
+  lwd = 2,
+  bty = &quot;n&quot;,
+  cex = 0.8
+)</code></pre>
+<p><img src="figure/Treg_Workflow.Rmd/5a%20-%20radar%20plots%20of%20organs%20comparing%20baseline%20to%20conditions-4.png" alt="" width="768" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>FeaturePlot(
+  treg_object,
+  features = &quot;Rorc&quot;,
+  reduction = &quot;mde_incremental&quot;,
+  cells = WhichCells(treg_object, expression = organ_simplified == &quot;lung&quot; &amp; condition_detailed_simplified == &quot;HDM&quot;),
+  order = TRUE,
+  pt.size = 0.5,
+  min.cutoff = &quot;0&quot;,
+  max.cutoff = &quot;3&quot;,
+ # raster = T,
+#  raster.dpi = c(512,512)
+) +
+  ggtitle(&quot;Rorc expression (lung, HDM)&quot;)</code></pre>
+<pre><code>Warning: Could not find Rorc in the default search locations, found in &#39;RNA&#39;
+assay instead</code></pre>
+<p><img src="figure/Treg_Workflow.Rmd/-%205b%20Rorc%20feature%20plot%20during%20HDM%20infection%20in%20lung-1.png" alt="" width="768" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>FeaturePlot(
+  treg_object,
+  features = &quot;Klrg1&quot;,
+  reduction = &quot;mde_incremental&quot;,
+  cells = WhichCells(treg_object, expression = organ_simplified == &quot;lung&quot; &amp; condition_detailed_simplified %in% c(&quot;MTB&quot;,&quot;flu&quot;)),
+  order = TRUE,
+  pt.size = 0.5,
+  min.cutoff = 0,
+  max.cutoff = 3
+) +
+  ggtitle(&quot;Klrg1 expression (lung, mtb + flu)&quot;)</code></pre>
+<pre><code>Warning: Could not find Klrg1 in the default search locations, found in &#39;RNA&#39;
+assay instead</code></pre>
+<p><img src="figure/Treg_Workflow.Rmd/5c%20-%20feature%20plot%20of%20Klrg1%20in%20lung%20during%20MTB/KP/flu-1.png" alt="" width="768" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>mdata_orig &lt;- treg_object@meta.data
+conditions_selected &lt;- mdata_orig %&gt;%
+  filter(
+    annotation_level2 == &quot;Treg.D&quot;,
+    organ_simplified== &quot;lung&quot;
+    ) %&gt;%
+  count(condition_detailed_simplified) %&gt;%
+  filter(n &gt; 20) %&gt;%
+  pull(condition_detailed_simplified) %&gt;%
+  as.character()
+
+mdata_orig %&gt;%
+  filter(
+    annotation_level2 == &quot;Treg.D&quot;,
+    organ_simplified == &quot;lung&quot;,
+    condition_detailed_simplified %in% conditions_selected
+  ) %&gt;%
+  count(condition_detailed_simplified)</code></pre>
+<pre><code>  condition_detailed_simplified   n
+1                    Afumigatus  22
+2                   Foxp3mutant  22
+3                           HDM 268
+4                            KP  83
+5                           MTB 111
+6                      baseline  55
+7                           flu  39</code></pre>
+<pre class="r"><code>res_list &lt;- list()
+group1 &lt;- mdata_orig %&gt;%
+  filter(
+    annotation_level2 == &quot;Treg.D&quot;,
+    organ_simplified == &quot;lung&quot;,
+    genetics %in% genetics_keep,
+    condition_detailed_simplified %in% conditions_selected
+  ) %&gt;%
+  pull(cellID)
+
+group2 &lt;- mdata_orig %&gt;%
+  filter(
+    !annotation_level2 %in% c(&quot;Treg.D&quot;, &quot;Treg.P&quot;, &quot;Treg.wM&quot;),
+    condition_detailed_simplified == &quot;baseline&quot;,
+    genetics %in% genetics_keep,
+    organ_simplified %in% organs_selected
+  ) %&gt;%
+  pull(cellID)
+
+res_list[[&quot;Treg.D_vs_all&quot;]] &lt;- FlashierDGE(
+  F1, L1, group1, group2,
+  title_plot = &quot;Treg.D vs other Tregs&quot;
+)
+
+conds &lt;- list(
+  all = NULL,
+  baseline = &quot;baseline&quot;,
+  Afumigatus = &quot;Afumigatus&quot;,
+  HDM = &quot;HDM&quot;,
+  MTB = &quot;MTB&quot;,
+  KP = &quot;KP&quot;,
+  flu = &quot;flu&quot;
+)
+
+res_list &lt;- list()
+
+group2 &lt;- mdata_orig %&gt;%
+  filter(
+    annotation_level2 == &quot;Treg.A&quot;,
+    condition_detailed_simplified == &quot;baseline&quot;,
+    genetics %in% genetics_keep,
+    organ_simplified == &quot;spleen&quot;
+  ) %&gt;%
+  pull(cellID)
+
+for (cond_name in names(conds)) {
+  
+  cond &lt;- conds[[cond_name]]
+  
+  group1_df &lt;- mdata_orig %&gt;%
+    filter(
+      annotation_level2 == &quot;Treg.D&quot;,
+      organ_simplified == &quot;lung&quot;
+    )
+  
+  if (!is.null(cond)) {
+    group1_df &lt;- group1_df %&gt;%
+      filter(condition_detailed_simplified == cond)
+  }
+  
+  group1 &lt;- group1_df %&gt;% pull(cellID)
+  
+  message(cond_name, &quot;: group1 cells = &quot;, length(group1),
+          &quot; | group2 cells = &quot;, length(group2))
+  
+  if (length(group1) &gt; 0 &amp;&amp; length(group2) &gt; 0) {
+    res_list[[sprintf(&quot;Lung_Treg.D_%s_vs_Baseline_Spleen_Treg.A&quot;, cond_name)]] &lt;- FlashierDGE(
+      F1, L1, group1, group2,
+      title_plot = sprintf(&quot;Lung Treg.D %s vs baseline spleen Treg.A&quot;, cond_name)
+    )
+  }
+}</code></pre>
+<pre><code>all: group1 cells = 619 | group2 cells = 2049</code></pre>
+<pre><code>baseline: group1 cells = 55 | group2 cells = 2049</code></pre>
+<pre><code>Afumigatus: group1 cells = 22 | group2 cells = 2049</code></pre>
+<pre><code>HDM: group1 cells = 268 | group2 cells = 2049</code></pre>
+<pre><code>MTB: group1 cells = 111 | group2 cells = 2049</code></pre>
+<pre><code>KP: group1 cells = 83 | group2 cells = 2049</code></pre>
+<pre><code>flu: group1 cells = 39 | group2 cells = 2049</code></pre>
+<pre class="r"><code>genes_to_plot = list()
+for (i in 1:length(res_list)) {
+    print(names(res_list)[i])
+    genes_to_plot[[names(res_list)[i]]] = res_list[[i]]$diff_genes %&gt;% filter(abs(log2FC) &gt; 1) %&gt;% arrange(desc(abs(log2FC))) %&gt;% pull(SYMBOL)
+}</code></pre>
+<pre><code>[1] &quot;Lung_Treg.D_all_vs_Baseline_Spleen_Treg.A&quot;
+[1] &quot;Lung_Treg.D_baseline_vs_Baseline_Spleen_Treg.A&quot;
+[1] &quot;Lung_Treg.D_Afumigatus_vs_Baseline_Spleen_Treg.A&quot;
+[1] &quot;Lung_Treg.D_HDM_vs_Baseline_Spleen_Treg.A&quot;
+[1] &quot;Lung_Treg.D_MTB_vs_Baseline_Spleen_Treg.A&quot;
+[1] &quot;Lung_Treg.D_KP_vs_Baseline_Spleen_Treg.A&quot;
+[1] &quot;Lung_Treg.D_flu_vs_Baseline_Spleen_Treg.A&quot;</code></pre>
+<pre class="r"><code>res_merged_log2FC = data.frame(res_list[[1]]$diff_genes$log2FC)
+for (i in 2:length(res_list)) {
+    res_merged_log2FC = data.frame(res_merged_log2FC, res_list[[i]]$diff_genes$log2FC)
+}
+colnames(res_merged_log2FC) = names(res_list)
+rownames(res_merged_log2FC) = res_list[[1]]$diff_genes$SYMBOL
+ColorRamp = rev(colorRampPalette(c(&#39;red&#39;,&#39;white&#39;,&#39;blue&#39;))(100))
+
+
+order &lt;- c(
+  &quot;Lung_Treg.D_all_vs_Baseline_Spleen_Treg.A&quot;,
+  &quot;Lung_Treg.D_baseline_vs_Baseline_Spleen_Treg.A&quot;,
+  &quot;Lung_Treg.D_Afumigatus_vs_Baseline_Spleen_Treg.A&quot;,
+  &quot;Lung_Treg.D_HDM_vs_Baseline_Spleen_Treg.A&quot;,
+  &quot;Lung_Treg.D_MTB_vs_Baseline_Spleen_Treg.A&quot;,
+  &quot;Lung_Treg.D_KP_vs_Baseline_Spleen_Treg.A&quot;,
+  &quot;Lung_Treg.D_flu_vs_Baseline_Spleen_Treg.A&quot;
+)
+
+order &lt;- order[order %in% colnames(res_merged_log2FC)]
+
+res_merged_log2FC &lt;- res_merged_log2FC[, order, drop = FALSE]
+
+pheatmap(
+  mat = as.matrix(res_merged_log2FC)[unique(unlist(genes_to_plot)), ],
+  breaks = seq(-5, 5, length.out = length(ColorRamp) + 1),
+  color = ColorRamp,
+  cluster_cols = FALSE
+)</code></pre>
+<p><img src="figure/Treg_Workflow.Rmd/heatmaps%20looking%20at%20Treg.D/E%20in%20lung%20across%20conditions-1.png" alt="" width="480" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>#treg.e
+mdata_orig &lt;- treg_object@meta.data
+conditions_selected &lt;- mdata_orig %&gt;%
+  filter(
+    annotation_level2 == &quot;Treg.E&quot;,
+    organ_simplified== &quot;lung&quot;
+    ) %&gt;%
+  count(condition_detailed_simplified) %&gt;%
+  filter(n &gt; 20) %&gt;%
+  pull(condition_detailed_simplified) %&gt;%
+  as.character()
+
+mdata_orig %&gt;%
+  filter(
+    annotation_level2 == &quot;Treg.E&quot;,
+    organ_simplified == &quot;lung&quot;,
+    condition_detailed_simplified %in% conditions_selected
+  ) %&gt;%
+  count(condition_detailed_simplified)</code></pre>
+<pre><code>  condition_detailed_simplified   n
+1                           HDM 368
+2                            KP  27
+3                           MTB  42
+4                      baseline  26</code></pre>
+<pre class="r"><code>res_list &lt;- list()
+group1 &lt;- mdata_orig %&gt;%
+  filter(
+    annotation_level2 == &quot;Treg.E&quot;,
+    organ_simplified == &quot;lung&quot;,
+    genetics %in% genetics_keep,
+    condition_detailed_simplified %in% conditions_selected
+  ) %&gt;%
+  pull(cellID)
+
+group2 &lt;- mdata_orig %&gt;%
+  filter(
+    !annotation_level2 %in% c(&quot;Treg.E&quot;, &quot;Treg.P&quot;, &quot;Treg.wM&quot;),
+    condition_detailed_simplified == &quot;baseline&quot;,
+    genetics %in% genetics_keep,
+    organ_simplified %in% organs_selected
+  ) %&gt;%
+  pull(cellID)
+
+
+res_list[[&quot;Treg.E_vs_all&quot;]] &lt;- FlashierDGE(
+  F1, L1, group1, group2,
+  title_plot = &quot;Treg.E vs other Tregs&quot;
+)
+
+conds &lt;- list(
+  all = NULL,
+  baseline = &quot;baseline&quot;,
+  Afumigatus = &quot;Afumigatus&quot;,
+  HDM = &quot;HDM&quot;,
+  MTB = &quot;MTB&quot;,
+  KP = &quot;KP&quot;,
+  flu = &quot;flu&quot;
+)
+
+res_list &lt;- list()
+
+group2 &lt;- mdata_orig %&gt;%
+  filter(
+    annotation_level2 == &quot;Treg.A&quot;,
+    condition_detailed_simplified == &quot;baseline&quot;,
+    genetics %in% genetics_keep,
+    organ_simplified == &quot;spleen&quot;
+  ) %&gt;%
+  pull(cellID)
+
+for (cond_name in names(conds)) {
+  
+  cond &lt;- conds[[cond_name]]
+  
+  group1_df &lt;- mdata_orig %&gt;%
+    filter(
+      annotation_level2 == &quot;Treg.E&quot;,
+      organ_simplified == &quot;lung&quot;
+    )
+  
+  if (!is.null(cond)) {
+    group1_df &lt;- group1_df %&gt;%
+      filter(condition_detailed_simplified == cond)
+  }
+  
+  group1 &lt;- group1_df %&gt;% pull(cellID)
+  
+  message(cond_name, &quot;: group1 cells = &quot;, length(group1),
+          &quot; | group2 cells = &quot;, length(group2))
+  
+  if (length(group1) &gt; 0 &amp;&amp; length(group2) &gt; 0) {
+    res_list[[sprintf(&quot;Lung_Treg.E_%s_vs_Baseline_Spleen_Treg.A&quot;, cond_name)]] &lt;- FlashierDGE(
+      F1, L1, group1, group2,
+      title_plot = sprintf(&quot;Lung Treg.E %s vs baseline spleen Treg.A&quot;, cond_name)
+    )
+  }
+}</code></pre>
+<pre><code>all: group1 cells = 529 | group2 cells = 2049</code></pre>
+<pre><code>baseline: group1 cells = 26 | group2 cells = 2049</code></pre>
+<pre><code>Afumigatus: group1 cells = 17 | group2 cells = 2049</code></pre>
+<pre><code>HDM: group1 cells = 368 | group2 cells = 2049</code></pre>
+<pre><code>MTB: group1 cells = 42 | group2 cells = 2049</code></pre>
+<pre><code>KP: group1 cells = 27 | group2 cells = 2049</code></pre>
+<pre><code>flu: group1 cells = 15 | group2 cells = 2049</code></pre>
+<pre class="r"><code>genes_to_plot = list()
+for (i in 1:length(res_list)) {
+    print(names(res_list)[i])
+    genes_to_plot[[names(res_list)[i]]] = res_list[[i]]$diff_genes %&gt;% filter(abs(log2FC) &gt; 1) %&gt;% arrange(desc(abs(log2FC))) %&gt;% pull(SYMBOL)
+}</code></pre>
+<pre><code>[1] &quot;Lung_Treg.E_all_vs_Baseline_Spleen_Treg.A&quot;
+[1] &quot;Lung_Treg.E_baseline_vs_Baseline_Spleen_Treg.A&quot;
+[1] &quot;Lung_Treg.E_Afumigatus_vs_Baseline_Spleen_Treg.A&quot;
+[1] &quot;Lung_Treg.E_HDM_vs_Baseline_Spleen_Treg.A&quot;
+[1] &quot;Lung_Treg.E_MTB_vs_Baseline_Spleen_Treg.A&quot;
+[1] &quot;Lung_Treg.E_KP_vs_Baseline_Spleen_Treg.A&quot;
+[1] &quot;Lung_Treg.E_flu_vs_Baseline_Spleen_Treg.A&quot;</code></pre>
+<pre class="r"><code>res_merged_log2FC = data.frame(res_list[[1]]$diff_genes$log2FC)
+for (i in 2:length(res_list)) {
+    res_merged_log2FC = data.frame(res_merged_log2FC, res_list[[i]]$diff_genes$log2FC)
+}
+colnames(res_merged_log2FC) = names(res_list)
+rownames(res_merged_log2FC) = res_list[[1]]$diff_genes$SYMBOL
+
+ColorRamp = rev(colorRampPalette(c(&#39;red&#39;,&#39;white&#39;,&#39;blue&#39;))(100))
+
+order &lt;- c(
+  &quot;Lung_Treg.E_all_vs_Baseline_Spleen_Treg.A&quot;,
+  &quot;Lung_Treg.E_baseline_vs_Baseline_Spleen_Treg.A&quot;,
+  &quot;Lung_Treg.E_Afumigatus_vs_Baseline_Spleen_Treg.A&quot;,
+  &quot;Lung_Treg.E_HDM_vs_Baseline_Spleen_Treg.A&quot;,
+  &quot;Lung_Treg.E_MTB_vs_Baseline_Spleen_Treg.A&quot;,
+  &quot;Lung_Treg.E_KP_vs_Baseline_Spleen_Treg.A&quot;,
+  &quot;Lung_Treg.E_flu_vs_Baseline_Spleen_Treg.A&quot;
+)
+
+order &lt;- order[order %in% colnames(res_merged_log2FC)]
+
+res_merged_log2FC &lt;- res_merged_log2FC[, order, drop = FALSE]
+
+pheatmap(
+  mat = as.matrix(res_merged_log2FC)[unique(unlist(genes_to_plot)), ],
+  breaks = seq(-5, 5, length.out = length(ColorRamp) + 1),
+  color = ColorRamp,
+  cluster_cols = FALSE
+)</code></pre>
+<p><img src="figure/Treg_Workflow.Rmd/heatmaps%20looking%20at%20Treg.D/E%20in%20lung%20across%20conditions-2.png" alt="" width="480" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>annotation_counts_cond &lt;- treg_object_filtered@meta.data %&gt;%
+  group_by(sample_code, condition_broad, annotation_level2, condition_detailed_simplified) %&gt;%
+  summarise(count = n(), .groups = &quot;drop&quot;)
+
+total_sample_data_cond &lt;- annotation_counts_cond %&gt;%
+  pivot_wider(
+    names_from = annotation_level2,
+    values_from = count,
+    values_fill = 0,
+    id_cols = c(sample_code, condition_broad, condition_detailed_simplified)
+  )
+
+total_sample_data_cond$total &lt;- rowSums(total_sample_data_cond[, 4:9])
+
+total_sample_data_cond &lt;- total_sample_data_cond %&gt;%
+  mutate(across(
+    .cols = starts_with(&quot;Treg.&quot;),
+    .fns = ~ .x / total,
+    .names = &quot;prop_{.col}&quot;
+  ))
+
+prop_long &lt;- total_sample_data_cond %&gt;%
+  select(condition_detailed_simplified, condition_broad, starts_with(&quot;prop_&quot;)) %&gt;%
+  pivot_longer(
+    cols = starts_with(&quot;prop_&quot;),
+    names_to = &quot;annotation_level2&quot;,
+    values_to = &quot;proportion&quot;
+  ) %&gt;%
+  mutate(annotation_level2 = sub(&quot;prop_&quot;, &quot;&quot;, annotation_level2))
+
+
+prop_long$percent &lt;- prop_long$proportion * 100
+
+prop_summary_ann &lt;- prop_long %&gt;%
+  group_by(condition_broad, annotation_level2, condition_detailed_simplified) %&gt;%
+  summarise(
+    med = median(percent, na.rm = TRUE),
+    sem = sd(percent, na.rm = TRUE) / sqrt(n()),
+    .groups = &quot;drop&quot;
+  )
+
+cancer_radar &lt;- prop_summary_ann %&gt;%
+  filter(
+    condition_broad == &quot;cancer&quot;,
+    annotation_level2 %in% c(&quot;Treg.A&quot;, &quot;Treg.D&quot;, &quot;Treg.B&quot;, &quot;Treg.F&quot;, &quot;Treg.E&quot;, &quot;Treg.P&quot;)
+  )
+
+annotation_order &lt;- c(&quot;Treg.A&quot;, &quot;Treg.D&quot;, &quot;Treg.B&quot;, &quot;Treg.F&quot;, &quot;Treg.E&quot;, &quot;Treg.P&quot;)
+
+cancer_radar_complete &lt;- cancer_radar %&gt;%
+  complete(
+    annotation_level2 = annotation_order,
+    condition_detailed_simplified,
+    fill = list(med = 0)
+  )
+
+cancer_radar_wide &lt;- cancer_radar_complete %&gt;%
+  pivot_wider(
+    names_from = annotation_level2,
+    values_from = med,
+    values_fill = 0,
+    id_cols = condition_detailed_simplified
+  ) %&gt;%
+  column_to_rownames(&quot;condition_detailed_simplified&quot;) %&gt;%
+  as.data.frame()
+
+cancer_radar_wide &lt;- cancer_radar_wide[, annotation_order]
+
+baseline_name &lt;- &quot;baseline&quot;
+
+cancer_radar_wide &lt;- cancer_radar_wide %&gt;%
+  tibble::rownames_to_column(&quot;condition_detailed_simplified&quot;) %&gt;%
+  mutate(
+    condition_detailed_simplified = factor(
+      condition_detailed_simplified,
+      levels = c(
+        baseline_name,
+        setdiff(condition_detailed_simplified, baseline_name)
+      )
+    )
+  ) %&gt;%
+  arrange(condition_detailed_simplified) %&gt;%
+  column_to_rownames(&quot;condition_detailed_simplified&quot;)
+
+radar_data &lt;- rbind(
+  max = rep(100, ncol(cancer_radar_wide)),
+  min = rep(0, ncol(cancer_radar_wide)),
+  cancer_radar_wide
+)
+
+n_conditions &lt;- nrow(cancer_radar_wide)
+
+condition_colors &lt;- c(
+  &quot;blue&quot;,
+  colorRampPalette(
+    RColorBrewer::brewer.pal(9, &quot;Set1&quot;)
+  )(n_conditions - 1)
+)
+
+par(mar = c(2, 2, 4, 2))
+
+radarchart(
+  radar_data,
+  axistype = 1,
+  pcol = condition_colors,
+  plwd = 2,
+  plty = 1,
+  pfcol = NA,
+  cglcol = &quot;grey&quot;,
+  cglty = 1,
+  axislabcol = &quot;grey30&quot;,
+  caxislabels = seq(0, 100, 20),
+  calcex = 0.7,
+  vlcex = 0.8,
+  title = &quot;Treg Cluster Composition by Cancer Type&quot;
+)
+
+legend(
+  &quot;bottomleft&quot;,
+  legend = rownames(cancer_radar_wide),
+  col = condition_colors,
+  lty = 1,
+  lwd = 2,
+  bty = &quot;n&quot;,
+  cex = 0.8
+)</code></pre>
+<p><img src="figure/Treg_Workflow.Rmd/5g%20-%20cancer%20radar%20plot-1.png" alt="" width="768" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>cond_col &lt;- names(main_trbi)[1]
+
+colnames(main_trbi)[colnames(main_trbi) == &quot;Cl.1&quot;] &lt;- &quot;Treg.A&quot;
+colnames(main_trbi)[colnames(main_trbi) == &quot;Cl.2&quot;] &lt;- &quot;Treg.D&quot;
+colnames(main_trbi)[colnames(main_trbi) == &quot;Cl.3&quot;] &lt;- &quot;Treg.B&quot;
+colnames(main_trbi)[colnames(main_trbi) == &quot;Cl.4&quot;] &lt;- &quot;Treg.F&quot;
+colnames(main_trbi)[colnames(main_trbi) == &quot;Cl.6&quot;] &lt;- &quot;Treg.C&quot;
+colnames(main_trbi)[colnames(main_trbi) == &quot;Cl.8&quot;] &lt;- &quot;Treg.E&quot;
+colnames(main_trbi)[colnames(main_trbi) == &quot;Miniverse&quot;] &lt;- &quot;Treg.wM&quot;
+colnames(main_trbi)[colnames(main_trbi) == &quot;Proliferating&quot;] &lt;- &quot;Treg.P&quot;
+
+
+radar_wide &lt;- main_trbi %&gt;%
+  rename(condition = all_of(cond_col)) %&gt;%
+  column_to_rownames(&quot;condition&quot;) %&gt;%
+  as.data.frame()
+radar_wide[] &lt;- lapply(radar_wide, function(x) as.numeric(as.character(x)))
+radar_data &lt;- rbind(
+  max = rep(100, ncol(radar_wide)),
+  min = rep(0,   ncol(radar_wide)),
+  radar_wide
+)
+
+n_conditions &lt;- nrow(radar_wide)
+condition_colors &lt;- c(&quot;black&quot;, colorRampPalette(brewer.pal(9, &quot;Set1&quot;))(max(n_conditions - 1, 1)))
+
+
+par(mar = c(2, 2, 4, 2))
+
+radarchart(
+  radar_data,
+  axistype = 1,
+  pcol = condition_colors,
+  plwd = 2,
+  plty = 1,
+  cglcol = &quot;grey&quot;,
+  cglty = 1,
+  axislabcol = &quot;grey30&quot;,
+  caxislabels = seq(0, 100, 20),
+  calcex = 0.7,
+  vlcex = 0.8,
+  title = &quot;Treg Cluster Composition by Condition - Main&quot;
+)
+
+legend(
+  &quot;bottomleft&quot;,
+  legend = rownames(radar_wide),
+  col = condition_colors,
+  lty = 1,
+  lwd = 2,
+  bty = &quot;n&quot;,
+  cex = 0.8
+)</code></pre>
+<p><img src="figure/Treg_Workflow.Rmd/5h%20-%20radar%20plots%20showikng%20props%20of%20Treg%20clusters%20in%20different%20external%20cancer%20treg%20datasets-1.png" alt="" width="768" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>top_organs &lt;- c(&quot;placenta&quot;, &quot;uterus&quot;, &quot;liver&quot;, &quot;peritoneal cavity&quot;, &quot;blood&quot;)
+
+for (org in top_organs) {
+  
+  healthy_subset_inc$highlight_tmp &lt;- ifelse(
+    treg_object$organ_simplified == org,
+    &quot;highlight&quot;, &quot;background&quot;
+  )
+  
+  coords &lt;- Embeddings(healthy_subset_inc, &quot;mde_incremental&quot;) %&gt;%
+    as.data.frame() %&gt;%
+    mutate(
+      cell = rownames(.),
+      highlight_tmp = healthy_subset_inc$highlight_tmp,
+      annotation_level2 = healthy_subset_inc$annotation_level2
+    )
+  
+  p &lt;- ggplot(coords, aes(x = mdeincremental_1, y = mdeincremental_2)) +
+    geom_point(
+      data = subset(coords, highlight_tmp == &quot;background&quot;),
+      color = &quot;lightgray&quot;,
+      size = 0.5
+    ) +
+    geom_point(
+      data = subset(coords, highlight_tmp == &quot;highlight&quot;),
+      aes(color = annotation_level2),
+      size = 1.5
+    ) +
+    scale_color_manual(values = palette_vector) +
+    theme_void() +
+    ggtitle(paste(org, &quot;Cells Highlighted&quot;)) + NoLegend()
+  
+  print(p)
+}</code></pre>
+<p><img src="figure/Treg_Workflow.Rmd/6a%20-%20mdes%20highlighting%20cluster%20dist.%20in%20top%20expressing%20cd4.f%20organs-1.png" alt="" width="768" style="display: block; margin: auto;" /><img src="figure/Treg_Workflow.Rmd/6a%20-%20mdes%20highlighting%20cluster%20dist.%20in%20top%20expressing%20cd4.f%20organs-2.png" alt="" width="768" style="display: block; margin: auto;" /><img src="figure/Treg_Workflow.Rmd/6a%20-%20mdes%20highlighting%20cluster%20dist.%20in%20top%20expressing%20cd4.f%20organs-3.png" alt="" width="768" style="display: block; margin: auto;" /><img src="figure/Treg_Workflow.Rmd/6a%20-%20mdes%20highlighting%20cluster%20dist.%20in%20top%20expressing%20cd4.f%20organs-4.png" alt="" width="768" style="display: block; margin: auto;" /><img src="figure/Treg_Workflow.Rmd/6a%20-%20mdes%20highlighting%20cluster%20dist.%20in%20top%20expressing%20cd4.f%20organs-5.png" alt="" width="768" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>assay_use &lt;- &quot;RNA&quot;
+
+Idents(treg_object) &lt;- &quot;annotation_level2&quot;
+
+de &lt;- FindMarkers(
+  treg_object,
+  ident.1 = &quot;Treg.F&quot;,
+  ident.2 = NULL,
+  assay = assay_use,
+  test.use = &quot;wilcox&quot;,
+  logfc.threshold = 0.25,
+  min.pct = 0.1
+)
+
+de$gene &lt;- rownames(de)
+
+de &lt;- de %&gt;%
+  mutate(
+    sign_fc = sign(avg_log2FC),
+    rank_stat = sign_fc * (-log10(p_val + 1e-300))
+  )
+
+ranks &lt;- setNames(
+  de$rank_stat,
+  de$gene
+)
+
+ranks &lt;- sort(
+  ranks,
+  decreasing = TRUE
+)
+
+species &lt;- &quot;Mus musculus&quot;
+
+m_c2 &lt;- msigdbr(
+  species = species,
+  category = &quot;C2&quot;
+) %&gt;%
+  select(
+    gs_name,
+    gene_symbol
+  )</code></pre>
+<pre><code>Using human MSigDB with ortholog mapping to mouse. Use `db_species = &quot;MM&quot;` for mouse-native gene sets.
+This message is displayed once per session.</code></pre>
+<pre><code>Warning: The `category` argument of `msigdbr()` is deprecated as of msigdbr 10.0.0.
+ℹ Please use the `collection` argument instead.
+This warning is displayed once per session.
+Call `lifecycle::last_lifecycle_warnings()` to see where this warning was
+generated.</code></pre>
+<pre class="r"><code>m_all &lt;- m_c2 %&gt;%
+  filter(
+    grepl(
+      &quot;^(KEGG_|REACTOME_|WP_)&quot;,
+      gs_name
+    )
+  )
+
+genesets &lt;- split(
+  m_all$gene_symbol,
+  m_all$gs_name
+)
+
+canon &lt;- function(x) {
+  x %&gt;%
+    toupper() %&gt;%
+    str_replace_all(
+      &quot;[^A-Z0-9]+&quot;,
+      &quot;_&quot;
+    ) %&gt;%
+    str_replace_all(
+      &quot;^_|_$&quot;,
+      &quot;&quot;
+    )
+}
+
+gs_names &lt;- names(genesets)
+
+canon_map &lt;- setNames(
+  gs_names,
+  canon(gs_names)
+)
+
+target &lt;- &quot;KEGG_LEUKOCYTE_TRANSENDOTHELIAL_MIGRATION&quot;
+
+key &lt;- canon(target)
+
+nm &lt;- canon_map[[key]]
+
+pw_genes &lt;- intersect(
+  unique(genesets[[nm]]),
+  names(ranks)
+)
+
+res &lt;- fgsea(
+  pathways = list(
+    this = pw_genes
+  ),
+  stats = ranks,
+  minSize = 1,
+  maxSize = Inf,
+  nperm = 10000
+) %&gt;%
+  as.data.frame()</code></pre>
+<pre><code>Warning in fgsea(pathways = list(this = pw_genes), stats = ranks, minSize = 1,
+: You are trying to run fgseaSimple. It is recommended to use fgseaMultilevel.
+To run fgseaMultilevel, you need to remove the nperm argument in the fgsea
+function call.</code></pre>
+<pre><code>Warning in preparePathwaysAndStats(pathways, stats, minSize, maxSize, gseaParam, : There are ties in the preranked stats (0.58% of the list).
+The order of those tied genes will be arbitrary, which may produce unexpected results.</code></pre>
+<pre class="r"><code>p &lt;- fgsea::plotEnrichment(
+  pw_genes,
+  ranks
+) +
+  ggtitle(
+    nm,
+    subtitle = sprintf(
+      &quot;NES = %.2f, FDR = %.2g  [Treg.F vs all]&quot;,
+      res$NES[1],
+      res$padj[1]
+    )
+  ) +
+  theme(
+    plot.title = element_text(
+      size = 12
+    )
+  )
+
+print(p)</code></pre>
+<p><img src="figure/Treg_Workflow.Rmd/6d%20-%20pathway%20analysis%20of%20top%20pathway%20upregulated%20in%20Treg.F-1.png" alt="" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>FeaturePlot(treg_object_filtered, features = &quot;Klf2&quot;,reduction = &quot;mde_incremental&quot;, raster = TRUE, raster.dpi = c(512,512)) + NoAxes()</code></pre>
+<p><img src="figure/Treg_Workflow.Rmd/6f%20-%20feature%20plot%20of%20klf2%20expression-1.png" alt="" width="768" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>FeaturePlot(treg_object_filtered, features = &quot;S1pr1&quot;,reduction = &quot;mde_incremental&quot;, raster = TRUE, raster.dpi = c(512,512)) + NoAxes()</code></pre>
+<p><img src="figure/Treg_Workflow.Rmd/6h%20-%20feature%20plot%20of%20s1pr1-1.png" alt="" width="768" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>s1c &lt;- treg_object@meta.data %&gt;%
+  filter(
+    !is.na(condition_detailed_simplified),
+    !is.na(organ_simplified)
+  ) %&gt;%
+  mutate(
+    compartment = case_when(
+      organ_simplified %in% c(&quot;spleen&quot;, &quot;LN&quot;, &quot;SLO&quot;) ~ &quot;SLO&quot;,
+      TRUE ~ &quot;NLT&quot;
+    )
+  ) %&gt;%
+  group_by(condition_detailed_simplified, compartment) %&gt;%
+  summarise(
+    n = n(),
+    .groups = &quot;drop&quot;
+  ) %&gt;%
+  complete(
+    condition_detailed_simplified,
+    compartment = c(&quot;SLO&quot;, &quot;NLT&quot;),
+    fill = list(n = 0)
+  ) %&gt;%
+  group_by(condition_detailed_simplified) %&gt;%
+  mutate(
+    prop = n / sum(n),
+    plot_prop = ifelse(compartment == &quot;SLO&quot;, -prop, prop)
+  ) %&gt;%
+  ungroup()
+
+condition_order &lt;- s1c %&gt;%
+  filter(compartment == &quot;NLT&quot;) %&gt;%
+  arrange(desc(prop)) %&gt;%
+  pull(condition_detailed_simplified)
+
+s1c &lt;- s1c %&gt;%
+  mutate(
+    condition_detailed_simplified = factor(
+      condition_detailed_simplified,
+      levels = condition_order
+    )
+  )
+
+ggplot(s1c,
+  aes(
+    x = condition_detailed_simplified,
+    y = plot_prop,
+    fill = compartment
+  )
+) +
+  geom_col(width = 0.8) +
+geom_text(
+  aes(
+    label = paste0(&quot;n = &quot;, scales::comma(n)),
+    y = ifelse(
+      compartment == &quot;SLO&quot;,
+      plot_prop - 0.2,
+      plot_prop + 0.2
+    )
+  ),
+  size = 3
+) +
+  
+  coord_flip() +
+  scale_fill_manual(
+    values = c(
+      &quot;SLO&quot; = &quot;darkblue&quot;,
+      &quot;NLT&quot; = &quot;darkred&quot;
+    )
+  ) +
+  geom_hline(
+    yintercept = 0,
+    color = &quot;black&quot;,
+    linewidth = 0.3
+  ) +
+  theme_classic() +
+  labs(x = NULL, y = &quot;Proportion of cells&quot;, fill = NULL)</code></pre>
+<p><img src="figure/Treg_Workflow.Rmd/S1c%20-%20Upon%20immune%20perturbations,%20proportion%20of%20SLO%20vs%20NLT%20per%20conditions-1.png" alt="" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>#cell #, not prop
+
+s1c &lt;- treg_object@meta.data %&gt;%
+  filter(!is.na(condition_detailed_simplified), !is.na(organ_simplified)) %&gt;%
+  mutate(
+    compartment = case_when(
+      organ_simplified %in% c(&quot;spleen&quot;, &quot;LN&quot;, &quot;SLO&quot;) ~ &quot;SLO&quot;,
+      TRUE ~ &quot;NLT&quot;
+    )
+  ) %&gt;%
+  group_by(condition_detailed_simplified, compartment) %&gt;%
+  summarise(n = n(), .groups = &quot;drop&quot;) %&gt;%
+  complete(condition_detailed_simplified, compartment = c(&quot;SLO&quot;, &quot;NLT&quot;), fill = list(n = 0)) %&gt;%
+  mutate(plot_n = ifelse(compartment == &quot;SLO&quot;, -n, n))
+
+condition_order &lt;- s1c %&gt;%
+  filter(compartment == &quot;NLT&quot;) %&gt;%
+  arrange(desc(n)) %&gt;%
+  pull(condition_detailed_simplified)
+
+s1c$condition_detailed_simplified &lt;- factor(s1c$condition_detailed_simplified, levels = condition_order)
+
+ggplot(s1c, aes(x = condition_detailed_simplified, y = plot_n, fill = compartment)) +
+  geom_col(width = 0.8) +
+  geom_text(
+    aes(label = n),
+    hjust = ifelse(s1c$compartment == &quot;SLO&quot;, 1.1, -0.1),
+    size = 3
+  ) +
+  coord_flip() +
+  scale_fill_manual(values = c(&quot;SLO&quot; = &quot;darkblue&quot;, &quot;NLT&quot; = &quot;darkred&quot;)) +
+  theme_classic() +
+  labs(
+    x = NULL,
+    y = &quot;Number of cells&quot;,
+    fill = NULL
+  ) +
+  geom_hline(yintercept = 0, color = &quot;black&quot;, linewidth = 0.3)</code></pre>
+<p><img src="figure/Treg_Workflow.Rmd/S1c%20-%20Upon%20immune%20perturbations,%20proportion%20of%20SLO%20vs%20NLT%20per%20conditions-2.png" alt="" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>FeaturePlot(treg_object_filtered, features = &quot;Mki67&quot;,reduction = &quot;mde_incremental&quot;) + NoAxes()</code></pre>
+<p><img src="figure/Treg_Workflow.Rmd/S1e%20-%20feature%20plot%20of%20mki67-1.png" alt="" width="768" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>gene_markers &lt;- c(
+  &quot;Il2ra&quot;, &quot;Lrrc32&quot;, &quot;Areg&quot;, &quot;Ctla4&quot;, &quot;Il10&quot;, &quot;Gzma&quot;, &quot;Gzmb&quot;,
+  &quot;Tgfb1&quot;, &quot;Ebi3&quot;, &quot;Entpd1&quot;, &quot;Nt5e&quot;
+)
+
+genes_use &lt;- intersect(
+  gene_markers,
+  rownames(treg_rna[[&quot;RNA&quot;]])
+)
+
+expr_mat &lt;- GetAssayData(
+  treg_rna,
+  assay = &quot;RNA&quot;,
+  layer = &quot;data&quot;
+)[genes_use, , drop = FALSE]
+
+cluster_vec &lt;- treg_rna$annotation_level2
+
+keep_cells &lt;- !is.na(cluster_vec)
+
+expr_mat &lt;- expr_mat[, keep_cells, drop = FALSE]
+cluster_vec &lt;- cluster_vec[keep_cells]
+
+cluster_levels &lt;- unique(cluster_vec)
+
+dp_list &lt;- lapply(cluster_levels, function(cl) {
+
+  idx &lt;- which(cluster_vec == cl)
+
+  mat_cl &lt;- expr_mat[, idx, drop = FALSE]
+
+  data.frame(
+    annotation_level2 = cl,
+    gene = genes_use,
+    pct.exp = Matrix::rowMeans(mat_cl &gt; 0) * 100,
+    avg.log1p_cp10k = Matrix::rowMeans(mat_cl)
+  )
+})
+
+dp_df &lt;- dplyr::bind_rows(dp_list)
+
+dp_df$annotation_level2 &lt;- factor(
+  dp_df$annotation_level2,
+  levels = cluster_levels
+)
+
+dp_df$gene &lt;- factor(
+  dp_df$gene,
+  levels = rev(genes_use)
+)
+
+base_size &lt;- 10
+axis_size &lt;- 9
+
+mid_val &lt;- median(
+  dp_df$avg.log1p_cp10k,
+  na.rm = TRUE
+)
+
+p_rna &lt;- ggplot(
+  dp_df,
+  aes(
+    x = annotation_level2,
+    y = gene
+  )
+) +
+  geom_point(
+    aes(
+      size = pct.exp,
+      fill = avg.log1p_cp10k
+    ),
+    shape = 21,
+    color = &quot;black&quot;,
+    stroke = 0.12
+  ) +
+  scale_fill_gradient2(
+    low = &quot;darkblue&quot;,
+    mid = &quot;white&quot;,
+    high = &quot;red&quot;,
+    midpoint = mid_val,
+    name = &quot;Avg log1p(CP10K)&quot;
+  ) +
+  scale_size_continuous(
+    name = &quot;% expressing&quot;,
+    range = c(0.25, 6),
+    breaks = c(0, 25, 50, 75, 100),
+    limits = c(0, 100)
+  ) +
+  scale_y_discrete(
+    expand = expansion(
+      mult = c(0.04, 0.04)
+    )
+  ) +
+  scale_x_discrete(
+    expand = expansion(
+      mult = c(0.04, 0.04)
+    )
+  ) +
+  theme_bw(
+    base_size = base_size
+  ) +
+  theme(
+    axis.title = element_blank(),
+    axis.text.x = element_text(
+      size = axis_size,
+      angle = 90,
+      vjust = 0.5,
+      hjust = 1,
+      margin = margin(t = 1)
+    ),
+    axis.text.y = element_text(
+      size = axis_size,
+      lineheight = 0.85,
+      margin = margin(r = 1)
+    ),
+    panel.grid = element_blank(),
+    panel.border = element_rect(
+      linewidth = 0.3
+    ),
+    plot.margin = margin(
+      2, 2, 2, 2
+    ),
+    legend.title = element_text(
+      size = base_size
+    ),
+    legend.text = element_text(
+      size = base_size - 1
+    )
+  ) +
+  guides(
+    size = guide_legend(
+      title = &quot;% expressing&quot;
+    ),
+    fill = guide_colorbar(
+      title = &quot;Avg log1p(CP10K)&quot;,
+      barheight = unit(20, &quot;mm&quot;)
+    )
+  )
+
+print(p_rna)</code></pre>
+<p><img src="figure/Treg_Workflow.Rmd/S1h%20-%20dotplot%20of%20effector%20markers-1.png" alt="" width="420" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>tcr &lt;- tcr %&gt;%
+  unite(
+    &quot;clonotype&quot;,
+    alpha.vgene,
+    alpha.jgene,
+    alpha.junction,
+    beta.vgene,
+    beta.jgene,
+    beta.junction,
+    sep = &quot;.&quot;,
+    remove = FALSE
+  )
+
+tcr_productive &lt;- subset(tcr, subset = alpha.functionality == &quot;productive&quot;)
+
+
+shared_clonotypes &lt;- tcr_productive %&gt;%
+  filter(level1 %in% c(&quot;Treg&quot;, &quot;CD4&quot;)) %&gt;%
+  distinct(clonotype, level1) %&gt;%
+  count(clonotype, name = &quot;n_level1&quot;) %&gt;%
+  filter(n_level1 == 2) %&gt;%
+  pull(clonotype)
+
+
+length(shared_clonotypes)</code></pre>
+<pre><code>[1] 1462</code></pre>
+<pre class="r"><code>shared_treg_cd4_cells &lt;- tcr_productive %&gt;%
+  filter(
+    level1 %in% c(&quot;Treg&quot;, &quot;CD4&quot;),
+    clonotype %in% shared_clonotypes
+  )
+
+
+shared_treg_cd4_cells %&gt;%
+  count(level1)</code></pre>
+<pre><code>  level1    n
+1    CD4 5796
+2   Treg 2279</code></pre>
+<pre class="r"><code>shared_cell_ids &lt;- shared_treg_cd4_cells %&gt;%
+  pull(IGT.cellID) %&gt;%  
+  unique()
+
+length(shared_cell_ids)</code></pre>
+<pre><code>[1] 8075</code></pre>
+<pre class="r"><code>cells_shared_treg_cd4 &lt;- intersect(
+  shared_cell_ids,
+  colnames(treg_object)
+)
+
+length(cells_shared_treg_cd4)</code></pre>
+<pre><code>[1] 2054</code></pre>
+<pre class="r"><code># Highlight shared-clonotype Tregs on MDE
+plots_shared_treg_cd4 &lt;- MyDimPlotHighlight(
+  seurat_object         = treg_object,
+  umap_to_plot          = &quot;mde_incremental&quot;,
+  cells_to_highlight    = cells_shared_treg_cd4,
+  highlight_column_name = &quot;annotation_level2&quot;,
+  title                 = &quot;Tregs that share clonotypes with Tconvs&quot;,
+  labelclusters         = FALSE,
+  highlight_raster      = TRUE,
+  highlight_pixels      = c(1024, 1024),
+  mycols                = palette_vector,
+  highlight_size        = 3,
+  highlight_alpha       = 1,
+  background_alpha      = 1.0,
+  pixels                = c(512, 512)
+)
+
+
+plots_shared_treg_cd4$plot1 +
+  NoAxes() +
+  NoGrid() +
+  NoLegend() +
+  theme(
+    legend.position = &quot;none&quot;
+  ) +
+  coord_cartesian(
+    xlim = c(-2.5, 4),
+    ylim = c(-2.5, 2.5)
+  )</code></pre>
+<p><img src="figure/Treg_Workflow.Rmd/S2a%20-%20plotting%20cells%20w/%20tcrs%20shared%20w/%20tconvs/ex-tregs-1.png" alt="" width="768" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>ref_embedding &lt;- as.data.frame(
+  Embeddings(
+    treg_object,
+    reduction = &quot;mde_incremental&quot;
+  )
+)
+
+colnames(ref_embedding)[1:2] &lt;- c(&quot;MDE_1&quot;, &quot;MDE_2&quot;)
+
+
+
+query_embedding &lt;- ptregs@meta.data %&gt;%
+  transmute(
+    MDE_1 = level2_MDE1,
+    MDE_2 = level2_MDE2,
+    RNA_clusters = RNA_clusters
+  )
+
+
+cluster_colors &lt;- c(
+  &quot;TF2.2 Treg&quot; = &quot;red&quot;,
+  &quot;TF2.6 Treg&quot; = &quot;darkgreen&quot;,
+  &quot;TF2.7 Treg_1&quot; = &quot;purple&quot;, 
+  &quot;TF2.7 Treg_2&quot; = &quot;pink3&quot;,
+  &quot;TM2.3 Treg&quot; = &quot;orange&quot;,
+  &quot;TM3.5 Treg&quot;  = &quot;blue&quot;,
+  &quot;TS2.1 Treg&quot; = &quot;black&quot;,
+  &quot;TS2.3 Treg&quot; = &quot;yellow2&quot;
+)
+
+p &lt;-ggplot() +
+
+  geom_point_rast(
+    data = ref_embedding,
+    aes(
+      x = MDE_1,
+      y = MDE_2
+    ),
+    color = &quot;lightgray&quot;,
+    size = 0.3,
+    alpha = 0.5,
+    raster.dpi = 300
+  ) +
+
+  geom_point(
+    data = query_embedding,
+    aes(
+      x = MDE_1,
+      y = MDE_2,
+      color = RNA_clusters
+    ),
+    size = 1.5,
+    alpha = 0.9
+  ) +
+
+ scale_color_manual(
+    values = cluster_colors
+  ) +
+
+  theme_classic() +
+
+  labs(
+    title = &quot;pTreg Clusters&quot;,
+    color = &quot;Cluster&quot;
+  ) +
+
+  guides(
+    color = ggplot2::guide_legend(
+      override.aes = list(size = 3)
+    )
+  )
+
+
+pdf(
+  &quot;ptregs_mapped.pdf&quot;,
+  width = 8,
+  height = 8,
+  useDingbats = FALSE
+)
+
+print(p)
+
+dev.off()</code></pre>
+<pre><code>quartz_off_screen 
+                2 </code></pre>
+<pre class="r"><code>#rownames(igt_flow) &lt;- c(&quot;thymus&quot;, &quot;bone marrow&quot;, &quot;blood&quot;, &quot;spleen&quot;, &quot;LN&quot;, &quot;lung&quot;, &quot;colon&quot;, &quot;small intestine&quot;, &quot;peritoneal cavity&quot;, &quot;liver&quot;)
+
+
+#adt_data &lt;- GetAssayData(treg_object_clean, assay = &quot;ADT&quot;, layer = &quot;data&quot;)
+
+
+#prop of all the samples in the colon that are cl8
+# Create phenotype assignment
+
+#phenotype_annotation &lt;- case_when(
+ # adt[&quot;CD44&quot;, ] &lt;= 5 &amp;
+  #  adt[&quot;CD62L&quot;, ] &gt; 4 ~ &quot;Treg_cl1&quot;,
+
+ #   adt[&quot;CD44&quot;, ] &gt; 5 &amp;
+ #   adt[&quot;CD62L&quot;, ] &lt;= 4 &amp;
+    #  adt[&quot;KLRG1&quot;, ] &gt; 4 &amp;
+     # adt[&quot;CD49B&quot;, ] &lt;= 4 ~ &quot;Treg_cl2&quot;,
+
+  #  adt[&quot;CD44&quot;, ] &gt; 4 &amp;
+   #   adt[&quot;CD62L&quot;, ] &lt;= 4 &amp;
+     # adt[&quot;CD49B&quot;, ] &lt;= 4 &amp;
+   #   adt[&quot;NEUROPILIN1.CD304&quot;, ] &gt; 5 &amp;
+     # adt[&quot;FR4&quot;, ] &lt;= 6 &amp;
+     # adt[&quot;CXCR5&quot;, ] &lt;= 3 &amp;
+     # adt[&quot;PDCD1.PD1.CD279&quot;, ] &lt;= 5 ~ &quot;Treg_cl3&quot;,
+
+ #   adt[&quot;CD44&quot;, ] &gt; 5 &amp;
+    #  adt[&quot;CD62L&quot;, ] &lt;= 4 &amp;
+     # adt[&quot;CD49B&quot;, ] &gt; 4 &amp;
+     # adt[&quot;KLRG1&quot;, ] &lt;= 4 &amp;
+   #   adt[&quot;CD69&quot;, ] &lt;= 4 &amp;
+     # adt[&quot;CD29&quot;, ] &lt;= 5 ~ &quot;Treg_cl4&quot;,
+
+   # adt[&quot;CD44&quot;, ] &gt; 5 &amp;
+   #   adt[&quot;CD62L&quot;, ] &lt;= 4 &amp;
+   #   adt[&quot;KLRG1&quot;, ] &lt;= 4 &amp;
+     # adt[&quot;CD49B&quot;, ] &lt;= 4 &amp;
+     # adt[&quot;CD69&quot;, ] &gt; 4 &amp;
+     # adt[&quot;CD29&quot;, ] &lt;= 5 ~ &quot;Treg_cl6&quot;,
+
+  #  adt[&quot;CD44&quot;, ] &gt; 5 &amp;
+ #     adt[&quot;CD62L&quot;, ] &lt;= 4 &amp;
+    #  adt[&quot;KLRG1&quot;, ] &lt;= 4 &amp;
+ #     adt[&quot;CD49B&quot;, ] &lt;= 4 &amp;
+     # adt[&quot;SCA1&quot;, ] &gt; 5 &amp;
+     # adt[&quot;NEUROPILIN1.CD304&quot;, ] &lt;= 5 ~ &quot;Treg_cl8&quot;,
+
+ #   TRUE ~ &quot;Other&quot;
+ # )
+
+ # meta$sorted_citeseq &lt;- phenotype_annotation
+
+ # organs_keep &lt;- c(
+ #   &quot;thymus&quot;, &quot;bone marrow&quot;, &quot;blood&quot;,&quot;spleen&quot;, &quot;LN&quot;, &quot;lung&quot;, &quot;colon&quot;, &quot;small intestine&quot;, &quot;peritoneal cavity&quot;, &quot;liver&quot;)
+
+ # sorted_citeseq_meta &lt;- meta %&gt;%
+   # filter(
+     # sorted_citeseq != &quot;Other&quot;,
+    #  organ_simplified %in% organs_keep
+ #   )
+
+#sorted_citeseq_th &lt;- subset(sorted_citeseq_object, subset = organ_simplified == &quot;thymus&quot;)
+
+ # annotation_counts_cite &lt;- sorted_citeseq_object@meta.data %&gt;%
+ #   group_by(sample_code, organ_simplified, sorted_citeseq) %&gt;%
+  #  summarise(count = n(), .groups = &quot;drop&quot;)
+
+ # total_sample_data_cite &lt;- annotation_counts_cite %&gt;%
+ #   pivot_wider(names_from = sorted_citeseq, values_from = count, values_fill = 0)
+ # total_sample_data_cite$total &lt;- rowSums(total_sample_data_cite[, 3:8])
+
+ # total_sample_data_cite &lt;- total_sample_data_cite %&gt;%
+   # mutate(across(
+     # .cols = starts_with(&quot;Treg_&quot;), 
+     # .fns = ~ .x / total,
+   #   .names = &quot;prop_{.col}&quot;
+  #  ))
+
+ # prop_long_cite &lt;- total_sample_data_cite %&gt;%
+   # select(organ_simplified, starts_with(&quot;prop_&quot;)) %&gt;%
+  #  pivot_longer(
+   #   cols = starts_with(&quot;prop_&quot;),
+   #   names_to = &quot;sorted_citeseq&quot;,
+   #   values_to = &quot;proportion&quot;
+  #  ) %&gt;%
+  #  mutate(sorted_citeseq_object = sub(&quot;prop_&quot;, &quot;&quot;, sorted_citeseq))
+
+ # prop_long_cite$annotation_level2 &lt;- prop_long_cite$sorted_citeseq_object
+
+ # prop_long_cite$percent &lt;- prop_long_cite$proportion * 100
+
+ # prop_summary_cite &lt;- prop_long_cite %&gt;%
+  #  group_by(organ_simplified, annotation_level2) %&gt;%
+  #  summarise(
+     # med = median(percent, na.rm = TRUE),
+   #   sem = sd(percent, na.rm = TRUE) / sqrt(n()),
+   #   .groups = &quot;drop&quot;
+  #  )
+
+ # cl1_flow &lt;- igt_flow %&gt;%
+   # select(starts_with(&quot;cl1_&quot;))
+ # cl1_flow$med_flow &lt;- rowMeans(cl1_flow, na.rm = TRUE)
+ # cl1_flow$sd &lt;- apply(cl1_flow, 1, sd, na.rm = TRUE)
+ # cl1_flow$organ_simplified &lt;- rownames(cl1_flow)
+ # cl1_flow &lt;- cl1_flow %&gt;%
+ #   arrange(med_flow)
+
+ # prop_summary_cl1 &lt;- subset(prop_summary_cite, subset = prop_summary_cite$annotation_level2 == &quot;Treg_cl1&quot;)
+ # joined_data_cl1 &lt;- left_join(cl1_flow, prop_summary_cl1)
+
+
+#ggplot(joined_data_cl1, aes(x = med, y = med_flow, label = organ_simplified)) +
+ # geom_point() +
+#  geom_text_repel(size = 3) +
+ # geom_errorbar(aes(ymin = med_flow - sd, ymax = med_flow + sd), width = 2) +
+#  geom_smooth(method = &quot;lm&quot;, se = FALSE, color = &quot;lightgray&quot;, linetype = &quot;dashed&quot;, linewidth = 0.5) +
+ # geom_errorbarh(aes(xmin = med - sem, xmax = med + sem), height = 2) +
+#  stat_regline_equation(label.y = 95, aes(label = ..eq.label..), size = 3.5) +  # Regression equation
+  #stat_cor(method = &quot;pearson&quot;, label.y = 90, aes(label = paste(..rr.label.., ..p.label.., sep = &quot;~`,`~&quot;))) +
+  #scale_x_continuous(limits = c(1, 100)) +
+  #scale_y_continuous(limits = c(1, 100)) +
+  #labs(
+ #   x = &quot;Cluster Proportion per Organ (scRNAseq)&quot;,
+#    y = &quot;Cluster Proportion per Organ (Flow Cytometry)&quot;,
+#    title = &quot;Avg Cluster Proportion (scRNAseq vs Flow) - Cluster 1&quot;
+ # ) +
+  #theme_minimal() +
+ # theme(axis.line = element_line())</code></pre>
+<pre class="r"><code>set.seed(123)
+
+ln_keep &lt;- c(
+  &quot;axillary lymph node&quot;,
+  &quot;cervical lymph node&quot;,
+  &quot;inguinal lymph node&quot;,
+  &quot;mediastinal lymph node&quot;,
+  &quot;mesenteric lymph node&quot;
+)
+
+ln_object &lt;- subset(
+  healthy_subset_inc,
+  subset = organ_simplified == &quot;LN&quot; &amp; organ %in% ln_keep
+)
+
+for (ln in sort(unique(ln_object$organ))) {
+
+  cells_in_ln &lt;- colnames(ln_object)[
+    ln_object$organ == ln
+  ]
+
+  if (length(cells_in_ln) == 0) {
+    message(sprintf(&quot;No cells found for &#39;%s&#39; — skipping.&quot;, ln))
+    next
+  }
+
+  if (length(cells_in_ln) &gt;= 198) {
+    cells_to_highlight &lt;- sample(cells_in_ln, 198)
+  } else {
+    message(sprintf(
+      &quot;%s has only %d cells; using all.&quot;,
+      ln,
+      length(cells_in_ln)
+    ))
+    cells_to_highlight &lt;- cells_in_ln
+  }
+
+  plots_ln &lt;- MyDimPlotHighlight(
+    seurat_object         = healthy_subset_inc,
+    umap_to_plot          = &quot;mde_incremental&quot;,
+    cells_to_highlight    = cells_to_highlight,
+    highlight_column_name = &quot;annotation_level2&quot;,
+    title                 = paste0(&quot;Cluster Distribution &quot;, ln),
+    labelclusters         = TRUE,
+    mycols                = palette_vector,
+    highlight_size        = 2
+  )
+
+  print(
+    plots_ln$plot1 +
+      NoAxes() +
+      NoGrid()
+  )
+}</code></pre>
+<pre><code>Scale for colour is already present.
+Adding another scale for colour, which will replace the existing scale.
+Scale for x is already present.
+Adding another scale for x, which will replace the existing scale.
+Scale for y is already present.
+Adding another scale for y, which will replace the existing scale.</code></pre>
+<p><img src="figure/Treg_Workflow.Rmd/S7a-e%20mdes%20of%20cluster%20distributions%20across%20lymph%20nodes,%20downsampled-1.png" alt="" width="768" style="display: block; margin: auto;" /></p>
+<pre><code>Scale for colour is already present.
+Adding another scale for colour, which will replace the existing scale.
+Scale for x is already present.
+Adding another scale for x, which will replace the existing scale.
+Scale for y is already present.
+Adding another scale for y, which will replace the existing scale.</code></pre>
+<p><img src="figure/Treg_Workflow.Rmd/S7a-e%20mdes%20of%20cluster%20distributions%20across%20lymph%20nodes,%20downsampled-2.png" alt="" width="768" style="display: block; margin: auto;" /></p>
+<pre><code>Scale for colour is already present.
+Adding another scale for colour, which will replace the existing scale.
+Scale for x is already present.
+Adding another scale for x, which will replace the existing scale.
+Scale for y is already present.
+Adding another scale for y, which will replace the existing scale.</code></pre>
+<p><img src="figure/Treg_Workflow.Rmd/S7a-e%20mdes%20of%20cluster%20distributions%20across%20lymph%20nodes,%20downsampled-3.png" alt="" width="768" style="display: block; margin: auto;" /></p>
+<pre><code>Scale for colour is already present.
+Adding another scale for colour, which will replace the existing scale.
+Scale for x is already present.
+Adding another scale for x, which will replace the existing scale.
+Scale for y is already present.
+Adding another scale for y, which will replace the existing scale.</code></pre>
+<p><img src="figure/Treg_Workflow.Rmd/S7a-e%20mdes%20of%20cluster%20distributions%20across%20lymph%20nodes,%20downsampled-4.png" alt="" width="768" style="display: block; margin: auto;" /></p>
+<pre><code>Scale for colour is already present.
+Adding another scale for colour, which will replace the existing scale.
+Scale for x is already present.
+Adding another scale for x, which will replace the existing scale.
+Scale for y is already present.
+Adding another scale for y, which will replace the existing scale.</code></pre>
+<p><img src="figure/Treg_Workflow.Rmd/S7a-e%20mdes%20of%20cluster%20distributions%20across%20lymph%20nodes,%20downsampled-5.png" alt="" width="768" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>lung_tregs &lt;- subset(treg_object_clean, subset = organ_simplified == &quot;lung&quot;)
+allergy_lung &lt;- subset(lung_tregs, subset = condition_detailed_simplified == &quot;HDM&quot;)
+
+cells_allergy_lung &lt;- colnames(allergy_lung)
+plots_allergy_lung &lt;- MyDimPlotHighlight(
+  seurat_object         = treg_object_clean,
+  umap_to_plot          = &quot;mde_incremental&quot;,
+  cells_to_highlight    = cells_allergy_lung,
+  highlight_column_name = &quot;annotation_level2&quot;,
+  title                 = &quot;Lung HDM Tregs highlighted&quot;,
+  labelclusters = FALSE,
+  highlight_raster = T,
+  highlight_pixels =  c(1024, 1024),
+  mycols = palette_vector,
+  highlight_size = 3,
+  highlight_alpha = 1,
+  background_alpha = 1.0,
+  pixels = c(512,512)
+)
+
+p &lt;- print(plots_allergy_lung$plot1 + NoAxes() + NoGrid()) + NoLegend() + theme(legend.position = &quot;none&quot;) + coord_cartesian(xlim = c(-2.5, 4), ylim = c(-2.5, 2.5))</code></pre>
+<p><img src="figure/Treg_Workflow.Rmd/S8b%20MDEs%20highlighting%20cluster%20dist.%20in%20selected%20conditions-1.png" alt="" width="768" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>print(p)</code></pre>
+<p><img src="figure/Treg_Workflow.Rmd/S8b%20MDEs%20highlighting%20cluster%20dist.%20in%20selected%20conditions-2.png" alt="" width="768" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>#flu
+flu_lung &lt;- subset(lung_tregs, subset = condition_detailed_simplified == &quot;flu&quot;)
+
+cells_flu_lung &lt;- colnames(flu_lung)
+plots_flu_lung &lt;- MyDimPlotHighlight(
+  seurat_object         = treg_object_clean,
+  umap_to_plot          = &quot;mde_incremental&quot;,
+  cells_to_highlight    = cells_flu_lung,
+  highlight_column_name = &quot;annotation_level2&quot;,
+  title                 = &quot;Lung Flu Tregs highlighted&quot;,
+  labelclusters = FALSE,
+  highlight_raster = T,
+  highlight_pixels =  c(1024, 1024),
+  mycols = palette_vector,
+  highlight_size = 3,
+  highlight_alpha = 1,
+  background_alpha = 1.0,
+  pixels = c(512,512)
+)
+
+p &lt;- print(plots_flu_lung$plot1 + NoAxes() + NoGrid()) + NoLegend() + theme(legend.position = &quot;none&quot;) + coord_cartesian(xlim = c(-2.5, 4), ylim = c(-2.5, 2.5))</code></pre>
+<p><img src="figure/Treg_Workflow.Rmd/S8b%20MDEs%20highlighting%20cluster%20dist.%20in%20selected%20conditions-3.png" alt="" width="768" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>print(p)</code></pre>
+<p><img src="figure/Treg_Workflow.Rmd/S8b%20MDEs%20highlighting%20cluster%20dist.%20in%20selected%20conditions-4.png" alt="" width="768" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>#MTB
+mtb_lung &lt;- subset(lung_tregs, subset = condition_detailed_simplified == &quot;MTB&quot;)
+
+cells_mtb_lung &lt;- colnames(mtb_lung)
+plots_mtb_lung &lt;- MyDimPlotHighlight(
+  seurat_object         = treg_object_clean,
+  umap_to_plot          = &quot;mde_incremental&quot;,
+  cells_to_highlight    = cells_mtb_lung,
+  highlight_column_name = &quot;annotation_level2&quot;,
+  title                 = &quot;Lung MTB Tregs highlighted&quot;,
+  labelclusters = FALSE,
+  highlight_raster = T,
+  highlight_pixels =  c(1024, 1024),
+  mycols = palette_vector,
+  highlight_size = 3,
+  highlight_alpha = 1,
+  background_alpha = 1.0,
+  pixels = c(512,512)
+)
+
+p &lt;- print(plots_mtb_lung$plot1 + NoAxes() + NoGrid()) + NoLegend() + theme(legend.position = &quot;none&quot;) + coord_cartesian(xlim = c(-2.5, 4), ylim = c(-2.5, 2.5))</code></pre>
+<p><img src="figure/Treg_Workflow.Rmd/S8b%20MDEs%20highlighting%20cluster%20dist.%20in%20selected%20conditions-5.png" alt="" width="768" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>print(p)</code></pre>
+<p><img src="figure/Treg_Workflow.Rmd/S8b%20MDEs%20highlighting%20cluster%20dist.%20in%20selected%20conditions-6.png" alt="" width="768" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>#kp
+
+kp_lung &lt;- subset(lung_tregs, subset = condition_detailed_simplified == &quot;KP&quot;)
+
+cells_kp_lung &lt;- colnames(kp_lung)
+plots_kp_lung &lt;- MyDimPlotHighlight(
+  seurat_object         = treg_object_clean,
+  umap_to_plot          = &quot;mde_incremental&quot;,
+  cells_to_highlight    = cells_flu_lung,
+  highlight_column_name = &quot;annotation_level2&quot;,
+  title                 = &quot;Lung KP Tregs highlighted&quot;,
+  labelclusters = FALSE,
+  highlight_raster = T,
+  highlight_pixels =  c(1024, 1024),
+  mycols = palette_vector,
+  highlight_size = 3,
+  highlight_alpha = 1,
+  background_alpha = 1.0,
+  pixels = c(512,512)
+)
+
+p &lt;- print(plots_kp_lung$plot1 + NoAxes() + NoGrid()) + NoLegend() + theme(legend.position = &quot;none&quot;) + coord_cartesian(xlim = c(-2.5, 4), ylim = c(-2.5, 2.5))</code></pre>
+<p><img src="figure/Treg_Workflow.Rmd/S8b%20MDEs%20highlighting%20cluster%20dist.%20in%20selected%20conditions-7.png" alt="" width="768" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>print(p)</code></pre>
+<p><img src="figure/Treg_Workflow.Rmd/S8b%20MDEs%20highlighting%20cluster%20dist.%20in%20selected%20conditions-8.png" alt="" width="768" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>FeaturePlot(
+  treg_object,
+  features = &quot;Rorc&quot;,
+  reduction = &quot;mde_incremental&quot;,
+  cells = WhichCells(treg_object, expression = organ_simplified == &quot;colon LP&quot; &amp; condition_broad == &quot;healthy&quot;),
+  order = TRUE,
+  pt.size = 0.5
+) +
+  ggtitle(&quot;Rorc expression (colon, healthy)&quot;)</code></pre>
+<pre><code>Warning: Could not find Rorc in the default search locations, found in &#39;RNA&#39;
+assay instead</code></pre>
+<p><img src="figure/Treg_Workflow.Rmd/S8c%20feature%20plots%20of%20Rorc%20and%20Klrg1%20in%20healthy%20colon-1.png" alt="" width="768" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>FeaturePlot(
+  treg_object,
+  features = &quot;Klrg1&quot;,
+  reduction = &quot;mde_incremental&quot;,
+  cells = WhichCells(treg_object, expression = organ_simplified == &quot;colon LP&quot; &amp; condition_broad == &quot;healthy&quot;),
+  order = TRUE,
+  pt.size = 0.5
+) +
+  ggtitle(&quot;Klrg1 expression (colon, healthy)&quot;)</code></pre>
+<pre><code>Warning: Could not find Klrg1 in the default search locations, found in &#39;RNA&#39;
+assay instead</code></pre>
+<p><img src="figure/Treg_Workflow.Rmd/S8c%20feature%20plots%20of%20Rorc%20and%20Klrg1%20in%20healthy%20colon-2.png" alt="" width="768" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>cancer_sub_adt &lt;- subset(
+  adt_so,
+  subset = condition_broad == &quot;cancer&quot;
+)
+
+cancer_all_metadata &lt;- cancer_sub_adt@meta.data %&gt;%
+  rownames_to_column(&quot;cell_id&quot;) %&gt;%
+  filter(
+    annotation_level2 %in% c(
+      &quot;Treg_cl1&quot;,
+      &quot;Treg_cl2&quot;,
+      &quot;Treg_cl3&quot;,
+      &quot;Treg_cl4&quot;,
+      &quot;Treg_cl8&quot;
+    )
+  ) %&gt;%
+  mutate(
+    annotation_level2 = recode(
+      annotation_level2,
+      &quot;Treg_cl1&quot; = &quot;Treg.A&quot;,
+      &quot;Treg_cl2&quot; = &quot;Treg.D&quot;,
+      &quot;Treg_cl3&quot; = &quot;Treg.B&quot;,
+      &quot;Treg_cl4&quot; = &quot;Treg.F&quot;,
+      &quot;Treg_cl8&quot; = &quot;Treg.E&quot;
+    )
+  )
+
+
+# cluster counts per sample
+cancer_props &lt;- cancer_all_metadata %&gt;%
+  count(
+    condition_detailed_simplified,
+    sample_name,
+    annotation_level2,
+    name = &quot;count&quot;
+  ) %&gt;%
+  group_by(
+    condition_detailed_simplified,
+    sample_name
+  ) %&gt;%
+  complete(
+    annotation_level2 = c(
+      &quot;Treg.A&quot;,
+      &quot;Treg.D&quot;,
+      &quot;Treg.B&quot;,
+      &quot;Treg.F&quot;,
+      &quot;Treg.E&quot;
+    ),
+    fill = list(count = 0)
+  ) %&gt;%
+  mutate(
+    total_cells = sum(count),
+    percent = 100 * count / total_cells
+  ) %&gt;%
+  ungroup()
+
+
+cancer_props &lt;- cancer_props %&gt;%
+  filter(total_cells &gt; 20)
+
+
+cancer_radar &lt;- cancer_props %&gt;%
+  group_by(
+    condition_detailed_simplified,
+    annotation_level2
+  ) %&gt;%
+  summarise(
+    med = median(percent, na.rm = TRUE),
+    .groups = &quot;drop&quot;
+  )
+
+
+# wide dataframe
+cancer_radar_wide &lt;- cancer_radar %&gt;%
+  pivot_wider(
+    names_from = annotation_level2,
+    values_from = med,
+    values_fill = 0
+  )
+
+
+radar_df &lt;- cancer_radar_wide %&gt;%
+  select(
+    condition_detailed_simplified,
+    Treg.A,
+    Treg.D,
+    Treg.B,
+    Treg.F,
+    Treg.E
+  ) %&gt;%
+  column_to_rownames(
+    &quot;condition_detailed_simplified&quot;
+  ) %&gt;%
+  as.data.frame()
+
+radar_df[] &lt;- lapply(
+  radar_df,
+  as.numeric
+)
+
+radar_plot_df &lt;- rbind(
+  max = rep(80, ncol(radar_df)),
+  min = rep(0, ncol(radar_df)),
+  radar_df
+)
+
+condition_colors &lt;- scales::hue_pal()(
+  nrow(radar_df)
+)
+
+par(
+  mar = c(2, 2, 2, 8),
+  xpd = TRUE
+)
+
+fmsb::radarchart(
+  radar_plot_df,
+  axistype = 1,
+
+  pcol = condition_colors,
+  pfcol = NA,
+  plwd = 2,
+  plty = 1,
+
+  cglcol = &quot;grey80&quot;,
+  cglty = 1,
+  cglwd = 1,
+
+  axislabcol = &quot;grey40&quot;,
+
+  seg = 4,
+
+  caxislabels = c(
+    &quot;0&quot;,
+    &quot;20&quot;,
+    &quot;40&quot;,
+    &quot;60&quot;,
+    &quot;80&quot;
+  ),
+
+  vlcex = 1.2,
+
+  vlabels = c(
+    &quot;Treg.A&quot;,
+    &quot;Treg.D&quot;,
+    &quot;Treg.B&quot;,
+    &quot;Treg.F&quot;,
+    &quot;Treg.E&quot;
+  )
+)
+
+legend(
+  &quot;right&quot;,
+  inset = c(-0.55, 0),
+  legend = rownames(radar_df),
+  col = condition_colors,
+  lty = 1,
+  lwd = 2,
+  bty = &quot;n&quot;,
+  cex = 0.85
+)</code></pre>
+<p><img src="figure/Treg_Workflow.Rmd/S9a%20radar%20plot%20of%20Treg%20cluster%20proportions%20across%20cancer%20with%20treatment-1.png" alt="" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>cond_col &lt;- names(trbi_supp)[1]
+
+radar_wide &lt;- trbi_supp %&gt;%
+  rename(
+    condition = all_of(cond_col),
+    Treg.A = Cl.1,
+    Treg.D = Cl.2,
+    Treg.B = Cl.3,
+    Treg.F = Cl.4,
+    Treg.C = Cl.6,
+    Treg.E = Cl.8,
+    Treg.wM = Miniverse,
+    Treg.P = Proliferating
+  ) %&gt;%
+  column_to_rownames(&quot;condition&quot;) %&gt;%
+  as.data.frame()
+
+radar_wide[] &lt;- lapply(
+  radar_wide,
+  function(x) as.numeric(as.character(x))
+)
+
+radar_data &lt;- rbind(
+  max = rep(100, ncol(radar_wide)),
+  min = rep(0, ncol(radar_wide)),
+  radar_wide
+)
+
+n_conditions &lt;- nrow(radar_wide)
+
+condition_colors &lt;- c(
+  &quot;black&quot;,
+  colorRampPalette(
+    brewer.pal(9, &quot;Set1&quot;)
+  )(max(n_conditions - 1, 1))
+)
+
+
+
+par(
+  mar = c(2, 2, 4, 2)
+)
+
+radarchart(
+  radar_data,
+  axistype = 1,
+  pcol = condition_colors,
+  plwd = 2,
+  plty = 1,
+  cglcol = &quot;grey&quot;,
+  cglty = 1,
+  axislabcol = &quot;grey30&quot;,
+  caxislabels = seq(0, 100, 20),
+  calcex = 0.7,
+  vlcex = 0.8,
+  title = &quot;Treg Cluster Composition by Condition - Supp&quot;
+)
+
+legend(
+  &quot;bottomleft&quot;,
+  legend = rownames(radar_wide),
+  col = condition_colors,
+  lty = 1,
+  lwd = 2,
+  bty = &quot;n&quot;,
+  cex = 0.8
+)</code></pre>
+<p><img src="figure/Treg_Workflow.Rmd/S9f%20cancer%20t-rbi%20radar%20plot-1.png" alt="" width="768" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>FeaturePlot(treg_object, reduction = &quot;mde_incremental&quot;, features = c(&quot;Ccr8&quot;), order = T,  min.cutoff = &quot;q1&quot;, max.cutoff = &quot;q99&quot;,  cols = c(&quot;lightgrey&quot;, &quot;blue&quot;) , raster = F, raster.dpi = c(512,512)) + coord_cartesian(xlim = c(-2.5, 4), ylim = c(-2.5, 2.5)) + NoAxes() + NoLegend() + theme_void() + theme(legend.position = &quot;none&quot;)</code></pre>
+<pre><code>Warning: Could not find Ccr8 in the default search locations, found in &#39;RNA&#39;
+assay instead</code></pre>
+<p><img src="figure/Treg_Workflow.Rmd/S9g%20Ccr8%20feature%20plot-1.png" alt="" width="768" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>library(msigdbr)
+library(fgsea)
+library(Seurat)
+library(dplyr)
+library(stringr)
+library(ggplot2)
+
+assay_use &lt;- &quot;RNA&quot;
+
+Idents(treg_object) &lt;- &quot;annotation_level2&quot;
+
+de &lt;- FindMarkers(
+  treg_object,
+  ident.1 = &quot;Treg.F&quot;,
+  ident.2 = NULL,
+  assay = assay_use,
+  test.use = &quot;wilcox&quot;,
+  logfc.threshold = 0.25,
+  min.pct = 0.1
+)
+
+de$gene &lt;- rownames(de)
+
+de &lt;- de %&gt;%
+  mutate(
+    sign_fc = sign(avg_log2FC),
+    rank_stat = sign_fc * (-log10(p_val + 1e-300))
+  )
+
+ranks &lt;- setNames(
+  de$rank_stat,
+  de$gene
+)
+
+ranks &lt;- sort(
+  ranks,
+  decreasing = TRUE
+)
+
+species &lt;- &quot;Mus musculus&quot;
+
+m_c2 &lt;- msigdbr(
+  species = species,
+  category = &quot;C2&quot;
+) %&gt;%
+  select(
+    gs_name,
+    gene_symbol
+  )
+
+m_all &lt;- m_c2 %&gt;%
+  filter(
+    grepl(
+      &quot;^(KEGG_|REACTOME_|WP_)&quot;,
+      gs_name
+    )
+  )
+
+genesets &lt;- split(
+  m_all$gene_symbol,
+  m_all$gs_name
+)
+
+canon &lt;- function(x) {
+  x %&gt;%
+    toupper() %&gt;%
+    str_replace_all(
+      &quot;[^A-Z0-9]+&quot;,
+      &quot;_&quot;
+    ) %&gt;%
+    str_replace_all(
+      &quot;^_|_$&quot;,
+      &quot;&quot;
+    )
+}
+
+gs_names &lt;- names(genesets)
+
+canon_map &lt;- setNames(
+  gs_names,
+  canon(gs_names)
+)
+
+pick_set &lt;- function(label) {
+  key &lt;- canon(label)
+
+  if (key %in% names(canon_map)) {
+    canon_map[[key]]
+  } else {
+    NA_character_
+  }
+}
+
+targets &lt;- c(
+  &quot;REACTOME_RAP1_SIGNALLING&quot;,
+  &quot;WP_REGULATION_OF_ACTIN_CYTOSKELETON&quot;
+)
+
+for (lbl in targets) {
+
+  nm &lt;- pick_set(lbl)
+
+  if (is.na(nm)) {
+    message(
+      &quot;No pathway found for: &quot;,
+      lbl
+    )
+    next
+  }
+
+  pw_genes &lt;- intersect(
+    unique(genesets[[nm]]),
+    names(ranks)
+  )
+
+  if (length(pw_genes) &lt; 1) {
+    message(
+      &quot;Too few overlapping genes for: &quot;,
+      nm
+    )
+    next
+  }
+
+  res &lt;- fgsea(
+    pathways = list(
+      this = pw_genes
+    ),
+    stats = ranks,
+    minSize = 1,
+    maxSize = Inf,
+    nperm = 10000
+  ) %&gt;%
+    as.data.frame()
+
+  p &lt;- fgsea::plotEnrichment(
+    pw_genes,
+    ranks
+  ) +
+    ggtitle(
+      nm,
+      subtitle = sprintf(
+        &quot;NES = %.2f, FDR = %.2g  [Treg.F vs all]&quot;,
+        res$NES[1],
+        res$padj[1]
+      )
+    ) +
+    theme(
+      plot.title = element_text(
+        size = 12
+      )
+    )
+
+  print(p)
+}</code></pre>
+<pre><code>Warning in fgsea(pathways = list(this = pw_genes), stats = ranks, minSize = 1,
+: You are trying to run fgseaSimple. It is recommended to use fgseaMultilevel.
+To run fgseaMultilevel, you need to remove the nperm argument in the fgsea
+function call.</code></pre>
+<pre><code>Warning in preparePathwaysAndStats(pathways, stats, minSize, maxSize, gseaParam, : There are ties in the preranked stats (0.58% of the list).
+The order of those tied genes will be arbitrary, which may produce unexpected results.</code></pre>
+<p><img src="figure/Treg_Workflow.Rmd/S10b%20-%20pathway%20analysis%20of%20Treg.F%20vs%20rest-1.png" alt="" width="672" style="display: block; margin: auto;" /></p>
+<pre><code>Warning in fgsea(pathways = list(this = pw_genes), stats = ranks, minSize = 1, : You are trying to run fgseaSimple. It is recommended to use fgseaMultilevel. To run fgseaMultilevel, you need to remove the nperm argument in the fgsea function call.
+Warning in fgsea(pathways = list(this = pw_genes), stats = ranks, minSize = 1, : There are ties in the preranked stats (0.58% of the list).
+The order of those tied genes will be arbitrary, which may produce unexpected results.</code></pre>
+<p><img src="figure/Treg_Workflow.Rmd/S10b%20-%20pathway%20analysis%20of%20Treg.F%20vs%20rest-2.png" alt="" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>emb_all &lt;- Embeddings(treg_object, &quot;mde_incremental&quot;) %&gt;% as.data.frame()
+emb_all$cluster &lt;- treg_object$annotation_level2
+emb_all$organ   &lt;- treg_object$organ_simplified
+emb_all$cond &lt;- treg_object$condition_detailed_simplified
+
+emb_all &lt;- emb_all %&gt;%
+  mutate(cond =  case_when(
+  cond %in% c(&quot;MHCIIhet&quot;, &quot;MHCIIhet_Ea16&quot;) ~ &quot;MHCIIhet&quot;,
+  cond %in% c(&quot;MHCIIKO&quot;, &quot;MHCIIKO_Ea16&quot;) ~ &quot;MHCIIKO&quot;,
+  TRUE ~ cond
+))
+
+
+
+emb_het &lt;- subset(emb_all,cond == &quot;MHCIIhet&quot;)
+emb_ko &lt;- subset(emb_all, cond == &quot;MHCIIKO&quot;)
+ggplot(emb_all, aes(x = mdeincremental_1, y = mdeincremental_2)) +
+  rasterise(geom_point(color = &quot;lightgray&quot;, size = 0.25, alpha = 0.25), dpi = 300) +
+  rasterise(
+    geom_point(data = emb_het, aes(color = cluster), size = 0.75),
+    dpi = 300
+  ) +
+  scale_color_manual(values = palette_vector) +
+  theme_minimal() +
+  ggtitle(&quot;MHCII Het Cells Highlighted by Cluster Color&quot;) +
+  NoAxes() + NoGrid() + NoLegend()</code></pre>
+<p><img src="figure/Treg_Workflow.Rmd/S10a%20mhciiko/het%20mdes%20highlighting%20cluster%20distribution-1.png" alt="" width="768" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>ggplot(emb_all, aes(x = mdeincremental_1, y = mdeincremental_2)) +
+  rasterise(geom_point(color = &quot;lightgray&quot;, size = 0.25, alpha = 0.25), dpi = 300) +
+  rasterise(
+    geom_point(data = emb_ko, aes(color = cluster), size = 0.75),
+    dpi = 300
+  ) +
+  scale_color_manual(values = palette_vector) +
+  theme_minimal() +
+  ggtitle(&quot;MHCII KO Cells Highlighted by Cluster Color&quot;) +
+  NoAxes() + NoGrid() + NoLegend()</code></pre>
+<p><img src="figure/Treg_Workflow.Rmd/S10a%20mhciiko/het%20mdes%20highlighting%20cluster%20distribution-2.png" alt="" width="768" style="display: block; margin: auto;" /></p>
+<br>
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
+<span class="glyphicon glyphicon-wrench" aria-hidden="true"></span>
+Session information
+</button>
+</p>
+<div id="workflowr-sessioninfo" class="collapse">
+<pre class="r"><code>sessionInfo()</code></pre>
+<pre><code>R version 4.5.2 (2025-10-31)
+Platform: aarch64-apple-darwin20
+Running under: macOS Tahoe 26.2
+
+Matrix products: default
+BLAS:   /System/Library/Frameworks/Accelerate.framework/Versions/A/Frameworks/vecLib.framework/Versions/A/libBLAS.dylib 
+LAPACK: /Library/Frameworks/R.framework/Versions/4.5-arm64/Resources/lib/libRlapack.dylib;  LAPACK version 3.12.1
+
+locale:
+[1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
+
+time zone: America/Chicago
+tzcode source: internal
+
+attached base packages:
+[1] stats     graphics  grDevices utils     datasets  methods   base     
+
+other attached packages:
+ [1] Matrix_1.7-4       ggpubr_0.6.2       viridis_0.6.5      viridisLite_0.4.3 
+ [5] msigdbr_25.1.1     ggrepel_0.9.8      RColorBrewer_1.1-3 pheatmap_1.0.13   
+ [9] ZemmourLib_0.1.1   fgsea_1.36.0       fmsb_0.7.6         cowplot_1.2.0     
+[13] scales_1.4.0       Seurat_5.4.0       SeuratObject_5.3.0 sp_2.2-1          
+[17] ggrastr_1.0.2      lubridate_1.9.4    forcats_1.0.1      stringr_1.6.0     
+[21] dplyr_1.2.1        purrr_1.2.1        readr_2.1.6        tidyr_1.3.2       
+[25] tibble_3.3.1       ggplot2_4.0.2      tidyverse_2.0.0    workflowr_1.7.2   
+
+loaded via a namespace (and not attached):
+  [1] rstudioapi_0.17.1      jsonlite_2.0.0         magrittr_2.0.5        
+  [4] spatstat.utils_3.2-0   ggbeeswarm_0.7.3       farver_2.1.2          
+  [7] rmarkdown_2.31         fs_2.0.1               vctrs_0.7.2           
+ [10] ROCR_1.0-11            Cairo_1.7-0            spatstat.explore_3.6-0
+ [13] rstatix_0.7.3          htmltools_0.5.9        curl_7.0.0            
+ [16] broom_1.0.11           Formula_1.2-5          sass_0.4.10           
+ [19] sctransform_0.4.2      parallelly_1.46.1      KernSmooth_2.23-26    
+ [22] bslib_0.10.0           htmlwidgets_1.6.4      ica_1.0-3             
+ [25] plyr_1.8.9             plotly_4.12.0          zoo_1.8-15            
+ [28] cachem_1.1.0           whisker_0.4.1          igraph_2.2.2          
+ [31] mime_0.13              lifecycle_1.0.5        pkgconfig_2.0.3       
+ [34] R6_2.6.1               fastmap_1.2.0          fitdistrplus_1.2-4    
+ [37] future_1.70.0          shiny_1.13.0           digest_0.6.39         
+ [40] patchwork_1.3.2        ps_1.9.1               rprojroot_2.1.1       
+ [43] tensor_1.5.1           RSpectra_0.16-2        irlba_2.3.7           
+ [46] labeling_0.4.3         progressr_0.18.0       spatstat.sparse_3.1-0 
+ [49] timechange_0.3.0       polyclip_1.10-7        httr_1.4.8            
+ [52] abind_1.4-8            compiler_4.5.2         withr_3.0.2           
+ [55] backports_1.5.0        S7_0.2.1               BiocParallel_1.44.0   
+ [58] carData_3.0-5          fastDummies_1.7.5      ggsignif_0.6.4        
+ [61] MASS_7.3-65            tools_4.5.2            vipor_0.4.7           
+ [64] lmtest_0.9-40          otel_0.2.0             beeswarm_0.4.0        
+ [67] httpuv_1.6.17          future.apply_1.20.1    goftest_1.2-3         
+ [70] glue_1.8.0             callr_3.7.6            nlme_3.1-168          
+ [73] promises_1.5.0         grid_4.5.2             Rtsne_0.17            
+ [76] getPass_0.2-4          cluster_2.1.8.1        reshape2_1.4.5        
+ [79] generics_0.1.4         gtable_0.3.6           spatstat.data_3.1-9   
+ [82] tzdb_0.5.0             data.table_1.18.2.1    hms_1.1.4             
+ [85] car_3.1-3              spatstat.geom_3.6-1    RcppAnnoy_0.0.23      
+ [88] RANN_2.6.2             pillar_1.11.1          limma_3.66.0          
+ [91] babelgene_22.9         spam_2.11-1            RcppHNSW_0.6.0        
+ [94] later_1.4.8            splines_4.5.2          lattice_0.22-7        
+ [97] deldir_2.0-4           survival_3.8-3         tidyselect_1.2.1      
+[100] miniUI_0.1.2           pbapply_1.7-4          knitr_1.51            
+[103] git2r_0.36.2           gridExtra_2.3          scattermore_1.2       
+[106] xfun_0.57              statmod_1.5.1          matrixStats_1.5.0     
+[109] stringi_1.8.7          lazyeval_0.2.3         yaml_2.3.12           
+[112] evaluate_1.0.5         codetools_0.2-20       cli_3.6.5             
+[115] uwot_0.2.4             xtable_1.8-8           reticulate_1.44.1     
+[118] processx_3.8.6         jquerylib_0.1.4        dichromat_2.0-0.1     
+[121] Rcpp_1.1.1             spatstat.random_3.4-3  globals_0.19.1        
+[124] png_0.1-9              spatstat.univar_3.1-5  parallel_4.5.2        
+[127] assertthat_0.2.1       dotCall64_1.2          listenv_0.10.1        
+[130] ggridges_0.5.7         rlang_1.1.7            fastmatch_1.1-6       </code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+
+<!-- Adjust MathJax settings so that all math formulae are shown using
+TeX fonts only; see
+https://docs.mathjax.org/en/latest/web/configuration.html. This will make
+the presentation more consistent at the cost of the webpage sometimes
+taking slightly longer to load. Note that this only works because the
+footer is added to webpages before the MathJax javascript. -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    "HTML-CSS": { availableFonts: ["TeX"] }
+  });
+</script>
+
+
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+<script>
+$(document).ready(function ()  {
+
+    // temporarily add toc-ignore selector to headers for the consistency with Pandoc
+    $('.unlisted.unnumbered').addClass('toc-ignore')
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
