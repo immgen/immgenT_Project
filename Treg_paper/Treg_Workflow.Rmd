@@ -1,0 +1,3933 @@
+```{r}
+#setup
+library(tidyverse) #v2.0.0
+library(stringr) #v1.6.0
+library(ggrastr) #v1.0.2
+library(dplyr) #v1.2.1
+library(Seurat) #v5.4.0
+library(scales) #1.4.0
+library(cowplot) #v1.2.0
+library(fmsb) #v0.7.6
+library(fgsea) #v1.36.0
+library(ZemmourLib) #v0.1.1
+library(pheatmap) #v1.0.13
+library(RColorBrewer) #v1.1-3
+library(ggrepel) #v0.9.8
+library(msigdbr) #v25.1.1
+library(viridis) #v0.6.5
+library(viridisLite) #v0.4.3
+setwd("/Users/nityamehrotra/Library/CloudStorage/Box-Box/ZemmourLab_Nitya/Tregs")
+```
+
+
+```{r}
+#Loading Data
+treg_object <- readRDS("Treg_igt1_96_withtotalvi20260206_clean.Rds")
+color_palette <- read.csv("immgent_color_palettes_level2_1.csv", header = FALSE)
+palette_vector <- setNames(as.character(color_palette$V2), as.character(color_palette$V1))
+organ_palette <- read.csv("immgent_color_palettes_organ_simplified.csv", header = FALSE)
+palette_vector_organ <- setNames(organ_palette$V2, organ_palette$V1)
+onevsall_cluster <- read.table("ttlist_OneVsAll.txt", header = TRUE)
+adt_so <- readRDS("igt1_96_withtotalvi20250710_clean_ADTonly.Rds")
+L1 <- readRDS("L1.Rds")
+F1 <- readRDS("F1.Rds")
+line_pairs_All <- read.csv("testAll.csv")
+igt_flow <- read.csv("igt_flow3.csv", row.names = 1)
+main_trbi <- read.csv("radarplot012626.csv")
+tcr <- read.csv("all_igts_summary.csv.gz")
+ptregs <- readRDS("ptreg_so.Rds")
+trbi_supp <- read.csv("all_data_suppl.csv")
+
+```
+
+```{r}
+#preprocessing necessary objects
+
+treg_object <- NormalizeData(treg_object,assay = "RNA", normalization.method = "LogNormalize",layer.name = "data")
+
+treg_object_clean <- subset(treg_object, subset = !annotation_level2 %in% c("Treg.P", "Treg.wM"))
+
+healthy_subset_inc <- subset(treg_object, subset = condition_broad == "healthy")
+
+sample_counts <- treg_object@meta.data %>%
+  count(sample_code, name = "cell_count") %>%
+  filter(cell_count > 20)
+
+treg_object_filtered <- subset(treg_object, subset = sample_code %in% sample_counts$sample_code)
+
+
+treg_rna <- subset(treg_object, subset = !annotation_level2 %in% c("Treg.wM"))
+
+```
+
+```{r 1a - Overall MDE}
+#for david
+```
+
+```{r 1b - GP68 volcano plot}
+#for david
+```
+
+```{r 1c - selected gene expression across gp68}
+#for david
+```
+
+```{r 1d - overall Treg mde, fig.width=8, fig.height=8}
+DimPlot(treg_object, reduction = "mde_incremental", group.by = "annotation_level2", cols = palette_vector, label = FALSE, raster = TRUE, raster.dpi = c(1024, 1024)) + ggtitle("Treg Cells in All Populations") + NoAxes() + NoLegend() + theme(legend.position = "none") + coord_cartesian(xlim = c(-2.5, 4), ylim = c(-2.5, 2.5))
+```
+
+```{r 1e - feature plots of selected genes , fig.width=8, fig.height=8}
+p = FeaturePlot(treg_object, slot = "data", features = "Foxp3", reduction = "mde_incremental", pt.size = 1.5, order = TRUE, raster = T, raster.dpi = c(512, 512))
+p + NoLegend()
+
+p = FeaturePlot(treg_object, slot = "data", features = "Il2ra", reduction = "mde_incremental", pt.size = 1.5, order = TRUE, raster = T, raster.dpi = c(512, 512))
+p + NoLegend()
+
+p = FeaturePlot(treg_object, slot = "data", features = "Ctla4", reduction = "mde_incremental", pt.size = 1.5, order = TRUE, raster = T, raster.dpi = c(512, 512))
+p + NoLegend()
+
+p = FeaturePlot(treg_object, slot = "data", features = "Ccr7", reduction = "mde_incremental", pt.size = 1.5, order = TRUE, raster = T, raster.dpi = c(512, 512))
+p + NoLegend()
+
+p = FeaturePlot(treg_object, slot = "data", features = "Nr4a1", reduction = "mde_incremental", pt.size = 1.5, order = TRUE, raster = T, raster.dpi = c(512, 512))
+p + NoLegend()
+
+p = FeaturePlot(treg_object, slot = "data", features = "Cxcr5", reduction = "mde_incremental", pt.size = 1.5, order = TRUE, raster = T, raster.dpi = c(512, 512))
+p + NoLegend()
+
+p = FeaturePlot(treg_object, slot = "data", features = "Il1rl1", reduction = "mde_incremental", pt.size = 1.5, order = TRUE, raster = T, raster.dpi = c(512, 512))
+p + NoLegend()
+
+p = FeaturePlot(treg_object, slot = "data", features = "Rorc", reduction = "mde_incremental", pt.size = 1.5, order = TRUE, raster = T, raster.dpi = c(512, 512))
+p + NoLegend()
+
+p = FeaturePlot(treg_object, slot = "data", features = "Tbx21", reduction = "mde_incremental", pt.size = 1.5, order = TRUE, raster = T, raster.dpi = c(512, 512))
+p + NoLegend()
+
+p = FeaturePlot(treg_object, slot = "data", features = "Cxcr3", reduction = "mde_incremental", pt.size = 0.5, order = TRUE)
+p + NoLegend()
+
+```
+
+```{r 1f - heatmap of top 10 DGE/cluster, fig.width=8, fig.height=10}
+logfc_cols <- grep("^log2FC_", names(onevsall_cluster), value = TRUE)
+
+col_order <- c(
+  "log2FC_Treg_cl1_vs_All","log2FC_Treg_cl3_vs_All","log2FC_Treg_cl6_vs_All",
+  "log2FC_Treg_cl2_vs_All","log2FC_Treg_cl8_vs_All","log2FC_Treg_cl4_vs_All"
+)
+
+hm_df <- onevsall_cluster %>% select(SYMBOL, all_of(logfc_cols))
+rownames(hm_df) <- hm_df$SYMBOL
+hm_mat <- hm_df %>% select(-SYMBOL) %>% as.matrix()
+hm_mat <- hm_mat[, match(col_order, colnames(hm_mat)), drop = FALSE]
+
+top_n <- 10
+get_topn <- function(mat, colname, n = 10) {
+  v <- mat[, colname]
+  ord <- order(v, decreasing = TRUE, na.last = NA)
+  head(rownames(mat)[ord], n)
+}
+tops_list <- lapply(col_order, function(cn) get_topn(hm_mat, cn, top_n))
+names(tops_list) <- col_order
+
+rows_dup <- unlist(tops_list, use.names = FALSE)
+group_tag_dup <- rep(col_order, times = lengths(tops_list))
+keep_idx <- !duplicated(rows_dup)
+rows_unique <- rows_dup[keep_idx]
+group_tag_unique <- group_tag_dup[keep_idx]
+
+sizes_unique <- as.integer(table(factor(group_tag_unique, levels = col_order)))
+gaps_row_unique <- cumsum(sizes_unique)
+
+hm_mat_unique <- hm_mat[rows_unique, , drop = FALSE]
+hm_mat_unique <- t(scale(t(hm_mat_unique)))
+max_abs <- max(abs(hm_mat_unique), na.rm = TRUE)
+breaks  <- seq(-max_abs, max_abs, length.out = 101)
+cols    <- colorRampPalette(c("darkblue", "white", "red"))(100)
+
+colnames(hm_mat_unique) <- c(
+  "Treg.A",
+  "Treg.C",
+  "Treg.E",
+  "Treg.B",
+  "Treg.F",
+  "Treg.D"
+)
+
+
+
+pheatmap(
+  hm_mat_unique,
+  color = cols,
+  breaks = breaks,
+  cluster_rows = FALSE,
+  cluster_cols = FALSE,
+  border_color = "lightgray",
+  fontsize_row = 8,
+  fontsize_col = 9,
+  cellwidth = 8,
+  cellheight = 8,
+  main = "Top 10 Genes per Column (Scaled Across Rows)"
+)
+```
+
+```{r 1g - clonotype frequencies}
+```
+
+```{r 1h - clonotype sharing MDE}
+mypal_level2_all <- ZemmourLib::immgent_colors$level2
+
+names(mypal_level2_all)[names(mypal_level2_all) == "Treg_cl1"] <- "Treg.A"
+names(mypal_level2_all)[names(mypal_level2_all) == "Treg_cl2"] <- "Treg.D"
+names(mypal_level2_all)[names(mypal_level2_all) == "Treg_cl3"] <- "Treg.B"
+names(mypal_level2_all)[names(mypal_level2_all) == "Treg_cl4"] <- "Treg.F"
+names(mypal_level2_all)[names(mypal_level2_all) == "Treg_cl6"] <- "Treg.C"
+names(mypal_level2_all)[names(mypal_level2_all) == "Treg_cl8"] <- "Treg.E"
+
+
+treg_mde <- as.data.frame(
+  treg_object_clean@reductions$mde_incremental@cell.embeddings
+)
+
+treg_mde$level2 <- treg_object_clean$annotation_level2
+
+
+write.csv(
+  treg_mde,
+  "treg_mde.csv",
+  row.names = TRUE,
+  quote = FALSE
+)
+
+
+mde_centroids <- treg_mde %>%
+  group_by(level2) %>%
+  summarise(
+    mdeincremental_1 = mean(mdeincremental_1),
+    mdeincremental_2 = mean(mdeincremental_2),
+    .groups = "drop"
+  ) %>%
+  column_to_rownames("level2")
+
+mde_centroids$level2 <- rownames(mde_centroids)
+
+
+mde_centroids["Treg.A", "mdeincremental_1"] <- -0.50
+mde_centroids["Treg.A", "mdeincremental_2"] <- -1.19
+
+mde_centroids["Treg.B", "mdeincremental_1"] <- -0.03
+mde_centroids["Treg.B", "mdeincremental_2"] <- -0.05
+
+mde_centroids["Treg.C", "mdeincremental_1"] <- 0.003
+mde_centroids["Treg.C", "mdeincremental_2"] <- 0.72
+
+mde_centroids["Treg.D", "mdeincremental_1"] <- 0.87
+mde_centroids["Treg.D", "mdeincremental_2"] <- -0.35
+
+mde_centroids["Treg.E", "mdeincremental_1"] <- 1.10
+mde_centroids["Treg.E", "mdeincremental_2"] <- -0.92
+
+mde_centroids["Treg.F", "mdeincremental_1"] <- 0.43
+mde_centroids["Treg.F", "mdeincremental_2"] <- -0.05
+
+
+write.csv(
+  mde_centroids,
+  "mde_centroids.csv",
+  row.names = TRUE,
+  quote = FALSE
+)
+
+
+points_centroids <- ggplot() +
+
+  geom_point_rast(
+    data = treg_mde,
+    aes(
+      x = mdeincremental_1,
+      y = mdeincremental_2,
+      colour = level2
+    ),
+    size = 0.5,
+    alpha = 0.7
+  ) +
+
+  geom_point(
+    data = mde_centroids,
+    aes(
+      x = mdeincremental_1,
+      y = mdeincremental_2
+    ),
+    size = 10,
+    colour = "black"
+  ) +
+
+  geom_point(
+    data = mde_centroids,
+    aes(
+      x = mdeincremental_1,
+      y = mdeincremental_2,
+      colour = level2
+    ),
+    size = 8
+  ) +
+
+  scale_colour_manual(
+    values = mypal_level2_all
+  ) +
+
+  theme_classic() +
+
+  NoLegend()
+
+
+points_centroids
+
+
+line_pairs_All <- line_pairs_All %>%
+  mutate(
+    X1 = trimws(as.character(X1)),
+    X2 = trimws(as.character(X2)),
+    X3 = as.numeric(X3)
+  ) %>%
+  filter(
+    X1 != X2,
+    X3 > 0.1
+  )
+
+
+centroids_x <- mde_centroids %>%
+  as.data.frame() %>%
+  mutate(
+    level2 = trimws(as.character(level2))
+  ) %>%
+  select(
+    level2,
+    mdeincremental_1,
+    mdeincremental_2
+  ) %>%
+  rename(
+    X1 = level2,
+    x = mdeincremental_1,
+    y = mdeincremental_2
+  )
+
+
+centroids_y <- mde_centroids %>%
+  as.data.frame() %>%
+  mutate(
+    level2 = trimws(as.character(level2))
+  ) %>%
+  select(
+    level2,
+    mdeincremental_1,
+    mdeincremental_2
+  ) %>%
+  rename(
+    X2 = level2,
+    xend = mdeincremental_1,
+    yend = mdeincremental_2
+  )
+
+
+line_pairs_All <- line_pairs_All %>%
+  left_join(
+    centroids_x,
+    by = "X1"
+  ) %>%
+  left_join(
+    centroids_y,
+    by = "X2"
+  ) %>%
+  filter(
+    !is.na(x),
+    !is.na(y),
+    !is.na(xend),
+    !is.na(yend)
+  )
+
+
+line_pairs_All$log2 <- log2(
+  line_pairs_All$X3
+)
+
+
+print(
+  line_pairs_All %>%
+    select(
+      X1,
+      X2,
+      X3,
+      x,
+      y,
+      xend,
+      yend
+    )
+)
+
+
+cat(
+  "Number of Jaccard lines to plot:",
+  nrow(line_pairs_All),
+  "\n"
+)
+
+
+centroids_plot <- mde_centroids %>%
+  as.data.frame() %>%
+  filter(
+    level2 %in% union(
+      line_pairs_All$X1,
+      line_pairs_All$X2
+    )
+  )
+
+
+All_plot_legend <- ggplot() +
+
+  geom_point_rast(
+    data = treg_mde,
+    aes(
+      x = mdeincremental_1,
+      y = mdeincremental_2,
+      colour = level2
+    ),
+    size = 0.5,
+    alpha = 0.7
+  ) +
+
+  geom_segment(
+    data = line_pairs_All,
+    aes(
+      x = x,
+      y = y,
+      xend = xend,
+      yend = yend,
+      linewidth = X3
+    ),
+    colour = "black",
+    lineend = "round"
+  ) +
+
+  geom_point(
+    data = centroids_plot,
+    aes(
+      x = mdeincremental_1,
+      y = mdeincremental_2
+    ),
+    size = 10,
+    colour = "black"
+  ) +
+
+  geom_point(
+    data = centroids_plot,
+    aes(
+      x = mdeincremental_1,
+      y = mdeincremental_2,
+      colour = level2
+    ),
+    size = 8
+  ) +
+
+  scale_colour_manual(
+    values = mypal_level2_all
+  ) +
+
+  scale_linewidth(
+    range = c(0.5, 4)
+  ) +
+
+  theme_classic()
+
+
+All_plot_legend
+```
+
+```{r 2a - Treg vs Tconv protein expression}
+vol_sub <- subset(adt_so, subset = annotation_level1 %in% c("CD4", "Treg"))
+vol_sub <- subset(vol_sub, subset = !(annotation_level2 %in% c("Treg_cl1", "Treg_cl7")))
+metadata <- vol_sub@meta.data
+
+CD4 <- metadata$annotation_level1 == "CD4"
+Treg <- metadata$annotation_level1 == "Treg"
+cd4 <- CD4
+treg <- Treg
+Idents(vol_sub) = "annotation_level1"
+treg_vol= NormalizeData(vol_sub, assay = "ADT", normalization.method = "LogNormalize")
+markers <- FindMarkers(
+  treg_vol,
+  ident.1 = "CD4",
+  ident.2 = "Treg"
+)
+
+lfc_cutoff <- 1.2 
+p_cutoff   <- 0.05
+
+volc_df <- markers %>%
+  rownames_to_column("feature") %>%
+  mutate(
+    neg_log10_padj = -log10(p_val_adj + 1e-300),
+    direction = case_when(
+      avg_log2FC >  lfc_cutoff & p_val_adj < p_cutoff ~ "Tconv_enriched",
+      avg_log2FC < -lfc_cutoff & p_val_adj < p_cutoff ~ "Treg_enriched",
+      TRUE                                            ~ "ns"
+    )
+  )
+
+label_genes <- volc_df %>%
+  filter(p_val_adj < p_cutoff, abs(avg_log2FC) > 1.5) %>%
+  pull(feature)
+
+
+ggplot(volc_df, aes(x = avg_log2FC, y = neg_log10_padj, color = direction)) +
+  geom_point(alpha = 0.7, size = 1.8) +
+  geom_text_repel(
+    data = subset(volc_df, feature %in% label_genes),
+    aes(label = feature),
+    size = 2,
+    max.overlaps = Inf,
+    box.padding = 0.3,
+    point.padding = 0.1
+  ) +
+  scale_color_manual(
+    values = c(
+      "Tconv_enriched"  = "darkblue",
+      "Treg_enriched" = "darkred",
+      "ns"            = "darkgray"
+    ),
+    breaks = c("Tconv_enriched", "Treg_enriched", "ns"),
+    name   = "Direction"
+  ) +
+  geom_vline(xintercept = c(-lfc_cutoff, lfc_cutoff),
+             linetype = "dashed", color = "black") +
+  geom_hline(yintercept = -log10(p_cutoff),
+             linetype = "dashed", color = "black") +
+  theme_classic() +
+  labs(
+    title = "Tconvs vs Activated Tregs (ADT) – Differential surface markers",
+    subtitle = "Right = higher in Tconv, Left = higher in Treg",
+    x = "avg log2FC (Tconv vs Treg, ADT)",
+    y = "-log10(adj p-value)"
+  )
+```
+```{r 2b - citeseq heatmap of selected markers,  fig.width=4, fig.height=5}
+
+
+adt_markers <- c("CD62L", "FR4", "NEUROPILIN1.CD304", "CD69", "KLRG1", "SCA1", "CD44", "CD29", "CD49B")
+
+cluster_order <- c("Treg.A", "Treg.B", "Treg.C","Treg.D", "Treg.E","Treg.F")
+
+DefaultAssay(treg_object) <- "ADT"
+treg_object <- NormalizeData(treg_object, assay = "ADT", normalization.method = "LogNormalize")
+adt_avg <- AverageExpression(
+  treg_object,
+  assays = "ADT",
+  features = adt_markers,
+  group.by = "annotation_level2",
+  layer = "data"
+)$ADT
+
+adt_avg <- adt_avg[
+  adt_markers,
+  cluster_order,
+  drop = FALSE
+]
+
+adt_scaled <- t(
+  scale(
+    t(adt_avg)
+  )
+)
+
+# Plot
+pheatmap(
+  adt_scaled,
+  cluster_rows = FALSE,
+  cluster_cols = FALSE,
+  border_color = "darkgray",
+  color = colorRampPalette(
+    c("#313695", "white", "#F21A1A")
+  )(100),
+  breaks = seq(
+    -2,
+    2,
+    length.out = 101
+  ),
+  show_rownames = TRUE,
+  show_colnames = TRUE,
+  cellwidth = 12,
+  cellheight = 12,
+  fontsize = 10,
+  angle_col = 45,
+  legend = FALSE
+)
+```
+```{r 2d - citeseq sorted MDEs highlighting clusters, fig.width= 8, fig.height=8}
+
+
+MyDimPlotHighlightDensity <- function(
+  seurat_object = so,
+  umap_to_plot = "mde_incremental",
+  group.by = NULL,
+  split.by = NULL,
+  raster = TRUE,
+  highlight_size = 2.0,
+  highlight_alpha = 1.0,
+  cols = rocket(100)
+) {
+  requireNamespace("scattermore", quietly = TRUE)
+  requireNamespace("ggplot2", quietly = TRUE)
+
+  if (is.null(group.by)) {
+    stop("Please provide a valid column name in `group.by`.")
+  }
+  df <- data.frame(
+    feature1 = seurat_object[[umap_to_plot]]@cell.embeddings[, 1],
+    feature2 = seurat_object[[umap_to_plot]]@cell.embeddings[, 2],
+    group.by = seurat_object@meta.data[[group.by]]
+  )
+
+  if (!is.null(split.by)) {
+    df$split.by <- seurat_object@meta.data[[split.by]]
+  }
+
+  df2 <- df[df$group.by == TRUE, ]
+
+  df2$density <- densCols(
+    df2$feature1,
+    df2$feature2,
+    colramp = colorRampPalette(cols),
+    nbin = 500
+  )
+
+  p1 <- ggplot(df) +
+    scattermore::geom_scattermore(
+      aes(feature1, feature2),
+      color = "grey",
+      pixels = c(512, 512)
+    )
+
+  if (raster) {
+    p2 <- scattermore::geom_scattermore(
+      data = df2,
+      aes(feature1, feature2, color = density),
+      pixels = c(216, 216)
+    )
+  } else {
+    p2 <- geom_point(
+      data = df2,
+      aes(feature1, feature2, color = density),
+      size = highlight_size,
+      alpha = highlight_alpha
+    )
+  }
+
+  p3 <- p1 + p2 +
+    scale_colour_identity() +
+    theme_bw() +
+    theme(
+      axis.text.x = element_text(size = 15),
+      axis.text.y = element_text(size = 15),
+      legend.text = element_text(size = 10),
+      axis.title.x = element_text(size = 20),
+      axis.title.y = element_text(size = 20),
+      legend.title = element_blank(),
+      panel.grid.major = element_blank(),
+      panel.grid.minor = element_blank()
+    )
+
+  if (!is.null(split.by)) {
+    p3 <- p3 + facet_wrap(~split.by)
+  }
+
+  return(p3)
+}
+
+treg_object_clean <- NormalizeData(treg_object_clean, assay = "ADT", normalization.method = "LogNormalize")
+adt_data <- GetAssayData(treg_object_clean, assay = "ADT", layer = "data")
+
+phenotype_annotation <- case_when(
+   adt_data["CD62L", ] > 4 ~ "Treg.A",
+   adt_data["CD62L", ] < 4 & adt_data["KLRG1", ] > 4 & adt_data["CD49B", ] < 4 & adt_data["CD44",] > 5 ~ "Treg.D",
+  adt_data["CD62L", ] < 4 & adt_data["CD49B", ] < 4 & adt_data["NEUROPILIN1.CD304", ] > 5 & adt_data["FR4", ] > 6 & adt_data["KLRG1", ] < 4 & adt_data["CD29", ] < 5 ~ "Treg.B",
+  adt_data["CD62L", ] < 4 & adt_data["CD49B", ] > 4 &
+    adt_data["KLRG1", ] < 4 & adt_data["CD69", ] < 4 & adt_data["CD29", ] > 5 & adt_data["CD44", ] > 5 ~ "Treg.F",
+  adt_data["CD62L", ] < 4 & adt_data["KLRG1", ] < 4 &
+    adt_data["CD49B", ] < 4 & adt_data["CD69", ] > 4 & adt_data["CD29", ] < 5 ~ "Treg.C",
+  adt_data["CD62L", ] <= 4 & adt_data["KLRG1", ] < 4 &
+    adt_data["CD49B", ] < 4 & adt_data["SCA1", ] > 4 & adt_data["NEUROPILIN1.CD304", ] < 5 & adt_data["CD44", ] > 5 ~ "Treg.E",
+  TRUE ~ "Other"
+)
+treg_object_clean$citeseq <- phenotype_annotation
+treg_object_clean$is_TregA <- treg_object_clean$citeseq == "Treg.A"
+MyDimPlotHighlightDensity(
+  seurat_object = treg_object_clean,
+  umap_to_plot = "mde_incremental",
+  group.by = "is_TregA",
+  split.by = NULL,
+  raster = TRUE,
+  highlight_size = 2,
+  highlight_alpha = 0.75,
+  cols = rocket(100)
+)
+
+treg_object_clean$is_TregB <- treg_object_clean$citeseq == "Treg.B"
+MyDimPlotHighlightDensity(
+  seurat_object = treg_object_clean,
+  umap_to_plot = "mde_incremental",
+  group.by = "is_TregB",
+  split.by = NULL,
+  raster = TRUE,
+  highlight_size = 2,
+  highlight_alpha = 0.75,
+  cols = rocket(100))
+
+treg_object_clean$is_TregD <- treg_object_clean$citeseq == "Treg.D"
+MyDimPlotHighlightDensity(
+  seurat_object = treg_object_clean,
+  umap_to_plot = "mde_incremental",
+  group.by = "is_TregD",
+  split.by = NULL,
+  raster = TRUE,
+  highlight_size = 2,
+  highlight_alpha = 0.75,
+  cols = rocket(100))
+
+treg_object_clean$is_TregE <- treg_object_clean$citeseq == "Treg.E"
+MyDimPlotHighlightDensity(
+  seurat_object = treg_object_clean,
+  umap_to_plot = "mde_incremental",
+  group.by = "is_TregE",
+  split.by = NULL,
+  raster = TRUE,
+  highlight_size = 6,
+  highlight_alpha = 1.0,
+  cols = rocket(100))
+
+
+treg_object_clean$is_TregF <- treg_object_clean$citeseq == "Treg.F"
+MyDimPlotHighlightDensity(
+  seurat_object = treg_object_clean,
+  umap_to_plot = "mde_incremental",
+  group.by = "is_TregF",
+  split.by = NULL,
+  raster = TRUE,
+  highlight_size = 2,
+  highlight_alpha = 1.0,
+  cols = rocket(100))
+```
+```{r 2f - radar plots comparing cluster distributions between flow/citeseq/scrnaseq across organs, fig.width= 8, fig.height= 8}
+library(Seurat)
+library(dplyr)
+library(tidyr)
+library(Matrix)
+library(fmsb)
+
+adt_features <- c(
+  "CD44",
+  "CD62L",
+  "NEUROPILIN1.CD304",
+  "FR4",
+  "SCA1",
+  "CD49B",
+  "KLRG1"
+)
+
+meta_all <- treg_object@meta.data
+
+cells_keep <- rownames(meta_all)[
+  !is.na(meta_all$cite_seq) &
+    meta_all$cite_seq == "TRUE" &
+    !is.na(meta_all$annotation_level2) &
+    !(meta_all$annotation_level2 %in% c("Treg.P", "Treg.wM")) &
+    !is.na(meta_all$condition_broad) &
+    meta_all$condition_broad == "healthy" &
+    !is.na(meta_all$sample_code)
+]
+
+sample_counts <- meta_all[cells_keep, , drop = FALSE] %>%
+  count(sample_code, name = "cell_count") %>%
+  filter(cell_count > 20)
+
+cells_keep <- cells_keep[
+  meta_all[cells_keep, "sample_code"] %in%
+    sample_counts$sample_code
+]
+
+meta <- meta_all[cells_keep, , drop = FALSE] %>%
+  mutate(
+    organ_simplified = case_when(
+      organ_simplified %in% c(
+        "colon epi",
+        "colon LP"
+      ) ~ "colon",
+      organ_simplified %in% c(
+        "small intestine epi",
+        "small intestine LP"
+      ) ~ "small intestine",
+      TRUE ~ organ_simplified
+    )
+  )
+
+organs_keep <- c(
+  "thymus",
+  "bone marrow",
+  "blood",
+  "spleen",
+  "LN",
+  "lung",
+  "colon",
+  "small intestine",
+  "peritoneal cavity",
+  "liver"
+)
+
+cells_keep <- rownames(meta)[
+  meta$organ_simplified %in% organs_keep
+]
+
+meta <- meta[
+  cells_keep,
+  ,
+  drop = FALSE
+]
+
+adt <- GetAssayData(
+  treg_object,
+  assay = "ADT",
+  layer = "data"
+)[
+  adt_features,
+  cells_keep,
+  drop = FALSE
+]
+
+cd44_feat  <- "CD44"
+cd62l_feat <- "CD62L"
+nrp1_feat  <- "NEUROPILIN1.CD304"
+fr4_feat   <- "FR4"
+sca1_feat  <- "SCA1"
+cd49b_feat <- "CD49B"
+klrg1_feat <- "KLRG1"
+
+sca1_thresh  <- 5
+nrp1_thresh  <- 5
+fr4_thresh   <- 6
+cd44_thresh  <- 5
+cd62l_thresh <- 4
+cd49b_thresh <- 4
+klrg1_thresh <- 4
+
+meta$is_cla_citeseq <-
+  (adt[cd44_feat, ] < cd44_thresh) &
+  (adt[cd62l_feat, ] > cd62l_thresh)
+
+meta$is_cld_citeseq <-
+  (adt[cd44_feat, ] > cd44_thresh) &
+  (adt[cd62l_feat, ] < cd62l_thresh) &
+  (adt[cd49b_feat, ] < cd49b_thresh) &
+  (adt[klrg1_feat, ] > klrg1_thresh)
+
+meta$is_clf_citeseq <-
+  (adt[cd44_feat, ] > cd44_thresh) &
+  (adt[cd62l_feat, ] < cd62l_thresh) &
+  (adt[cd49b_feat, ] > cd49b_thresh) &
+  (adt[klrg1_feat, ] < klrg1_thresh)
+
+meta$is_clb_citeseq <-
+  (adt[cd44_feat, ] > cd44_thresh) &
+  (adt[cd62l_feat, ] < cd62l_thresh) &
+  (adt[cd49b_feat, ] < cd49b_thresh) &
+  (adt[klrg1_feat, ] < klrg1_thresh) &
+  (adt[nrp1_feat, ] > nrp1_thresh) &
+  (adt[fr4_feat, ] > fr4_thresh)
+
+meta$is_cle_citeseq <-
+  (adt[cd44_feat, ] > cd44_thresh) &
+  (adt[cd62l_feat, ] < cd62l_thresh) &
+  (adt[cd49b_feat, ] < cd49b_thresh) &
+  (adt[klrg1_feat, ] < klrg1_thresh) &
+  (adt[nrp1_feat, ] < nrp1_thresh) &
+  (adt[sca1_feat, ] > sca1_thresh)
+
+meta <- meta %>%
+  mutate(
+    Treg.A = is_cla_citeseq,
+    Treg.D = is_cld_citeseq,
+    Treg.B = is_clb_citeseq,
+    Treg.F = is_clf_citeseq,
+    Treg.E = is_cle_citeseq
+  )
+
+colnames(igt_flow) <- colnames(igt_flow) %>%
+  gsub("^Cl1\\.", "Treg.A.", .) %>%
+  gsub("^Cl2\\.", "Treg.D.", .) %>%
+  gsub("^Cl3\\.", "Treg.B.", .) %>%
+  gsub("^Cl4\\.", "Treg.F.", .) %>%
+  gsub("^Cl6\\.", "Treg.C.", .) %>%
+  gsub("^Cl8\\.", "Treg.E.", .)
+
+rownames(igt_flow) <- c(
+  "thymus",
+  "bone marrow",
+  "blood",
+  "spleen",
+  "LN",
+  "lung",
+  "colon",
+  "small intestine",
+  "peritoneal cavity",
+  "liver"
+)
+
+cluster_order <- c(
+  "Treg.A",
+  "Treg.D",
+  "Treg.B",
+  "Treg.E",
+  "Treg.F"
+)
+
+gate_cols <- cluster_order
+
+sample_totals <- meta %>%
+  group_by(
+    sample_code,
+    organ_simplified
+  ) %>%
+  summarise(
+    total = n(),
+    .groups = "drop"
+  )
+
+cite_counts <- meta %>%
+  select(
+    sample_code,
+    organ_simplified,
+    all_of(gate_cols)
+  ) %>%
+  pivot_longer(
+    cols = all_of(gate_cols),
+    names_to = "annotation_level2",
+    values_to = "is_in_gate"
+  ) %>%
+  group_by(
+    sample_code,
+    organ_simplified,
+    annotation_level2
+  ) %>%
+  summarise(
+    count = sum(
+      is_in_gate,
+      na.rm = TRUE
+    ),
+    .groups = "drop"
+  ) %>%
+  left_join(
+    sample_totals,
+    by = c(
+      "sample_code",
+      "organ_simplified"
+    )
+  ) %>%
+  mutate(
+    percent = 100 * count / total
+  )
+
+cite_summary <- cite_counts %>%
+  group_by(
+    organ_simplified,
+    annotation_level2
+  ) %>%
+  summarise(
+    med_cite = median(
+      percent,
+      na.rm = TRUE
+    ),
+    .groups = "drop"
+  )
+
+rna_counts <- meta %>%
+  filter(
+    annotation_level2 %in% cluster_order
+  ) %>%
+  count(
+    sample_code,
+    organ_simplified,
+    annotation_level2,
+    name = "count"
+  ) %>%
+  left_join(
+    sample_totals,
+    by = c(
+      "sample_code",
+      "organ_simplified"
+    )
+  ) %>%
+  mutate(
+    percent = 100 * count / total
+  )
+
+rna_summary <- rna_counts %>%
+  group_by(
+    organ_simplified,
+    annotation_level2
+  ) %>%
+  summarise(
+    med_rna = median(
+      percent,
+      na.rm = TRUE
+    ),
+    .groups = "drop"
+  )
+
+flow_A <- igt_flow %>%
+  select(
+    starts_with("Treg.A.")
+  )
+
+flow_D <- igt_flow %>%
+  select(
+    starts_with("Treg.D.")
+  )
+
+flow_B <- igt_flow %>%
+  select(
+    starts_with("Treg.B.")
+  )
+
+flow_E <- igt_flow %>%
+  select(
+    starts_with("Treg.E.")
+  )
+
+flow_F <- igt_flow %>%
+  select(
+    starts_with("Treg.F.")
+  )
+
+flow_summary_A <- data.frame(
+  organ_simplified = rownames(flow_A),
+  annotation_level2 = "Treg.A",
+  med_flow = apply(
+    flow_A,
+    1,
+    median,
+    na.rm = TRUE
+  )
+)
+
+flow_summary_D <- data.frame(
+  organ_simplified = rownames(flow_D),
+  annotation_level2 = "Treg.D",
+  med_flow = apply(
+    flow_D,
+    1,
+    median,
+    na.rm = TRUE
+  )
+)
+
+flow_summary_B <- data.frame(
+  organ_simplified = rownames(flow_B),
+  annotation_level2 = "Treg.B",
+  med_flow = apply(
+    flow_B,
+    1,
+    median,
+    na.rm = TRUE
+  )
+)
+
+flow_summary_E <- data.frame(
+  organ_simplified = rownames(flow_E),
+  annotation_level2 = "Treg.E",
+  med_flow = apply(
+    flow_E,
+    1,
+    median,
+    na.rm = TRUE
+  )
+)
+
+flow_summary_F <- data.frame(
+  organ_simplified = rownames(flow_F),
+  annotation_level2 = "Treg.F",
+  med_flow = apply(
+    flow_F,
+    1,
+    median,
+    na.rm = TRUE
+  )
+)
+
+flow_summary <- bind_rows(
+  flow_summary_A,
+  flow_summary_D,
+  flow_summary_B,
+  flow_summary_E,
+  flow_summary_F
+)
+
+total_plot_df <- flow_summary %>%
+  full_join(
+    cite_summary,
+    by = c(
+      "organ_simplified",
+      "annotation_level2"
+    )
+  ) %>%
+  full_join(
+    rna_summary,
+    by = c(
+      "organ_simplified",
+      "annotation_level2"
+    )
+  ) %>%
+  mutate(
+    annotation_level2 = factor(
+      annotation_level2,
+      levels = cluster_order
+    ),
+    organ_simplified = factor(
+      organ_simplified,
+      levels = organs_keep
+    )
+  ) %>%
+  arrange(
+    organ_simplified,
+    annotation_level2
+  )
+
+organs <- unique(
+  as.character(
+    total_plot_df$organ_simplified
+  )
+)
+
+organs <- organs[
+  !is.na(organs)
+]
+
+for (org in organs) {
+
+  sub_df <- total_plot_df %>%
+    filter(
+      organ_simplified == org
+    ) %>%
+    arrange(
+      annotation_level2
+    )
+
+  annotations <- as.character(
+    sub_df$annotation_level2
+  )
+
+  flow_med <- setNames(
+    sub_df$med_flow,
+    annotations
+  )
+
+  cite_med <- setNames(
+    sub_df$med_cite,
+    annotations
+  )
+
+  rna_med <- setNames(
+    sub_df$med_rna,
+    annotations
+  )
+
+  radar_data <- rbind(
+    max = rep(
+      100,
+      length(annotations)
+    ),
+    min = rep(
+      0,
+      length(annotations)
+    ),
+    Flow = flow_med,
+    CITEseq = cite_med,
+    RNAseq = rna_med
+  )
+
+  radar_data <- as.data.frame(
+    radar_data
+  )
+
+  colnames(radar_data) <- annotations
+
+  radar_data[
+    is.na(radar_data)
+  ] <- 0
+
+  par(
+    mar = c(3, 3, 4, 3),
+    xpd = TRUE
+  )
+
+  radarchart(
+    radar_data,
+    axistype = 1,
+    pcol = c(
+      "blue",
+      "red",
+      "darkgray"
+    ),
+    plwd = c(
+      2,
+      2,
+      2
+    ),
+    plty = c(
+      1,
+      1,
+      1
+    ),
+    cglcol = "grey",
+    cglty = 1,
+    axislabcol = "grey",
+    vlcex = 0.8,
+    title = paste(
+      "Flow vs CITE-seq vs RNA-seq proportions -",
+      org
+    )
+  )
+
+  legend(
+    "topleft",
+    inset = c(
+      0,
+      -0.15
+    ),
+    horiz = TRUE,
+    legend = c(
+      "Flow",
+      "CITE-seq",
+      "RNA-seq"
+    ),
+    col = c(
+      "blue",
+      "red",
+      "darkgray"
+    ),
+    lty = 1,
+    lwd = 2,
+    bty = "n",
+    xpd = TRUE,
+    cex = 0.8
+  )
+}
+```
+
+```{r 3b - mde highlighting Extravascular Treg.A in NLTs, fig.width= 8, fig.height= 8}
+selected_organs <- c("small intestine", "colon", "skin", "liver", "placenta", "lung")
+
+ivneg_gating <- c("IV- CD3+", "IV- CD45.2+ CD3e+", "IV- CD45+ CD3e+","IV- CD45+ CD3e+ Thy1.1- and Thy1.1+ (OT1)")
+
+treg_object$nlta_highlight <- "Other"
+
+treg_object$nlta_highlight[
+  treg_object$annotation_level2 == "Treg.A" &
+    treg_object$organ_simplified %in% selected_organs
+] <- "Treg.A selected organs"
+
+treg_object$nlta_highlight[
+  treg_object$annotation_level2 == "Treg.A" &
+    treg_object$organ_simplified %in% selected_organs &
+    treg_object$gating_strategy %in% ivneg_gating
+] <- "IV-"
+
+treg_object$nlta_highlight <- factor(
+  treg_object$nlta_highlight,
+  levels = c(
+    "Treg.A selected organs",
+    "IV-"
+  )
+)
+
+cells_nlta <- colnames(treg_object)[
+  treg_object$nlta_highlight != "Other"
+]
+
+
+
+#layering red on top
+treg_object$nlta_highlight <- "Other"
+
+treg_object$nlta_highlight[
+  treg_object$annotation_level2 == "Treg.A" &
+    treg_object$organ_simplified %in% selected_organs
+] <- "Treg.A selected organs"
+
+treg_object$nlta_highlight[
+  treg_object$annotation_level2 == "Treg.A" &
+    treg_object$organ_simplified %in% selected_organs &
+    treg_object$gating_strategy %in% ivneg_gating
+] <- "IV-"
+
+
+
+plot <- FetchData(
+  treg_object,
+  vars = c(
+    "mdeincremental_1",
+    "mdeincremental_2",
+    "nlta_highlight"
+  )
+)
+
+plot <- plot %>%
+  mutate(
+    plot_order = case_when(
+      nlta_highlight == "Other" ~ 1,
+      nlta_highlight == "Treg.A selected organs" ~ 2,
+      nlta_highlight == "IV-" ~ 3
+    )
+  ) %>%
+  arrange(plot_order)
+
+ggplot(plot, aes(mdeincremental_1, mdeincremental_2)) +
+  geom_point(
+    data = subset(plot, nlta_highlight == "Other"),
+    color = "lightgray",
+    size = 1.0
+  ) +
+  geom_point(
+    data = subset(plot,
+                  nlta_highlight == "Treg.A selected organs"),
+    color = "black",
+    size = 1.5
+  ) +
+  geom_point(
+    data = subset(plot,
+                  nlta_highlight == "IV-"),
+    color = "red",
+    size = 2.5
+  ) +
+  NoAxes() +
+  NoGrid()
+```
+
+```{r 3f - heatmap comparing Treg.A in spleen to selected organs, fig.height= 15, fig.width=5}
+top_n <- 50
+
+organ_col <- "organ_simplified"
+cluster_col <- "annotation_level2"
+
+trega_label <- "Treg.A"
+baseline_org <- "spleen"
+org_to_compare <- c("LN", "small intestine LP", "colon LP", "lung", "liver")
+min_cells <- 10
+
+genetics_keep <- c("wt", "B6-Foxp3-GFP (B6.Cg-Foxp3tm1Kuch/J)")
+
+remove_gene_pattern <- "^Gm|^mt-|^Rpl|^Rps|^Snor|^Mir|^Linc|^Rp[sl]|-ps|Rik$|^Hbb"
+
+mdata_use <- treg_object@meta.data %>%
+  filter(
+    # igt_number == "67",
+    organ_simplified != "thymus",
+    condition_detailed_simplified == "baseline",
+    genetics %in% genetics_keep
+  )
+
+org_to_compare <- intersect(org_to_compare, unique(mdata_use[[organ_col]]))
+
+group2 <- mdata_use %>%
+  filter(
+    .data[[cluster_col]] == trega_label,
+    .data[[organ_col]] == baseline_org
+  ) %>%
+  pull(cellID)
+
+message("Treg.A spleen cells: ", length(group2))
+
+if (length(group2) < min_cells) {
+  stop("Not enough Treg.A spleen cells.")
+}
+
+res_list <- list()
+
+for (org in org_to_compare) {
+  
+  group1 <- mdata_use %>%
+    filter(
+      .data[[cluster_col]] == trega_label,
+      .data[[organ_col]] == org
+    ) %>%
+    pull(cellID)
+  
+  message(org, ": group1 cells = ", length(group1),
+          " | spleen cells = ", length(group2))
+  
+  if (length(group1) < min_cells) {
+    warning("Skipping ", org, " because group1 has < ", min_cells, " cells.")
+    next
+  }
+  
+  org_label <- gsub("[^A-Za-z0-9._-]+", "_", org)
+  
+  res_list[[org_label]] <- FlashierDGE(
+    F1,
+    L1,
+    group1,
+    group2,
+    title_plot = sprintf("Treg.A %s vs Treg.A spleen", org)
+  )
+}
+
+if (!length(res_list)) {
+  stop("No FlashierDGE results generated.")
+}
+
+diff_list <- lapply(names(res_list), function(nm) {
+  
+  res_list[[nm]]$diff_genes %>%
+    as.data.frame() %>%
+    filter(
+      !is.na(SYMBOL),
+      !grepl(remove_gene_pattern, SYMBOL, ignore.case = TRUE),
+      is.finite(log2FC), 
+      abs(log2FC) > 0.5
+    ) %>%
+    group_by(SYMBOL) %>%
+    slice_max(abs(log2FC), n = 1, with_ties = FALSE) %>%
+    ungroup() %>%
+    mutate(comparison = nm)
+})
+
+names(diff_list) <- names(res_list)
+
+combined <- bind_rows(diff_list)
+
+genes_to_plot <- combined %>%
+  group_by(comparison) %>%
+  slice_max(abs(log2FC), n = top_n, with_ties = FALSE) %>%
+  ungroup() %>%
+  pull(SYMBOL) %>%
+  unique()
+
+heatmap_df <- combined %>%
+  filter(SYMBOL %in% genes_to_plot) %>%
+  select(SYMBOL, comparison, log2FC) %>%
+  pivot_wider(
+    id_cols = SYMBOL,
+    names_from = comparison,
+    values_from = log2FC,
+    values_fill = 0
+  )
+heatmap_df[,"LN"] = res_list[["LN"]]$diff_genes[rownames(heatmap_df),"log2FC"]
+heatmap_df[is.na(heatmap_df)] = 0
+
+heatmap_mat <- heatmap_df %>%
+  column_to_rownames("SYMBOL") %>%
+  as.matrix()
+
+heatmap_mat[!is.finite(heatmap_mat)] <- 0
+
+col_order <- gsub("[^A-Za-z0-9._-]+", "_", org_to_compare)
+present_cols <- intersect(col_order, colnames(heatmap_mat))
+heatmap_mat <- heatmap_mat[, present_cols, drop = FALSE]
+
+gene_order_df <- combined %>%
+  filter(SYMBOL %in% rownames(heatmap_mat)) %>%
+  group_by(SYMBOL) %>%
+  slice_max(abs(log2FC), n = 1, with_ties = FALSE) %>%
+  ungroup() %>%
+  mutate(
+    comparison = factor(comparison, levels = present_cols)
+  ) %>%
+  arrange(comparison, desc(abs(log2FC)))
+
+heatmap_mat <- heatmap_mat[
+  gene_order_df$SYMBOL[gene_order_df$SYMBOL %in% rownames(heatmap_mat)],
+  ,
+  drop = FALSE
+]
+
+colnames(heatmap_mat) <- gsub("_", " ", colnames(heatmap_mat))
+
+ColorRamp <- rev(colorRampPalette(c("red", "white", "blue"))(100))
+
+pheatmap(
+  mat = heatmap_mat,
+  scale = "none",
+  cluster_rows = T,
+  cluster_cols = T,
+  show_rownames = TRUE,
+  show_colnames = TRUE,
+  cellheight = 6,
+  cellwidth = 12,
+  fontsize_row = 8,
+  fontsize_col = 10,
+  breaks = seq(-5, 5, length.out = length(ColorRamp) + 1),
+  color = ColorRamp,
+  border_color = "darkgray",
+  main = "Treg.A tissue vs spleen FlashierDGE log2FC"
+)
+
+```
+
+```{r 4d - mdes highlighting Treg cluster distributions in healthy NLTS, fig.width= 8, fig.height= 8}
+emb_all <- Embeddings(healthy_subset_inc, "mde_incremental") %>% as.data.frame()
+emb_all$cluster <- healthy_subset_inc$annotation_level2
+emb_all$organ   <- healthy_subset_inc$organ_simplified
+
+emb_colon <- subset(emb_all, organ == "colon LP")
+emb_skin <- subset(emb_all, organ == "skin")
+emb_si <- subset(emb_all, organ == "small intestine LP")
+
+ggplot(emb_all, aes(x = mdeincremental_1, y = mdeincremental_2)) +
+  rasterise(geom_point(color = "lightgray", size = 0.25, alpha = 0.25), dpi = 300) +
+  rasterise(
+    geom_point(data = emb_colon, aes(color = cluster), size = 1.0),
+    dpi = 300
+  ) +
+  scale_color_manual(values = palette_vector) +
+  theme_minimal() +
+  ggtitle("Colon Cells Highlighted by Cluster Color") +
+  NoAxes() + NoGrid()
+
+ggplot(emb_all, aes(x = mdeincremental_1, y = mdeincremental_2)) +
+  rasterise(geom_point(color = "lightgray", size = 0.25, alpha = 0.25), dpi = 300) +
+  rasterise(
+    geom_point(data = emb_skin, aes(color = cluster), size = 1.0),
+    dpi = 300
+  ) +
+  scale_color_manual(values = palette_vector) +
+  theme_minimal() +
+  ggtitle("Skin Cells Highlighted by Cluster Color") +
+  NoAxes() + NoGrid()
+
+
+ggplot(emb_all, aes(x = mdeincremental_1, y = mdeincremental_2)) +
+  rasterise(geom_point(color = "lightgray", size = 0.25, alpha = 0.25), dpi = 300) +
+  rasterise(
+    geom_point(data = emb_si, aes(color = cluster), size = 1.0),
+    dpi = 300
+  ) +
+  scale_color_manual(values = palette_vector) +
+  theme_minimal() +
+  ggtitle("Small Intestine Cells Highlighted by Cluster Color") +
+  NoAxes() + NoGrid()
+
+#mg_kidney_combined
+emb_mg_kidney <- subset(emb_all, organ %in% c("mammary gland", "kidney"))
+ggplot(emb_all, aes(x = mdeincremental_1, y = mdeincremental_2)) +
+  rasterise(geom_point(color = "lightgray", size = 0.25, alpha = 0.25), dpi = 300) +
+  rasterise(
+    geom_point(data = emb_mg_kidney, aes(color = cluster), size = 1.0),
+    dpi = 300
+  ) +
+  scale_color_manual(values = palette_vector) +
+  theme_minimal() +
+  ggtitle("Mammary Gland and Kidney Cells Highlighted by Cluster Color") +
+  NoAxes() + NoGrid()
+```
+```{r 4e - mde highlighting healthy spleen and LN cluster distribution, fig.width=8, fig.height=8}
+emb_all <- Embeddings(healthy_subset_inc, "mde_incremental") %>% as.data.frame()
+emb_all$cluster <- healthy_subset_inc$annotation_level2
+emb_all$organ   <- healthy_subset_inc$organ_simplified
+
+emb_spleen <- subset(emb_all, organ == "spleen")
+emb_ln <- subset(emb_all, organ == "LN")
+
+ggplot(emb_all, aes(x = mdeincremental_1, y = mdeincremental_2)) +
+  rasterise(geom_point(color = "lightgray", size = 0.25, alpha = 0.25), dpi = 300) +
+  rasterise(
+    geom_point(data = emb_spleen, aes(color = cluster), size = 0.75),
+    dpi = 300
+  ) +
+  scale_color_manual(values = palette_vector) +
+  theme_minimal() +
+  ggtitle("Spleen Cells Highlighted by Cluster Color") +
+  NoAxes() + NoGrid()
+
+ggplot(emb_all, aes(x = mdeincremental_1, y = mdeincremental_2)) +
+  rasterise(geom_point(color = "lightgray", size = 0.25, alpha = 0.25), dpi = 300) +
+  rasterise(
+    geom_point(data = emb_ln, aes(color = cluster), size = 0.75),
+    dpi = 300
+  ) +
+  scale_color_manual(values = palette_vector) +
+  theme_minimal() +
+  ggtitle("LN Cells Highlighted by Cluster Color") +
+  NoAxes() + NoGrid()
+```
+```{r heatmaps comparing Treg.D/E to Treg.A in spleen, fig.width = 5, fig.height = 15}
+
+mdata_orig <- treg_object@meta.data
+genetics_keep <- c("wt", "B6-Foxp3-GFP (B6.Cg-Foxp3tm1Kuch/J)")
+
+organs_selected <- mdata_orig %>%
+  filter(annotation_level2 == "Treg.E",
+         condition_detailed_simplified == "baseline",
+         genetics %in% genetics_keep) %>%
+  count(organ_simplified) %>%
+  filter(n > 20) %>%
+  pull(organ_simplified)
+
+res_list_E <- list()
+
+group1 <- mdata_orig %>%
+  filter(annotation_level2 == "Treg.E",
+         condition_detailed_simplified == "baseline",
+         genetics %in% genetics_keep,
+         organ_simplified %in% organs_selected) %>%
+  pull(cellID)
+
+group2 <- mdata_orig %>%
+  filter(!annotation_level2 %in% c("Treg.E", "Treg.P", "Treg.wM"),
+         condition_detailed_simplified == "baseline",
+         genetics %in% genetics_keep,
+         organ_simplified %in% organs_selected) %>%
+  pull(cellID)
+
+res_list_E[["Treg.E_vs_all"]] <- FlashierDGE(
+  F1, L1, group1, group2,
+  title_plot = "Treg.E vs other Tregs"
+)
+
+orgs <- list(
+  c("spleen", "LN"),
+  "colon LP",
+  "small intestine LP",
+  "lung",
+  "bone marrow",
+  "skin"
+)
+
+group2 <- mdata_orig %>%
+  filter(annotation_level2 == "Treg.A",
+         condition_detailed_simplified == "baseline",
+         genetics %in% genetics_keep,
+         organ_simplified == "spleen") %>%
+  pull(cellID)
+
+for (org in orgs) {
+  org_label <- paste(org, collapse = "_")
+  org_title <- paste(org, collapse = " + ")
+
+  group1 <- mdata_orig %>%
+    filter(annotation_level2 == "Treg.E",
+           condition_detailed_simplified == "baseline",
+           genetics %in% genetics_keep,
+           organ_simplified %in% org) %>%
+    pull(cellID)
+
+  message("Running: Treg.E ", org_title, " vs Treg.A spleen")
+  message("group1 cells: ", length(group1), " | group2 cells: ", length(group2))
+
+  if (length(group1) > 0 && length(group2) > 0) {
+    res_list_E[[paste0("Treg.E_", org_label, "_vs_Treg.ASpleen")]] <- FlashierDGE(
+      F1, L1, group1, group2,
+      title_plot = paste0("Treg.E ", org_title, " vs Treg.A spleen")
+    )
+  }
+}
+
+
+genes_to_plot_E <- lapply(res_list_E, function(x) {
+  x$diff_genes %>%
+    filter(!is.na(log2FC), abs(log2FC) > 1) %>%
+    arrange(desc(abs(log2FC))) %>%
+    pull(SYMBOL)
+})
+
+res_merged_E <- imap(res_list_E, ~ .x$diff_genes %>%
+                       select(SYMBOL, log2FC) %>%
+                       distinct(SYMBOL, .keep_all = TRUE) %>%
+                       rename(!!.y := log2FC)) %>%
+  reduce(full_join, by = "SYMBOL")
+
+heatmap_E <- res_merged_E %>%
+  filter(SYMBOL %in% unique(unlist(genes_to_plot_E))) %>%
+  column_to_rownames("SYMBOL") %>%
+  as.matrix()
+
+ColorRamp <- rev(colorRampPalette(c("red", "white", "blue"))(100))
+
+pheatmap(
+  heatmap_E,
+  breaks = seq(-5, 5, length.out = length(ColorRamp) + 1),
+  cellwidth = 12,
+  cellheight = 6,
+  fontsize = 7,
+  color = ColorRamp
+)
+
+
+organs_selected <- mdata_orig %>%
+  filter(annotation_level2 == "Treg.D",
+         condition_detailed_simplified == "baseline",
+         genetics %in% genetics_keep) %>%
+  count(organ_simplified) %>%
+  filter(n > 20) %>%
+  pull(organ_simplified)
+
+res_list_D <- list()
+
+group1 <- mdata_orig %>%
+  filter(annotation_level2 == "Treg.D",
+         condition_detailed_simplified == "baseline",
+         genetics %in% genetics_keep,
+         organ_simplified %in% organs_selected) %>%
+  pull(cellID)
+
+group2 <- mdata_orig %>%
+  filter(!annotation_level2 %in% c("Treg.D", "Treg.P", "Treg.wM"),
+         condition_detailed_simplified == "baseline",
+         genetics %in% genetics_keep,
+         organ_simplified %in% organs_selected) %>%
+  pull(cellID)
+
+res_list_D[["Treg.D_vs_all"]] <- FlashierDGE(
+  F1, L1, group1, group2,
+  title_plot = "Treg.D vs other Tregs"
+)
+
+group2 <- mdata_orig %>%
+  filter(annotation_level2 == "Treg.A",
+         condition_detailed_simplified == "baseline",
+         genetics %in% genetics_keep,
+         organ_simplified == "spleen") %>%
+  pull(cellID)
+
+for (org in orgs) {
+  org_label <- paste(org, collapse = "_")
+  org_title <- paste(org, collapse = " + ")
+
+  group1 <- mdata_orig %>%
+    filter(annotation_level2 == "Treg.D",
+           condition_detailed_simplified == "baseline",
+           genetics %in% genetics_keep,
+           organ_simplified %in% org) %>%
+    pull(cellID)
+
+  message("Running: Treg.D ", org_title, " vs Treg.A spleen")
+  message("group1 cells: ", length(group1), " | group2 cells: ", length(group2))
+
+  if (length(group1) > 0 && length(group2) > 0) {
+    res_list_D[[paste0("Treg.D_", org_label, "_vs_Treg.ASpleen")]] <- FlashierDGE(
+      F1, L1, group1, group2,
+      title_plot = paste0("Treg.D ", org_title, " vs Treg.A spleen")
+    )
+  }
+}
+
+
+genes_to_plot_D <- lapply(res_list_D, function(x) {
+  x$diff_genes %>%
+    filter(!is.na(log2FC), abs(log2FC) > 1) %>%
+    arrange(desc(abs(log2FC))) %>%
+    pull(SYMBOL)
+})
+
+res_merged_D <- imap(res_list_D, ~ .x$diff_genes %>%
+                       select(SYMBOL, log2FC) %>%
+                       distinct(SYMBOL, .keep_all = TRUE) %>%
+                       rename(!!.y := log2FC)) %>%
+  reduce(full_join, by = "SYMBOL")
+
+heatmap_D <- res_merged_D %>%
+  filter(SYMBOL %in% unique(unlist(genes_to_plot_D))) %>%
+  column_to_rownames("SYMBOL") %>%
+  as.matrix()
+
+pheatmap(
+  heatmap_D,
+  breaks = seq(-5, 5, length.out = length(ColorRamp) + 1),
+  cellwidth = 12,
+  cellheight = 6,
+  fontsize = 7,
+  color = ColorRamp
+)
+```
+```{r 5a - radar plots of organs comparing baseline to conditions, fig.width=8, fig.height=8}
+treg_object_filtered@meta.data <- treg_object_filtered@meta.data %>%
+  mutate(condition_detailed_simplified = case_when(
+    condition_detailed_simplified %in% c("CtrachomatisD", "CtrachomatisL2") ~ "Ctrachomatis",
+    TRUE ~ condition_detailed_simplified
+  ))
+
+treg_object_filtered@meta.data <- treg_object_filtered@meta.data %>%
+  mutate(condition_detailed_simplified = case_when(
+    condition_detailed_simplified %in% c("B16_ACT", "B16_ACTaPD1a41BB") ~ "B16",
+    condition_detailed_simplified %in% c("PDAC_FishHFD", "PDAC_SoyHFD", "PDAC", "PDAC_aPD1aCTLA4") ~ "PDAC",
+    condition_detailed_simplified %in% c("GBMmes", "GBMmes_aPD1aCTLA4", "GBMpron_aPD1aCTLA4") ~ "GBM",
+    TRUE ~ condition_detailed_simplified
+  ))
+
+annotation_counts_cond <- treg_object_filtered@meta.data %>%
+  group_by(sample_code, organ_simplified, annotation_level2, condition_detailed_simplified) %>%
+  summarise(count = n(), .groups = "drop")
+
+total_sample_data_cond <- annotation_counts_cond %>%
+  pivot_wider(
+    names_from = annotation_level2,
+    values_from = count,
+    values_fill = 0,
+    id_cols = c(sample_code, organ_simplified, condition_detailed_simplified)
+  )
+total_sample_data_cond$total <- rowSums(total_sample_data_cond[, 4:9])
+
+total_sample_data_cond <- total_sample_data_cond %>%
+  mutate(across(
+    .cols = starts_with("Treg."),
+    .fns = ~ .x / total,
+    .names = "prop_{.col}"
+  ))
+
+total_sample_data_cond <- subset(total_sample_data_cond, subset = ! condition_detailed_simplified == "other")
+
+prop_long <- total_sample_data_cond %>%
+  select(condition_detailed_simplified, organ_simplified, starts_with("prop_")) %>%
+  pivot_longer(
+    cols = starts_with("prop_"),
+    names_to = "annotation_level2",
+    values_to = "proportion"
+  ) %>%
+  mutate(annotation_level2 = sub("prop_", "", annotation_level2))
+
+
+prop_long$percent <- prop_long$proportion * 100
+
+prop_summary_ann <- prop_long %>%
+  group_by(organ_simplified, annotation_level2, condition_detailed_simplified) %>%
+  summarise(
+    med = median(percent, na.rm = TRUE),
+    sem = sd(percent, na.rm = TRUE) / sqrt(n()),
+    .groups = "drop"
+  )
+
+#uterus
+
+uterus_radar <- prop_summary_ann %>%
+  filter(
+    organ_simplified == "uterus",
+    annotation_level2 %in% c("Treg.A", "Treg.B", "Treg.D", "Treg.F", "Treg.E", "Treg.P")
+  ) %>%
+  mutate(
+    annotation_level2 = factor(
+      annotation_level2,
+      levels = c("Treg.A", "Treg.B", "Treg.D", "Treg.F", "Treg.E", "Treg.P")
+    )
+  )
+
+all_annotations <- levels(uterus_radar$annotation_level2)
+
+uterus_radar_complete <- uterus_radar %>%
+  complete(
+    annotation_level2 = all_annotations,
+    condition_detailed_simplified,
+    fill = list(med = 0)
+  )
+
+uterus_radar_wide <- uterus_radar_complete %>%
+  pivot_wider(
+    names_from = annotation_level2,
+    values_from = med,
+    values_fill = 0,
+    id_cols = condition_detailed_simplified
+  ) %>%
+  select(
+    condition_detailed_simplified,
+    Treg.A, Treg.B, Treg.D, Treg.F, Treg.E, Treg.P
+  ) %>%
+  column_to_rownames("condition_detailed_simplified") %>%
+  as.data.frame()
+
+radar_data <- rbind(
+  max = rep(100, ncol(uterus_radar_wide)),
+  min = rep(0, ncol(uterus_radar_wide)),
+  uterus_radar_wide
+)
+
+n_conditions <- nrow(uterus_radar_wide)
+condition_colors <- c("black", colorRampPalette(brewer.pal(9, "Set1"))(n_conditions - 1))
+fill_colors <- c(alpha("black", 0.2), rep(NA, n_conditions - 1))
+
+par(mar = c(2, 2, 4, 2))
+
+radarchart(
+  radar_data,
+  axistype = 1,
+  pcol = condition_colors,
+  plwd = 2,
+  plty = 1,
+  pfcol = fill_colors,
+  cglcol = "grey",
+  cglty = 1,
+  axislabcol = "grey30",
+  caxislabels = seq(0, 100, 20),
+  calcex = 0.7,
+  vlcex = 0.8,
+  title = "Treg Cluster Composition by Condition (Uterus)"
+)
+
+legend(
+  "bottomleft",
+  legend = rownames(uterus_radar_wide),
+  col = condition_colors,
+  lty = 1,
+  lwd = 2,
+  bty = "n",
+  cex = 0.8
+)
+
+
+#lung
+lung_radar <- prop_summary_ann %>%
+  filter(
+    organ_simplified == "lung",
+    annotation_level2 %in% c("Treg.A", "Treg.B", "Treg.D", "Treg.F", "Treg.E", "Treg.P")
+  ) %>%
+  mutate(
+    annotation_level2 = factor(
+      annotation_level2,
+      levels = c("Treg.A", "Treg.B", "Treg.D", "Treg.F", "Treg.E", "Treg.P")
+    )
+  )
+
+all_annotations <- levels(lung_radar$annotation_level2)
+
+lung_radar_complete <- lung_radar %>%
+  complete(
+    annotation_level2 = all_annotations,
+    condition_detailed_simplified,
+    fill = list(med = 0)
+  )
+
+lung_radar_wide <- lung_radar_complete %>%
+  pivot_wider(
+    names_from = annotation_level2,
+    values_from = med,
+    values_fill = 0,
+    id_cols = condition_detailed_simplified
+  ) %>%
+  select(
+    condition_detailed_simplified,
+    Treg.A, Treg.B, Treg.D, Treg.F, Treg.E, Treg.P
+  ) %>%
+  column_to_rownames("condition_detailed_simplified") %>%
+  as.data.frame()
+
+radar_data <- rbind(
+  max = rep(100, ncol(lung_radar_wide)),
+  min = rep(0, ncol(lung_radar_wide)),
+  lung_radar_wide
+)
+
+n_conditions <- nrow(lung_radar_wide)
+condition_colors <- c("black", colorRampPalette(brewer.pal(9, "Set1"))(n_conditions - 1))
+fill_colors <- c(alpha("black", 0.2), rep(NA, n_conditions - 1))
+
+par(mar = c(2, 2, 4, 2))
+
+radarchart(
+  radar_data,
+  axistype = 1,
+  pcol = condition_colors,
+  plwd = 2,
+  plty = 1,
+  pfcol = fill_colors,
+  cglcol = "grey",
+  cglty = 1,
+  axislabcol = "grey30",
+  caxislabels = seq(0, 100, 20),
+  calcex = 0.7,
+  vlcex = 0.8,
+  title = "Treg Cluster Composition by Condition (Lung)"
+)
+
+legend(
+  "bottomleft",
+  legend = rownames(lung_radar_wide),
+  col = condition_colors,
+  lty = 1,
+  lwd = 2,
+  bty = "n",
+  cex = 0.8
+)
+
+
+#spleen
+spleen_radar <- prop_summary_ann %>%
+  filter(
+    organ_simplified == "spleen",
+    annotation_level2 %in% c("Treg.A", "Treg.B", "Treg.D", "Treg.F", "Treg.E", "Treg.P"),
+    !condition_detailed_simplified %in% c(
+      "KbDbKO", "MHCIIhet", "MHCIIKO", "SFB_pregnancy",
+      "MHCIIKO_Ea16", "MHCIIhet_Ea16", "KbDbQa1KO", "KbDbQa1KO_MCMV", "Foxp3mutant", "KbDbKO_MCMV"
+    )
+  ) %>%
+  mutate(
+    annotation_level2 = factor(
+      annotation_level2,
+      levels = c("Treg.A", "Treg.B", "Treg.D", "Treg.F", "Treg.E", "Treg.P")
+    )
+  )
+
+all_annotations <- levels(spleen_radar$annotation_level2)
+
+spleen_radar_complete <- spleen_radar %>%
+  complete(
+    annotation_level2 = all_annotations,
+    condition_detailed_simplified,
+    fill = list(med = 0)
+  )
+
+spleen_radar_wide <- spleen_radar_complete %>%
+  pivot_wider(
+    names_from = annotation_level2,
+    values_from = med,
+    values_fill = 0,
+    id_cols = condition_detailed_simplified
+  ) %>%
+  select(
+    condition_detailed_simplified,
+    Treg.A, Treg.B, Treg.D, Treg.F, Treg.E, Treg.P
+  ) %>%
+  mutate(
+    condition_detailed_simplified = factor(
+      condition_detailed_simplified,
+      levels = c(
+        "baseline",
+        setdiff(condition_detailed_simplified, "baseline")
+      )
+    )
+  ) %>%
+  arrange(condition_detailed_simplified) %>%
+  column_to_rownames("condition_detailed_simplified") %>%
+  as.data.frame()
+
+radar_data <- rbind(
+  max = rep(100, ncol(spleen_radar_wide)),
+  min = rep(0, ncol(spleen_radar_wide)),
+  spleen_radar_wide
+)
+
+n_conditions <- nrow(spleen_radar_wide)
+
+condition_colors <- c(
+  "black",
+  colorRampPalette(brewer.pal(9, "Set1"))(n_conditions - 1)
+)
+
+fill_colors <- c(
+  alpha("black", 0.2),
+  rep(NA, n_conditions - 1)
+)
+
+par(mar = c(2, 2, 4, 2))
+
+radarchart(
+  radar_data,
+  axistype = 1,
+  pcol = condition_colors,
+  plwd = 2,
+  plty = 1,
+  pfcol = fill_colors,
+  cglcol = "grey",
+  cglty = 1,
+  axislabcol = "grey30",
+  caxislabels = seq(0, 100, 20),
+  calcex = 0.7,
+  vlcex = 0.8,
+  title = "Treg Cluster Composition by Condition (Spleen)"
+)
+
+legend(
+  "bottomleft",
+  legend = rownames(spleen_radar_wide),
+  col = condition_colors,
+  lty = 1,
+  lwd = 2,
+  bty = "n",
+  cex = 0.8
+)
+
+#colon
+colon_radar <- prop_summary_ann %>%
+  filter(
+    organ_simplified == "colon LP",
+    annotation_level2 %in% c("Treg.A", "Treg.B", "Treg.D", "Treg.F", "Treg.E", "Treg.P"),
+    !condition_detailed_simplified %in% c("SFB_pregnancy", "Foxp3mutant")
+  ) %>%
+  mutate(
+    annotation_level2 = factor(
+      annotation_level2,
+      levels = c("Treg.A", "Treg.B", "Treg.D", "Treg.F", "Treg.E", "Treg.P")
+    )
+  )
+
+all_annotations <- levels(colon_radar$annotation_level2)
+
+colon_radar_complete <- colon_radar %>%
+  complete(
+    annotation_level2 = all_annotations,
+    condition_detailed_simplified,
+    fill = list(med = 0)
+  )
+
+colon_radar_wide <- colon_radar_complete %>%
+  pivot_wider(
+    names_from = annotation_level2,
+    values_from = med,
+    values_fill = 0,
+    id_cols = condition_detailed_simplified
+  ) %>%
+  select(
+    condition_detailed_simplified,
+    Treg.A, Treg.B, Treg.D, Treg.F, Treg.E, Treg.P
+  ) %>%
+  mutate(
+    condition_detailed_simplified = factor(
+      condition_detailed_simplified,
+      levels = c(
+        "baseline",
+        setdiff(condition_detailed_simplified, "baseline")
+      )
+    )
+  ) %>%
+  arrange(condition_detailed_simplified) %>%
+  column_to_rownames("condition_detailed_simplified") %>%
+  as.data.frame()
+
+radar_data <- rbind(
+  max = rep(100, ncol(colon_radar_wide)),
+  min = rep(0, ncol(colon_radar_wide)),
+  colon_radar_wide
+)
+
+n_conditions <- nrow(colon_radar_wide)
+condition_colors <- c(
+  "black",
+  colorRampPalette(brewer.pal(9, "Set1"))(n_conditions - 1)
+)
+
+fill_colors <- c(
+  alpha("black", 0.2),
+  rep(NA, n_conditions - 1)
+)
+
+par(mar = c(2, 2, 4, 2))
+
+radarchart(
+  radar_data,
+  axistype = 1,
+  pcol = condition_colors,
+  plwd = 2,
+  plty = 1,
+  pfcol = fill_colors,
+  cglcol = "grey",
+  cglty = 1,
+  axislabcol = "grey30",
+  caxislabels = seq(0, 100, 20),
+  calcex = 0.7,
+  vlcex = 0.8,
+  title = "Treg Cluster Composition by Condition (Colon)"
+)
+
+legend(
+  "bottomleft",
+  legend = rownames(colon_radar_wide),
+  col = condition_colors,
+  lty = 1,
+  lwd = 2,
+  bty = "n",
+  cex = 0.8
+)
+```
+
+```{r - 5b Rorc feature plot during HDM infection in lung, fig.width=8, fig.height=8}
+
+FeaturePlot(
+  treg_object,
+  features = "Rorc",
+  reduction = "mde_incremental",
+  cells = WhichCells(treg_object, expression = organ_simplified == "lung" & condition_detailed_simplified == "HDM"),
+  order = TRUE,
+  pt.size = 0.5,
+  min.cutoff = "0",
+  max.cutoff = "3",
+ # raster = T,
+#  raster.dpi = c(512,512)
+) +
+  ggtitle("Rorc expression (lung, HDM)")
+```
+```{r 5c - feature plot of Klrg1 in lung during MTB/KP/flu, fig.width=8, fig.height=8}
+FeaturePlot(
+  treg_object,
+  features = "Klrg1",
+  reduction = "mde_incremental",
+  cells = WhichCells(treg_object, expression = organ_simplified == "lung" & condition_detailed_simplified %in% c("MTB","flu")),
+  order = TRUE,
+  pt.size = 0.5,
+  min.cutoff = 0,
+  max.cutoff = 3
+) +
+  ggtitle("Klrg1 expression (lung, mtb + flu)")
+```
+```{r heatmaps looking at Treg.D/E in lung across conditions, fig.width=5, fig.height=15}
+mdata_orig <- treg_object@meta.data
+conditions_selected <- mdata_orig %>%
+  filter(
+    annotation_level2 == "Treg.D",
+    organ_simplified== "lung"
+    ) %>%
+  count(condition_detailed_simplified) %>%
+  filter(n > 20) %>%
+  pull(condition_detailed_simplified) %>%
+  as.character()
+
+mdata_orig %>%
+  filter(
+    annotation_level2 == "Treg.D",
+    organ_simplified == "lung",
+    condition_detailed_simplified %in% conditions_selected
+  ) %>%
+  count(condition_detailed_simplified)
+
+res_list <- list()
+group1 <- mdata_orig %>%
+  filter(
+    annotation_level2 == "Treg.D",
+    organ_simplified == "lung",
+    genetics %in% genetics_keep,
+    condition_detailed_simplified %in% conditions_selected
+  ) %>%
+  pull(cellID)
+
+group2 <- mdata_orig %>%
+  filter(
+    !annotation_level2 %in% c("Treg.D", "Treg.P", "Treg.wM"),
+    condition_detailed_simplified == "baseline",
+    genetics %in% genetics_keep,
+    organ_simplified %in% organs_selected
+  ) %>%
+  pull(cellID)
+
+res_list[["Treg.D_vs_all"]] <- FlashierDGE(
+  F1, L1, group1, group2,
+  title_plot = "Treg.D vs other Tregs"
+)
+
+conds <- list(
+  all = NULL,
+  baseline = "baseline",
+  Afumigatus = "Afumigatus",
+  HDM = "HDM",
+  MTB = "MTB",
+  KP = "KP",
+  flu = "flu"
+)
+
+res_list <- list()
+
+group2 <- mdata_orig %>%
+  filter(
+    annotation_level2 == "Treg.A",
+    condition_detailed_simplified == "baseline",
+    genetics %in% genetics_keep,
+    organ_simplified == "spleen"
+  ) %>%
+  pull(cellID)
+
+for (cond_name in names(conds)) {
+  
+  cond <- conds[[cond_name]]
+  
+  group1_df <- mdata_orig %>%
+    filter(
+      annotation_level2 == "Treg.D",
+      organ_simplified == "lung"
+    )
+  
+  if (!is.null(cond)) {
+    group1_df <- group1_df %>%
+      filter(condition_detailed_simplified == cond)
+  }
+  
+  group1 <- group1_df %>% pull(cellID)
+  
+  message(cond_name, ": group1 cells = ", length(group1),
+          " | group2 cells = ", length(group2))
+  
+  if (length(group1) > 0 && length(group2) > 0) {
+    res_list[[sprintf("Lung_Treg.D_%s_vs_Baseline_Spleen_Treg.A", cond_name)]] <- FlashierDGE(
+      F1, L1, group1, group2,
+      title_plot = sprintf("Lung Treg.D %s vs baseline spleen Treg.A", cond_name)
+    )
+  }
+}
+
+genes_to_plot = list()
+for (i in 1:length(res_list)) {
+    print(names(res_list)[i])
+    genes_to_plot[[names(res_list)[i]]] = res_list[[i]]$diff_genes %>% filter(abs(log2FC) > 1) %>% arrange(desc(abs(log2FC))) %>% pull(SYMBOL)
+}
+
+res_merged_log2FC = data.frame(res_list[[1]]$diff_genes$log2FC)
+for (i in 2:length(res_list)) {
+    res_merged_log2FC = data.frame(res_merged_log2FC, res_list[[i]]$diff_genes$log2FC)
+}
+colnames(res_merged_log2FC) = names(res_list)
+rownames(res_merged_log2FC) = res_list[[1]]$diff_genes$SYMBOL
+ColorRamp = rev(colorRampPalette(c('red','white','blue'))(100))
+
+
+order <- c(
+  "Lung_Treg.D_all_vs_Baseline_Spleen_Treg.A",
+  "Lung_Treg.D_baseline_vs_Baseline_Spleen_Treg.A",
+  "Lung_Treg.D_Afumigatus_vs_Baseline_Spleen_Treg.A",
+  "Lung_Treg.D_HDM_vs_Baseline_Spleen_Treg.A",
+  "Lung_Treg.D_MTB_vs_Baseline_Spleen_Treg.A",
+  "Lung_Treg.D_KP_vs_Baseline_Spleen_Treg.A",
+  "Lung_Treg.D_flu_vs_Baseline_Spleen_Treg.A"
+)
+
+order <- order[order %in% colnames(res_merged_log2FC)]
+
+res_merged_log2FC <- res_merged_log2FC[, order, drop = FALSE]
+
+pheatmap(
+  mat = as.matrix(res_merged_log2FC)[unique(unlist(genes_to_plot)), ],
+  breaks = seq(-5, 5, length.out = length(ColorRamp) + 1),
+  color = ColorRamp,
+  cluster_cols = FALSE
+)
+
+#treg.e
+mdata_orig <- treg_object@meta.data
+conditions_selected <- mdata_orig %>%
+  filter(
+    annotation_level2 == "Treg.E",
+    organ_simplified== "lung"
+    ) %>%
+  count(condition_detailed_simplified) %>%
+  filter(n > 20) %>%
+  pull(condition_detailed_simplified) %>%
+  as.character()
+
+mdata_orig %>%
+  filter(
+    annotation_level2 == "Treg.E",
+    organ_simplified == "lung",
+    condition_detailed_simplified %in% conditions_selected
+  ) %>%
+  count(condition_detailed_simplified)
+
+res_list <- list()
+group1 <- mdata_orig %>%
+  filter(
+    annotation_level2 == "Treg.E",
+    organ_simplified == "lung",
+    genetics %in% genetics_keep,
+    condition_detailed_simplified %in% conditions_selected
+  ) %>%
+  pull(cellID)
+
+group2 <- mdata_orig %>%
+  filter(
+    !annotation_level2 %in% c("Treg.E", "Treg.P", "Treg.wM"),
+    condition_detailed_simplified == "baseline",
+    genetics %in% genetics_keep,
+    organ_simplified %in% organs_selected
+  ) %>%
+  pull(cellID)
+
+
+res_list[["Treg.E_vs_all"]] <- FlashierDGE(
+  F1, L1, group1, group2,
+  title_plot = "Treg.E vs other Tregs"
+)
+
+conds <- list(
+  all = NULL,
+  baseline = "baseline",
+  Afumigatus = "Afumigatus",
+  HDM = "HDM",
+  MTB = "MTB",
+  KP = "KP",
+  flu = "flu"
+)
+
+res_list <- list()
+
+group2 <- mdata_orig %>%
+  filter(
+    annotation_level2 == "Treg.A",
+    condition_detailed_simplified == "baseline",
+    genetics %in% genetics_keep,
+    organ_simplified == "spleen"
+  ) %>%
+  pull(cellID)
+
+for (cond_name in names(conds)) {
+  
+  cond <- conds[[cond_name]]
+  
+  group1_df <- mdata_orig %>%
+    filter(
+      annotation_level2 == "Treg.E",
+      organ_simplified == "lung"
+    )
+  
+  if (!is.null(cond)) {
+    group1_df <- group1_df %>%
+      filter(condition_detailed_simplified == cond)
+  }
+  
+  group1 <- group1_df %>% pull(cellID)
+  
+  message(cond_name, ": group1 cells = ", length(group1),
+          " | group2 cells = ", length(group2))
+  
+  if (length(group1) > 0 && length(group2) > 0) {
+    res_list[[sprintf("Lung_Treg.E_%s_vs_Baseline_Spleen_Treg.A", cond_name)]] <- FlashierDGE(
+      F1, L1, group1, group2,
+      title_plot = sprintf("Lung Treg.E %s vs baseline spleen Treg.A", cond_name)
+    )
+  }
+}
+
+genes_to_plot = list()
+for (i in 1:length(res_list)) {
+    print(names(res_list)[i])
+    genes_to_plot[[names(res_list)[i]]] = res_list[[i]]$diff_genes %>% filter(abs(log2FC) > 1) %>% arrange(desc(abs(log2FC))) %>% pull(SYMBOL)
+}
+
+res_merged_log2FC = data.frame(res_list[[1]]$diff_genes$log2FC)
+for (i in 2:length(res_list)) {
+    res_merged_log2FC = data.frame(res_merged_log2FC, res_list[[i]]$diff_genes$log2FC)
+}
+colnames(res_merged_log2FC) = names(res_list)
+rownames(res_merged_log2FC) = res_list[[1]]$diff_genes$SYMBOL
+
+ColorRamp = rev(colorRampPalette(c('red','white','blue'))(100))
+
+order <- c(
+  "Lung_Treg.E_all_vs_Baseline_Spleen_Treg.A",
+  "Lung_Treg.E_baseline_vs_Baseline_Spleen_Treg.A",
+  "Lung_Treg.E_Afumigatus_vs_Baseline_Spleen_Treg.A",
+  "Lung_Treg.E_HDM_vs_Baseline_Spleen_Treg.A",
+  "Lung_Treg.E_MTB_vs_Baseline_Spleen_Treg.A",
+  "Lung_Treg.E_KP_vs_Baseline_Spleen_Treg.A",
+  "Lung_Treg.E_flu_vs_Baseline_Spleen_Treg.A"
+)
+
+order <- order[order %in% colnames(res_merged_log2FC)]
+
+res_merged_log2FC <- res_merged_log2FC[, order, drop = FALSE]
+
+pheatmap(
+  mat = as.matrix(res_merged_log2FC)[unique(unlist(genes_to_plot)), ],
+  breaks = seq(-5, 5, length.out = length(ColorRamp) + 1),
+  color = ColorRamp,
+  cluster_cols = FALSE
+)
+```
+
+```{r 5g - cancer radar plot, fig.width=8, fig.height=8}
+annotation_counts_cond <- treg_object_filtered@meta.data %>%
+  group_by(sample_code, condition_broad, annotation_level2, condition_detailed_simplified) %>%
+  summarise(count = n(), .groups = "drop")
+
+total_sample_data_cond <- annotation_counts_cond %>%
+  pivot_wider(
+    names_from = annotation_level2,
+    values_from = count,
+    values_fill = 0,
+    id_cols = c(sample_code, condition_broad, condition_detailed_simplified)
+  )
+
+total_sample_data_cond$total <- rowSums(total_sample_data_cond[, 4:9])
+
+total_sample_data_cond <- total_sample_data_cond %>%
+  mutate(across(
+    .cols = starts_with("Treg."),
+    .fns = ~ .x / total,
+    .names = "prop_{.col}"
+  ))
+
+prop_long <- total_sample_data_cond %>%
+  select(condition_detailed_simplified, condition_broad, starts_with("prop_")) %>%
+  pivot_longer(
+    cols = starts_with("prop_"),
+    names_to = "annotation_level2",
+    values_to = "proportion"
+  ) %>%
+  mutate(annotation_level2 = sub("prop_", "", annotation_level2))
+
+
+prop_long$percent <- prop_long$proportion * 100
+
+prop_summary_ann <- prop_long %>%
+  group_by(condition_broad, annotation_level2, condition_detailed_simplified) %>%
+  summarise(
+    med = median(percent, na.rm = TRUE),
+    sem = sd(percent, na.rm = TRUE) / sqrt(n()),
+    .groups = "drop"
+  )
+
+cancer_radar <- prop_summary_ann %>%
+  filter(
+    condition_broad == "cancer",
+    annotation_level2 %in% c("Treg.A", "Treg.D", "Treg.B", "Treg.F", "Treg.E", "Treg.P")
+  )
+
+annotation_order <- c("Treg.A", "Treg.D", "Treg.B", "Treg.F", "Treg.E", "Treg.P")
+
+cancer_radar_complete <- cancer_radar %>%
+  complete(
+    annotation_level2 = annotation_order,
+    condition_detailed_simplified,
+    fill = list(med = 0)
+  )
+
+cancer_radar_wide <- cancer_radar_complete %>%
+  pivot_wider(
+    names_from = annotation_level2,
+    values_from = med,
+    values_fill = 0,
+    id_cols = condition_detailed_simplified
+  ) %>%
+  column_to_rownames("condition_detailed_simplified") %>%
+  as.data.frame()
+
+cancer_radar_wide <- cancer_radar_wide[, annotation_order]
+
+baseline_name <- "baseline"
+
+cancer_radar_wide <- cancer_radar_wide %>%
+  tibble::rownames_to_column("condition_detailed_simplified") %>%
+  mutate(
+    condition_detailed_simplified = factor(
+      condition_detailed_simplified,
+      levels = c(
+        baseline_name,
+        setdiff(condition_detailed_simplified, baseline_name)
+      )
+    )
+  ) %>%
+  arrange(condition_detailed_simplified) %>%
+  column_to_rownames("condition_detailed_simplified")
+
+radar_data <- rbind(
+  max = rep(100, ncol(cancer_radar_wide)),
+  min = rep(0, ncol(cancer_radar_wide)),
+  cancer_radar_wide
+)
+
+n_conditions <- nrow(cancer_radar_wide)
+
+condition_colors <- c(
+  "blue",
+  colorRampPalette(
+    RColorBrewer::brewer.pal(9, "Set1")
+  )(n_conditions - 1)
+)
+
+par(mar = c(2, 2, 4, 2))
+
+radarchart(
+  radar_data,
+  axistype = 1,
+  pcol = condition_colors,
+  plwd = 2,
+  plty = 1,
+  pfcol = NA,
+  cglcol = "grey",
+  cglty = 1,
+  axislabcol = "grey30",
+  caxislabels = seq(0, 100, 20),
+  calcex = 0.7,
+  vlcex = 0.8,
+  title = "Treg Cluster Composition by Cancer Type"
+)
+
+legend(
+  "bottomleft",
+  legend = rownames(cancer_radar_wide),
+  col = condition_colors,
+  lty = 1,
+  lwd = 2,
+  bty = "n",
+  cex = 0.8
+)
+
+```
+```{r 5h - radar plots showikng props of Treg clusters in different external cancer treg datasets, fig.width=8, fig.height=8}
+cond_col <- names(main_trbi)[1]
+
+colnames(main_trbi)[colnames(main_trbi) == "Cl.1"] <- "Treg.A"
+colnames(main_trbi)[colnames(main_trbi) == "Cl.2"] <- "Treg.D"
+colnames(main_trbi)[colnames(main_trbi) == "Cl.3"] <- "Treg.B"
+colnames(main_trbi)[colnames(main_trbi) == "Cl.4"] <- "Treg.F"
+colnames(main_trbi)[colnames(main_trbi) == "Cl.6"] <- "Treg.C"
+colnames(main_trbi)[colnames(main_trbi) == "Cl.8"] <- "Treg.E"
+colnames(main_trbi)[colnames(main_trbi) == "Miniverse"] <- "Treg.wM"
+colnames(main_trbi)[colnames(main_trbi) == "Proliferating"] <- "Treg.P"
+
+
+radar_wide <- main_trbi %>%
+  rename(condition = all_of(cond_col)) %>%
+  column_to_rownames("condition") %>%
+  as.data.frame()
+radar_wide[] <- lapply(radar_wide, function(x) as.numeric(as.character(x)))
+radar_data <- rbind(
+  max = rep(100, ncol(radar_wide)),
+  min = rep(0,   ncol(radar_wide)),
+  radar_wide
+)
+
+n_conditions <- nrow(radar_wide)
+condition_colors <- c("black", colorRampPalette(brewer.pal(9, "Set1"))(max(n_conditions - 1, 1)))
+
+
+par(mar = c(2, 2, 4, 2))
+
+radarchart(
+  radar_data,
+  axistype = 1,
+  pcol = condition_colors,
+  plwd = 2,
+  plty = 1,
+  cglcol = "grey",
+  cglty = 1,
+  axislabcol = "grey30",
+  caxislabels = seq(0, 100, 20),
+  calcex = 0.7,
+  vlcex = 0.8,
+  title = "Treg Cluster Composition by Condition - Main"
+)
+
+legend(
+  "bottomleft",
+  legend = rownames(radar_wide),
+  col = condition_colors,
+  lty = 1,
+  lwd = 2,
+  bty = "n",
+  cex = 0.8
+)
+
+```
+```{r 6a - mdes highlighting cluster dist. in top expressing cd4.f organs, fig.width=8, fig.height=8}
+top_organs <- c("placenta", "uterus", "liver", "peritoneal cavity", "blood")
+
+for (org in top_organs) {
+  
+  healthy_subset_inc$highlight_tmp <- ifelse(
+    treg_object$organ_simplified == org,
+    "highlight", "background"
+  )
+  
+  coords <- Embeddings(healthy_subset_inc, "mde_incremental") %>%
+    as.data.frame() %>%
+    mutate(
+      cell = rownames(.),
+      highlight_tmp = healthy_subset_inc$highlight_tmp,
+      annotation_level2 = healthy_subset_inc$annotation_level2
+    )
+  
+  p <- ggplot(coords, aes(x = mdeincremental_1, y = mdeincremental_2)) +
+    geom_point(
+      data = subset(coords, highlight_tmp == "background"),
+      color = "lightgray",
+      size = 0.5
+    ) +
+    geom_point(
+      data = subset(coords, highlight_tmp == "highlight"),
+      aes(color = annotation_level2),
+      size = 1.5
+    ) +
+    scale_color_manual(values = palette_vector) +
+    theme_void() +
+    ggtitle(paste(org, "Cells Highlighted")) + NoLegend()
+  
+  print(p)
+}
+
+```
+```{r 6c - Treg.F vs all - David}
+```
+
+
+```{r 6d - pathway analysis of top pathway upregulated in Treg.F}
+assay_use <- "RNA"
+
+Idents(treg_object) <- "annotation_level2"
+
+de <- FindMarkers(
+  treg_object,
+  ident.1 = "Treg.F",
+  ident.2 = NULL,
+  assay = assay_use,
+  test.use = "wilcox",
+  logfc.threshold = 0.25,
+  min.pct = 0.1
+)
+
+de$gene <- rownames(de)
+
+de <- de %>%
+  mutate(
+    sign_fc = sign(avg_log2FC),
+    rank_stat = sign_fc * (-log10(p_val + 1e-300))
+  )
+
+ranks <- setNames(
+  de$rank_stat,
+  de$gene
+)
+
+ranks <- sort(
+  ranks,
+  decreasing = TRUE
+)
+
+species <- "Mus musculus"
+
+m_c2 <- msigdbr(
+  species = species,
+  category = "C2"
+) %>%
+  select(
+    gs_name,
+    gene_symbol
+  )
+
+m_all <- m_c2 %>%
+  filter(
+    grepl(
+      "^(KEGG_|REACTOME_|WP_)",
+      gs_name
+    )
+  )
+
+genesets <- split(
+  m_all$gene_symbol,
+  m_all$gs_name
+)
+
+canon <- function(x) {
+  x %>%
+    toupper() %>%
+    str_replace_all(
+      "[^A-Z0-9]+",
+      "_"
+    ) %>%
+    str_replace_all(
+      "^_|_$",
+      ""
+    )
+}
+
+gs_names <- names(genesets)
+
+canon_map <- setNames(
+  gs_names,
+  canon(gs_names)
+)
+
+target <- "KEGG_LEUKOCYTE_TRANSENDOTHELIAL_MIGRATION"
+
+key <- canon(target)
+
+nm <- canon_map[[key]]
+
+pw_genes <- intersect(
+  unique(genesets[[nm]]),
+  names(ranks)
+)
+
+res <- fgsea(
+  pathways = list(
+    this = pw_genes
+  ),
+  stats = ranks,
+  minSize = 1,
+  maxSize = Inf,
+  nperm = 10000
+) %>%
+  as.data.frame()
+
+p <- fgsea::plotEnrichment(
+  pw_genes,
+  ranks
+) +
+  ggtitle(
+    nm,
+    subtitle = sprintf(
+      "NES = %.2f, FDR = %.2g  [Treg.F vs all]",
+      res$NES[1],
+      res$padj[1]
+    )
+  ) +
+  theme(
+    plot.title = element_text(
+      size = 12
+    )
+  )
+
+print(p)
+```
+
+
+```{r 6f - feature plot of klf2 expression, fig.width = 8, fig.height=8}
+FeaturePlot(treg_object_filtered, features = "Klf2",reduction = "mde_incremental", raster = TRUE, raster.dpi = c(512,512)) + NoAxes()
+
+```
+
+```{r 6h - feature plot of s1pr1, fig.width = 8, fig.height=8}
+FeaturePlot(treg_object_filtered, features = "S1pr1",reduction = "mde_incremental", raster = TRUE, raster.dpi = c(512,512)) + NoAxes()
+```
+
+```{r S1c - Upon immune perturbations, proportion of SLO vs NLT per conditions}
+s1c <- treg_object@meta.data %>%
+  filter(
+    !is.na(condition_detailed_simplified),
+    !is.na(organ_simplified)
+  ) %>%
+  mutate(
+    compartment = case_when(
+      organ_simplified %in% c("spleen", "LN", "SLO") ~ "SLO",
+      TRUE ~ "NLT"
+    )
+  ) %>%
+  group_by(condition_detailed_simplified, compartment) %>%
+  summarise(
+    n = n(),
+    .groups = "drop"
+  ) %>%
+  complete(
+    condition_detailed_simplified,
+    compartment = c("SLO", "NLT"),
+    fill = list(n = 0)
+  ) %>%
+  group_by(condition_detailed_simplified) %>%
+  mutate(
+    prop = n / sum(n),
+    plot_prop = ifelse(compartment == "SLO", -prop, prop)
+  ) %>%
+  ungroup()
+
+condition_order <- s1c %>%
+  filter(compartment == "NLT") %>%
+  arrange(desc(prop)) %>%
+  pull(condition_detailed_simplified)
+
+s1c <- s1c %>%
+  mutate(
+    condition_detailed_simplified = factor(
+      condition_detailed_simplified,
+      levels = condition_order
+    )
+  )
+
+ggplot(s1c,
+  aes(
+    x = condition_detailed_simplified,
+    y = plot_prop,
+    fill = compartment
+  )
+) +
+  geom_col(width = 0.8) +
+geom_text(
+  aes(
+    label = paste0("n = ", scales::comma(n)),
+    y = ifelse(
+      compartment == "SLO",
+      plot_prop - 0.2,
+      plot_prop + 0.2
+    )
+  ),
+  size = 3
+) +
+  
+  coord_flip() +
+  scale_fill_manual(
+    values = c(
+      "SLO" = "darkblue",
+      "NLT" = "darkred"
+    )
+  ) +
+  geom_hline(
+    yintercept = 0,
+    color = "black",
+    linewidth = 0.3
+  ) +
+  theme_classic() +
+  labs(x = NULL, y = "Proportion of cells", fill = NULL)
+
+#cell #, not prop
+
+s1c <- treg_object@meta.data %>%
+  filter(!is.na(condition_detailed_simplified), !is.na(organ_simplified)) %>%
+  mutate(
+    compartment = case_when(
+      organ_simplified %in% c("spleen", "LN", "SLO") ~ "SLO",
+      TRUE ~ "NLT"
+    )
+  ) %>%
+  group_by(condition_detailed_simplified, compartment) %>%
+  summarise(n = n(), .groups = "drop") %>%
+  complete(condition_detailed_simplified, compartment = c("SLO", "NLT"), fill = list(n = 0)) %>%
+  mutate(plot_n = ifelse(compartment == "SLO", -n, n))
+
+condition_order <- s1c %>%
+  filter(compartment == "NLT") %>%
+  arrange(desc(n)) %>%
+  pull(condition_detailed_simplified)
+
+s1c$condition_detailed_simplified <- factor(s1c$condition_detailed_simplified, levels = condition_order)
+
+ggplot(s1c, aes(x = condition_detailed_simplified, y = plot_n, fill = compartment)) +
+  geom_col(width = 0.8) +
+  geom_text(
+    aes(label = n),
+    hjust = ifelse(s1c$compartment == "SLO", 1.1, -0.1),
+    size = 3
+  ) +
+  coord_flip() +
+  scale_fill_manual(values = c("SLO" = "darkblue", "NLT" = "darkred")) +
+  theme_classic() +
+  labs(
+    x = NULL,
+    y = "Number of cells",
+    fill = NULL
+  ) +
+  geom_hline(yintercept = 0, color = "black", linewidth = 0.3)
+```
+```{r S1e - feature plot of mki67, fig.height=8, fig.width=8}
+FeaturePlot(treg_object_filtered, features = "Mki67",reduction = "mde_incremental") + NoAxes()
+```
+```{r S1h - dotplot of effector markers, fig.width=4.375, fig.height=2.5}
+gene_markers <- c(
+  "Il2ra", "Lrrc32", "Areg", "Ctla4", "Il10", "Gzma", "Gzmb",
+  "Tgfb1", "Ebi3", "Entpd1", "Nt5e"
+)
+
+genes_use <- intersect(
+  gene_markers,
+  rownames(treg_rna[["RNA"]])
+)
+
+expr_mat <- GetAssayData(
+  treg_rna,
+  assay = "RNA",
+  layer = "data"
+)[genes_use, , drop = FALSE]
+
+cluster_vec <- treg_rna$annotation_level2
+
+keep_cells <- !is.na(cluster_vec)
+
+expr_mat <- expr_mat[, keep_cells, drop = FALSE]
+cluster_vec <- cluster_vec[keep_cells]
+
+cluster_levels <- unique(cluster_vec)
+
+dp_list <- lapply(cluster_levels, function(cl) {
+
+  idx <- which(cluster_vec == cl)
+
+  mat_cl <- expr_mat[, idx, drop = FALSE]
+
+  data.frame(
+    annotation_level2 = cl,
+    gene = genes_use,
+    pct.exp = Matrix::rowMeans(mat_cl > 0) * 100,
+    avg.log1p_cp10k = Matrix::rowMeans(mat_cl)
+  )
+})
+
+dp_df <- dplyr::bind_rows(dp_list)
+
+dp_df$annotation_level2 <- factor(
+  dp_df$annotation_level2,
+  levels = cluster_levels
+)
+
+dp_df$gene <- factor(
+  dp_df$gene,
+  levels = rev(genes_use)
+)
+
+base_size <- 10
+axis_size <- 9
+
+mid_val <- median(
+  dp_df$avg.log1p_cp10k,
+  na.rm = TRUE
+)
+
+p_rna <- ggplot(
+  dp_df,
+  aes(
+    x = annotation_level2,
+    y = gene
+  )
+) +
+  geom_point(
+    aes(
+      size = pct.exp,
+      fill = avg.log1p_cp10k
+    ),
+    shape = 21,
+    color = "black",
+    stroke = 0.12
+  ) +
+  scale_fill_gradient2(
+    low = "darkblue",
+    mid = "white",
+    high = "red",
+    midpoint = mid_val,
+    name = "Avg log1p(CP10K)"
+  ) +
+  scale_size_continuous(
+    name = "% expressing",
+    range = c(0.25, 6),
+    breaks = c(0, 25, 50, 75, 100),
+    limits = c(0, 100)
+  ) +
+  scale_y_discrete(
+    expand = expansion(
+      mult = c(0.04, 0.04)
+    )
+  ) +
+  scale_x_discrete(
+    expand = expansion(
+      mult = c(0.04, 0.04)
+    )
+  ) +
+  theme_bw(
+    base_size = base_size
+  ) +
+  theme(
+    axis.title = element_blank(),
+    axis.text.x = element_text(
+      size = axis_size,
+      angle = 90,
+      vjust = 0.5,
+      hjust = 1,
+      margin = margin(t = 1)
+    ),
+    axis.text.y = element_text(
+      size = axis_size,
+      lineheight = 0.85,
+      margin = margin(r = 1)
+    ),
+    panel.grid = element_blank(),
+    panel.border = element_rect(
+      linewidth = 0.3
+    ),
+    plot.margin = margin(
+      2, 2, 2, 2
+    ),
+    legend.title = element_text(
+      size = base_size
+    ),
+    legend.text = element_text(
+      size = base_size - 1
+    )
+  ) +
+  guides(
+    size = guide_legend(
+      title = "% expressing"
+    ),
+    fill = guide_colorbar(
+      title = "Avg log1p(CP10K)",
+      barheight = unit(20, "mm")
+    )
+  )
+
+print(p_rna)
+```
+
+```{r S2a - plotting cells w/ tcrs shared w/ tconvs/ex-tregs, fig.width = 8, fig.height=8}
+tcr <- tcr %>%
+  unite(
+    "clonotype",
+    alpha.vgene,
+    alpha.jgene,
+    alpha.junction,
+    beta.vgene,
+    beta.jgene,
+    beta.junction,
+    sep = ".",
+    remove = FALSE
+  )
+
+tcr_productive <- subset(tcr, subset = alpha.functionality == "productive")
+
+
+shared_clonotypes <- tcr_productive %>%
+  filter(level1 %in% c("Treg", "CD4")) %>%
+  distinct(clonotype, level1) %>%
+  count(clonotype, name = "n_level1") %>%
+  filter(n_level1 == 2) %>%
+  pull(clonotype)
+
+
+length(shared_clonotypes)
+
+
+shared_treg_cd4_cells <- tcr_productive %>%
+  filter(
+    level1 %in% c("Treg", "CD4"),
+    clonotype %in% shared_clonotypes
+  )
+
+
+shared_treg_cd4_cells %>%
+  count(level1)
+
+shared_cell_ids <- shared_treg_cd4_cells %>%
+  pull(IGT.cellID) %>%  
+  unique()
+
+length(shared_cell_ids)
+
+cells_shared_treg_cd4 <- intersect(
+  shared_cell_ids,
+  colnames(treg_object)
+)
+
+length(cells_shared_treg_cd4)
+
+
+# Highlight shared-clonotype Tregs on MDE
+plots_shared_treg_cd4 <- MyDimPlotHighlight(
+  seurat_object         = treg_object,
+  umap_to_plot          = "mde_incremental",
+  cells_to_highlight    = cells_shared_treg_cd4,
+  highlight_column_name = "annotation_level2",
+  title                 = "Tregs that share clonotypes with Tconvs",
+  labelclusters         = FALSE,
+  highlight_raster      = TRUE,
+  highlight_pixels      = c(1024, 1024),
+  mycols                = palette_vector,
+  highlight_size        = 3,
+  highlight_alpha       = 1,
+  background_alpha      = 1.0,
+  pixels                = c(512, 512)
+)
+
+
+plots_shared_treg_cd4$plot1 +
+  NoAxes() +
+  NoGrid() +
+  NoLegend() +
+  theme(
+    legend.position = "none"
+  ) +
+  coord_cartesian(
+    xlim = c(-2.5, 4),
+    ylim = c(-2.5, 2.5)
+  )
+
+
+
+```
+```{r external dataset mapping of Chi et al. 2026, fig.width=8, fig.height=8}
+ref_embedding <- as.data.frame(
+  Embeddings(
+    treg_object,
+    reduction = "mde_incremental"
+  )
+)
+
+colnames(ref_embedding)[1:2] <- c("MDE_1", "MDE_2")
+
+
+
+query_embedding <- ptregs@meta.data %>%
+  transmute(
+    MDE_1 = level2_MDE1,
+    MDE_2 = level2_MDE2,
+    RNA_clusters = RNA_clusters
+  )
+
+
+cluster_colors <- c(
+  "TF2.2 Treg" = "red",
+  "TF2.6 Treg" = "darkgreen",
+  "TF2.7 Treg_1" = "purple", 
+  "TF2.7 Treg_2" = "pink3",
+  "TM2.3 Treg" = "orange",
+  "TM3.5 Treg"  = "blue",
+  "TS2.1 Treg" = "black",
+  "TS2.3 Treg" = "yellow2"
+)
+
+p <-ggplot() +
+
+  geom_point_rast(
+    data = ref_embedding,
+    aes(
+      x = MDE_1,
+      y = MDE_2
+    ),
+    color = "lightgray",
+    size = 0.3,
+    alpha = 0.5,
+    raster.dpi = 300
+  ) +
+
+  geom_point(
+    data = query_embedding,
+    aes(
+      x = MDE_1,
+      y = MDE_2,
+      color = RNA_clusters
+    ),
+    size = 1.5,
+    alpha = 0.9
+  ) +
+
+ scale_color_manual(
+    values = cluster_colors
+  ) +
+
+  theme_classic() +
+
+  labs(
+    title = "pTreg Clusters",
+    color = "Cluster"
+  ) +
+
+  guides(
+    color = ggplot2::guide_legend(
+      override.aes = list(size = 3)
+    )
+  )
+
+
+pdf(
+  "ptregs_mapped.pdf",
+  width = 8,
+  height = 8,
+  useDingbats = FALSE
+)
+
+print(p)
+
+dev.off()
+```
+
+```{r S5b - flow vs scrnaeq cluster prop correlations per organ}
+rownames(igt_flow) <- c("thymus", "bone marrow", "blood", "spleen", "LN", "lung", "colon", "small intestine", "peritoneal cavity", "liver")
+
+
+adt_data <- GetAssayData(treg_object_clean, assay = "ADT", layer = "data")
+
+
+#prop of all the samples in the colon that are cl8
+# Create phenotype assignment
+phenotype_annotation <- case_when(
+  adt_data["CD44", ] <= 5 & adt_data["CD62L", ] > 4 ~ "Treg_cl1",
+  adt_data["CD44", ] > 5 & adt_data["CD62L", ] <= 4 & adt_data["KLRG1", ] > 4 & adt_data["CD49B", ] <= 4 ~ "Treg_cl2",
+  adt_data["CD44", ] > 4 & adt_data["CD62L", ] <= 4 & adt_data["CD49B", ] <= 4 &
+    adt_data["NEUROPILIN1.CD304", ] > 5 & adt_data["FR4", ] <= 6 &
+    adt_data["CXCR5", ] <= 3 & adt_data["PDCD1.PD1.CD279", ] <= 5 ~ "Treg_cl3",
+  adt_data["CD44", ] > 5 & adt_data["CD62L", ] <= 4 & adt_data["CD49B", ] > 4 &
+    adt_data["KLRG1", ] <= 4 & adt_data["CD69", ] <= 4 & adt_data["CD29", ] <= 5 ~ "Treg_cl4",
+  adt_data["CD44", ] > 5 & adt_data["CD62L", ] <= 4 & adt_data["KLRG1", ] <= 4 &
+    adt_data["CD49B", ] <= 4 & adt_data["CD69", ] > 4 & adt_data["CD29", ] <= 5 ~ "Treg_cl6",
+  adt_data["CD44", ] > 5 & adt_data["CD62L", ] <= 4 & adt_data["KLRG1", ] <= 4 &
+    adt_data["CD49B", ] <= 4 & adt_data["SCA1", ] > 5 & adt_data["NEUROPILIN1.CD304", ] <= 5 ~ "Treg_cl8",
+  TRUE ~ "Other"
+)
+
+healthy_subset_filtered$sorted_citeseq <- phenotype_annotation
+
+sorted_citeseq_object <- subset(healthy_subset_filtered, subset = !sorted_citeseq == "Other")
+sorted_citeseq_object <- subset(sorted_citeseq_object, subset = organ_simplified %in% c("thymus", "bone marrow", "blood", "spleen", "LN", "lung", "colon", "small intestine", "peritoneal cavity", "liver"))
+
+#sorted_citeseq_th <- subset(sorted_citeseq_object, subset = organ_simplified == "thymus")
+
+annotation_counts_cite <- sorted_citeseq_object@meta.data %>%
+  group_by(sample_code, organ_simplified, sorted_citeseq) %>%
+  summarise(count = n(), .groups = "drop")
+
+total_sample_data_cite <- annotation_counts_cite %>%
+  pivot_wider(names_from = sorted_citeseq, values_from = count, values_fill = 0)
+total_sample_data_cite$total <- rowSums(total_sample_data_cite[, 3:8])
+
+total_sample_data_cite <- total_sample_data_cite %>%
+  mutate(across(
+    .cols = starts_with("Treg_"), 
+    .fns = ~ .x / total,
+    .names = "prop_{.col}"
+  ))
+
+prop_long_cite <- total_sample_data_cite %>%
+  select(organ_simplified, starts_with("prop_")) %>%
+  pivot_longer(
+    cols = starts_with("prop_"),
+    names_to = "sorted_citeseq",
+    values_to = "proportion"
+  ) %>%
+  mutate(sorted_citeseq_object = sub("prop_", "", sorted_citeseq))
+
+prop_long_cite$annotation_level2 <- prop_long_cite$sorted_citeseq_object
+
+prop_long_cite$percent <- prop_long_cite$proportion * 100
+
+prop_summary_cite <- prop_long_cite %>%
+  group_by(organ_simplified, annotation_level2) %>%
+  summarise(
+    med = median(percent, na.rm = TRUE),
+    sem = sd(percent, na.rm = TRUE) / sqrt(n()),
+    .groups = "drop"
+  )
+
+cl1_flow <- igt_flow %>%
+  select(starts_with("cl1_"))
+cl1_flow$med_flow <- rowMeans(cl1_flow, na.rm = TRUE)
+cl1_flow$sd <- apply(cl1_flow, 1, sd, na.rm = TRUE)
+cl1_flow$organ_simplified <- rownames(cl1_flow)
+cl1_flow <- cl1_flow %>%
+  arrange(med_flow)
+
+prop_summary_cl1 <- subset(prop_summary_cite, subset = prop_summary_cite$annotation_level2 == "Treg_cl1")
+joined_data_cl1 <- left_join(cl1_flow, prop_summary_cl1)
+
+
+library(ggpubr)
+ggplot(joined_data_cl1, aes(x = med, y = med_flow, label = organ_simplified)) +
+  geom_point() +
+  geom_text_repel(size = 3) +
+  geom_errorbar(aes(ymin = med_flow - sd, ymax = med_flow + sd), width = 2) +
+  geom_smooth(method = "lm", se = FALSE, color = "lightgray", linetype = "dashed", linewidth = 0.5) +
+  geom_errorbarh(aes(xmin = med - sem, xmax = med + sem), height = 2) +
+#  stat_regline_equation(label.y = 95, aes(label = ..eq.label..), size = 3.5) +  # Regression equation
+  stat_cor(method = "pearson", label.y = 90, aes(label = paste(..rr.label.., ..p.label.., sep = "~`,`~"))) +
+  scale_x_continuous(limits = c(1, 100)) +
+  scale_y_continuous(limits = c(1, 100)) +
+  labs(
+    x = "Cluster Proportion per Organ (scRNAseq)",
+    y = "Cluster Proportion per Organ (Flow Cytometry)",
+    title = "Avg Cluster Proportion (scRNAseq vs Flow) - Cluster 1"
+  ) +
+  theme_minimal() +
+  theme(axis.line = element_line())
+```
+```{r S7a-e mdes of cluster distributions across lymph nodes, downsampled, fig.width=8, fig.height=8}
+set.seed(123)
+
+ln_keep <- c(
+  "axillary lymph node",
+  "cervical lymph node",
+  "inguinal lymph node",
+  "mediastinal lymph node",
+  "mesenteric lymph node"
+)
+
+ln_object <- subset(
+  healthy_subset_inc,
+  subset = organ_simplified == "LN" & organ %in% ln_keep
+)
+
+for (ln in sort(unique(ln_object$organ))) {
+
+  cells_in_ln <- colnames(ln_object)[
+    ln_object$organ == ln
+  ]
+
+  if (length(cells_in_ln) == 0) {
+    message(sprintf("No cells found for '%s' — skipping.", ln))
+    next
+  }
+
+  if (length(cells_in_ln) >= 198) {
+    cells_to_highlight <- sample(cells_in_ln, 198)
+  } else {
+    message(sprintf(
+      "%s has only %d cells; using all.",
+      ln,
+      length(cells_in_ln)
+    ))
+    cells_to_highlight <- cells_in_ln
+  }
+
+  plots_ln <- MyDimPlotHighlight(
+    seurat_object         = healthy_subset_inc,
+    umap_to_plot          = "mde_incremental",
+    cells_to_highlight    = cells_to_highlight,
+    highlight_column_name = "annotation_level2",
+    title                 = paste0("Cluster Distribution ", ln),
+    labelclusters         = TRUE,
+    mycols                = palette_vector,
+    highlight_size        = 2
+  )
+
+  print(
+    plots_ln$plot1 +
+      NoAxes() +
+      NoGrid()
+  )
+}
+```
+```{r S8b MDEs highlighting cluster dist. in selected conditions, fig.width=8, fig.height=8}
+
+lung_tregs <- subset(treg_object_clean, subset = organ_simplified == "lung")
+allergy_lung <- subset(lung_tregs, subset = condition_detailed_simplified == "HDM")
+
+cells_allergy_lung <- colnames(allergy_lung)
+plots_allergy_lung <- MyDimPlotHighlight(
+  seurat_object         = treg_object_clean,
+  umap_to_plot          = "mde_incremental",
+  cells_to_highlight    = cells_allergy_lung,
+  highlight_column_name = "annotation_level2",
+  title                 = "Lung HDM Tregs highlighted",
+  labelclusters = FALSE,
+  highlight_raster = T,
+  highlight_pixels =  c(1024, 1024),
+  mycols = palette_vector,
+  highlight_size = 3,
+  highlight_alpha = 1,
+  background_alpha = 1.0,
+  pixels = c(512,512)
+)
+
+p <- print(plots_allergy_lung$plot1 + NoAxes() + NoGrid()) + NoLegend() + theme(legend.position = "none") + coord_cartesian(xlim = c(-2.5, 4), ylim = c(-2.5, 2.5))
+print(p)
+#flu
+flu_lung <- subset(lung_tregs, subset = condition_detailed_simplified == "flu")
+
+cells_flu_lung <- colnames(flu_lung)
+plots_flu_lung <- MyDimPlotHighlight(
+  seurat_object         = treg_object_clean,
+  umap_to_plot          = "mde_incremental",
+  cells_to_highlight    = cells_flu_lung,
+  highlight_column_name = "annotation_level2",
+  title                 = "Lung Flu Tregs highlighted",
+  labelclusters = FALSE,
+  highlight_raster = T,
+  highlight_pixels =  c(1024, 1024),
+  mycols = palette_vector,
+  highlight_size = 3,
+  highlight_alpha = 1,
+  background_alpha = 1.0,
+  pixels = c(512,512)
+)
+
+p <- print(plots_flu_lung$plot1 + NoAxes() + NoGrid()) + NoLegend() + theme(legend.position = "none") + coord_cartesian(xlim = c(-2.5, 4), ylim = c(-2.5, 2.5))
+print(p)
+
+#MTB
+mtb_lung <- subset(lung_tregs, subset = condition_detailed_simplified == "MTB")
+
+cells_mtb_lung <- colnames(mtb_lung)
+plots_mtb_lung <- MyDimPlotHighlight(
+  seurat_object         = treg_object_clean,
+  umap_to_plot          = "mde_incremental",
+  cells_to_highlight    = cells_mtb_lung,
+  highlight_column_name = "annotation_level2",
+  title                 = "Lung MTB Tregs highlighted",
+  labelclusters = FALSE,
+  highlight_raster = T,
+  highlight_pixels =  c(1024, 1024),
+  mycols = palette_vector,
+  highlight_size = 3,
+  highlight_alpha = 1,
+  background_alpha = 1.0,
+  pixels = c(512,512)
+)
+
+p <- print(plots_mtb_lung$plot1 + NoAxes() + NoGrid()) + NoLegend() + theme(legend.position = "none") + coord_cartesian(xlim = c(-2.5, 4), ylim = c(-2.5, 2.5))
+print(p)
+
+#kp
+
+kp_lung <- subset(lung_tregs, subset = condition_detailed_simplified == "KP")
+
+cells_kp_lung <- colnames(kp_lung)
+plots_kp_lung <- MyDimPlotHighlight(
+  seurat_object         = treg_object_clean,
+  umap_to_plot          = "mde_incremental",
+  cells_to_highlight    = cells_flu_lung,
+  highlight_column_name = "annotation_level2",
+  title                 = "Lung KP Tregs highlighted",
+  labelclusters = FALSE,
+  highlight_raster = T,
+  highlight_pixels =  c(1024, 1024),
+  mycols = palette_vector,
+  highlight_size = 3,
+  highlight_alpha = 1,
+  background_alpha = 1.0,
+  pixels = c(512,512)
+)
+
+p <- print(plots_kp_lung$plot1 + NoAxes() + NoGrid()) + NoLegend() + theme(legend.position = "none") + coord_cartesian(xlim = c(-2.5, 4), ylim = c(-2.5, 2.5))
+print(p)
+```
+```{r S8c feature plots of Rorc and Klrg1 in healthy colon, fig.width=8, fig.height=8}
+FeaturePlot(
+  treg_object,
+  features = "Rorc",
+  reduction = "mde_incremental",
+  cells = WhichCells(treg_object, expression = organ_simplified == "colon LP" & condition_broad == "healthy"),
+  order = TRUE,
+  pt.size = 0.5
+) +
+  ggtitle("Rorc expression (colon, healthy)")
+
+
+FeaturePlot(
+  treg_object,
+  features = "Klrg1",
+  reduction = "mde_incremental",
+  cells = WhichCells(treg_object, expression = organ_simplified == "colon LP" & condition_broad == "healthy"),
+  order = TRUE,
+  pt.size = 0.5
+) +
+  ggtitle("Klrg1 expression (colon, healthy)")
+
+```
+```{r S9a radar plot of Treg cluster proportions across cancer with treatment}
+
+cancer_sub_adt <- subset(
+  adt_so,
+  subset = condition_broad == "cancer"
+)
+
+cancer_all_metadata <- cancer_sub_adt@meta.data %>%
+  rownames_to_column("cell_id") %>%
+  filter(
+    annotation_level2 %in% c(
+      "Treg_cl1",
+      "Treg_cl2",
+      "Treg_cl3",
+      "Treg_cl4",
+      "Treg_cl8"
+    )
+  ) %>%
+  mutate(
+    annotation_level2 = recode(
+      annotation_level2,
+      "Treg_cl1" = "Treg.A",
+      "Treg_cl2" = "Treg.D",
+      "Treg_cl3" = "Treg.B",
+      "Treg_cl4" = "Treg.F",
+      "Treg_cl8" = "Treg.E"
+    )
+  )
+
+
+# cluster counts per sample
+cancer_props <- cancer_all_metadata %>%
+  count(
+    condition_detailed_simplified,
+    sample_name,
+    annotation_level2,
+    name = "count"
+  ) %>%
+  group_by(
+    condition_detailed_simplified,
+    sample_name
+  ) %>%
+  complete(
+    annotation_level2 = c(
+      "Treg.A",
+      "Treg.D",
+      "Treg.B",
+      "Treg.F",
+      "Treg.E"
+    ),
+    fill = list(count = 0)
+  ) %>%
+  mutate(
+    total_cells = sum(count),
+    percent = 100 * count / total_cells
+  ) %>%
+  ungroup()
+
+
+cancer_props <- cancer_props %>%
+  filter(total_cells > 20)
+
+
+cancer_radar <- cancer_props %>%
+  group_by(
+    condition_detailed_simplified,
+    annotation_level2
+  ) %>%
+  summarise(
+    med = median(percent, na.rm = TRUE),
+    .groups = "drop"
+  )
+
+
+# wide dataframe
+cancer_radar_wide <- cancer_radar %>%
+  pivot_wider(
+    names_from = annotation_level2,
+    values_from = med,
+    values_fill = 0
+  )
+
+
+radar_df <- cancer_radar_wide %>%
+  select(
+    condition_detailed_simplified,
+    Treg.A,
+    Treg.D,
+    Treg.B,
+    Treg.F,
+    Treg.E
+  ) %>%
+  column_to_rownames(
+    "condition_detailed_simplified"
+  ) %>%
+  as.data.frame()
+
+radar_df[] <- lapply(
+  radar_df,
+  as.numeric
+)
+
+radar_plot_df <- rbind(
+  max = rep(80, ncol(radar_df)),
+  min = rep(0, ncol(radar_df)),
+  radar_df
+)
+
+condition_colors <- scales::hue_pal()(
+  nrow(radar_df)
+)
+
+par(
+  mar = c(2, 2, 2, 8),
+  xpd = TRUE
+)
+
+fmsb::radarchart(
+  radar_plot_df,
+  axistype = 1,
+
+  pcol = condition_colors,
+  pfcol = NA,
+  plwd = 2,
+  plty = 1,
+
+  cglcol = "grey80",
+  cglty = 1,
+  cglwd = 1,
+
+  axislabcol = "grey40",
+
+  seg = 4,
+
+  caxislabels = c(
+    "0",
+    "20",
+    "40",
+    "60",
+    "80"
+  ),
+
+  vlcex = 1.2,
+
+  vlabels = c(
+    "Treg.A",
+    "Treg.D",
+    "Treg.B",
+    "Treg.F",
+    "Treg.E"
+  )
+)
+
+legend(
+  "right",
+  inset = c(-0.55, 0),
+  legend = rownames(radar_df),
+  col = condition_colors,
+  lty = 1,
+  lwd = 2,
+  bty = "n",
+  cex = 0.85
+)
+```
+
+```{r S9f cancer t-rbi radar plot, fig.width=8, fig.height=8}
+
+
+cond_col <- names(trbi_supp)[1]
+
+radar_wide <- trbi_supp %>%
+  rename(
+    condition = all_of(cond_col),
+    Treg.A = Cl.1,
+    Treg.D = Cl.2,
+    Treg.B = Cl.3,
+    Treg.F = Cl.4,
+    Treg.C = Cl.6,
+    Treg.E = Cl.8,
+    Treg.wM = Miniverse,
+    Treg.P = Proliferating
+  ) %>%
+  column_to_rownames("condition") %>%
+  as.data.frame()
+
+radar_wide[] <- lapply(
+  radar_wide,
+  function(x) as.numeric(as.character(x))
+)
+
+radar_data <- rbind(
+  max = rep(100, ncol(radar_wide)),
+  min = rep(0, ncol(radar_wide)),
+  radar_wide
+)
+
+n_conditions <- nrow(radar_wide)
+
+condition_colors <- c(
+  "black",
+  colorRampPalette(
+    brewer.pal(9, "Set1")
+  )(max(n_conditions - 1, 1))
+)
+
+
+
+par(
+  mar = c(2, 2, 4, 2)
+)
+
+radarchart(
+  radar_data,
+  axistype = 1,
+  pcol = condition_colors,
+  plwd = 2,
+  plty = 1,
+  cglcol = "grey",
+  cglty = 1,
+  axislabcol = "grey30",
+  caxislabels = seq(0, 100, 20),
+  calcex = 0.7,
+  vlcex = 0.8,
+  title = "Treg Cluster Composition by Condition - Supp"
+)
+
+legend(
+  "bottomleft",
+  legend = rownames(radar_wide),
+  col = condition_colors,
+  lty = 1,
+  lwd = 2,
+  bty = "n",
+  cex = 0.8
+)
+
+
+```
+```{r S9g Ccr8 feature plot, fig.width=8, fig.height=8}
+FeaturePlot(treg_object, reduction = "mde_incremental", features = c("Ccr8"), order = T,  min.cutoff = "q1", max.cutoff = "q99",  cols = c("lightgrey", "blue") , raster = F, raster.dpi = c(512,512)) + coord_cartesian(xlim = c(-2.5, 4), ylim = c(-2.5, 2.5)) + NoAxes() + NoLegend() + theme_void() + theme(legend.position = "none")
+
+```
+```{r S10b - pathway analysis of Treg.F vs rest}
+library(msigdbr)
+library(fgsea)
+library(Seurat)
+library(dplyr)
+library(stringr)
+library(ggplot2)
+
+assay_use <- "RNA"
+
+Idents(treg_object) <- "annotation_level2"
+
+de <- FindMarkers(
+  treg_object,
+  ident.1 = "Treg.F",
+  ident.2 = NULL,
+  assay = assay_use,
+  test.use = "wilcox",
+  logfc.threshold = 0.25,
+  min.pct = 0.1
+)
+
+de$gene <- rownames(de)
+
+de <- de %>%
+  mutate(
+    sign_fc = sign(avg_log2FC),
+    rank_stat = sign_fc * (-log10(p_val + 1e-300))
+  )
+
+ranks <- setNames(
+  de$rank_stat,
+  de$gene
+)
+
+ranks <- sort(
+  ranks,
+  decreasing = TRUE
+)
+
+species <- "Mus musculus"
+
+m_c2 <- msigdbr(
+  species = species,
+  category = "C2"
+) %>%
+  select(
+    gs_name,
+    gene_symbol
+  )
+
+m_all <- m_c2 %>%
+  filter(
+    grepl(
+      "^(KEGG_|REACTOME_|WP_)",
+      gs_name
+    )
+  )
+
+genesets <- split(
+  m_all$gene_symbol,
+  m_all$gs_name
+)
+
+canon <- function(x) {
+  x %>%
+    toupper() %>%
+    str_replace_all(
+      "[^A-Z0-9]+",
+      "_"
+    ) %>%
+    str_replace_all(
+      "^_|_$",
+      ""
+    )
+}
+
+gs_names <- names(genesets)
+
+canon_map <- setNames(
+  gs_names,
+  canon(gs_names)
+)
+
+pick_set <- function(label) {
+  key <- canon(label)
+
+  if (key %in% names(canon_map)) {
+    canon_map[[key]]
+  } else {
+    NA_character_
+  }
+}
+
+targets <- c(
+  "REACTOME_RAP1_SIGNALLING",
+  "WP_REGULATION_OF_ACTIN_CYTOSKELETON"
+)
+
+for (lbl in targets) {
+
+  nm <- pick_set(lbl)
+
+  if (is.na(nm)) {
+    message(
+      "No pathway found for: ",
+      lbl
+    )
+    next
+  }
+
+  pw_genes <- intersect(
+    unique(genesets[[nm]]),
+    names(ranks)
+  )
+
+  if (length(pw_genes) < 1) {
+    message(
+      "Too few overlapping genes for: ",
+      nm
+    )
+    next
+  }
+
+  res <- fgsea(
+    pathways = list(
+      this = pw_genes
+    ),
+    stats = ranks,
+    minSize = 1,
+    maxSize = Inf,
+    nperm = 10000
+  ) %>%
+    as.data.frame()
+
+  p <- fgsea::plotEnrichment(
+    pw_genes,
+    ranks
+  ) +
+    ggtitle(
+      nm,
+      subtitle = sprintf(
+        "NES = %.2f, FDR = %.2g  [Treg.F vs all]",
+        res$NES[1],
+        res$padj[1]
+      )
+    ) +
+    theme(
+      plot.title = element_text(
+        size = 12
+      )
+    )
+
+  print(p)
+}
+```
+```{r S10a mhciiko/het mdes highlighting cluster distribution, fig.width=8, fig.height=8}
+emb_all <- Embeddings(treg_object, "mde_incremental") %>% as.data.frame()
+emb_all$cluster <- treg_object$annotation_level2
+emb_all$organ   <- treg_object$organ_simplified
+emb_all$cond <- treg_object$condition_detailed_simplified
+
+emb_all <- emb_all %>%
+  mutate(cond =  case_when(
+  cond %in% c("MHCIIhet", "MHCIIhet_Ea16") ~ "MHCIIhet",
+  cond %in% c("MHCIIKO", "MHCIIKO_Ea16") ~ "MHCIIKO",
+  TRUE ~ cond
+))
+
+
+
+emb_het <- subset(emb_all,cond == "MHCIIhet")
+emb_ko <- subset(emb_all, cond == "MHCIIKO")
+ggplot(emb_all, aes(x = mdeincremental_1, y = mdeincremental_2)) +
+  rasterise(geom_point(color = "lightgray", size = 0.25, alpha = 0.25), dpi = 300) +
+  rasterise(
+    geom_point(data = emb_het, aes(color = cluster), size = 0.75),
+    dpi = 300
+  ) +
+  scale_color_manual(values = palette_vector) +
+  theme_minimal() +
+  ggtitle("MHCII Het Cells Highlighted by Cluster Color") +
+  NoAxes() + NoGrid() + NoLegend()
+
+
+ggplot(emb_all, aes(x = mdeincremental_1, y = mdeincremental_2)) +
+  rasterise(geom_point(color = "lightgray", size = 0.25, alpha = 0.25), dpi = 300) +
+  rasterise(
+    geom_point(data = emb_ko, aes(color = cluster), size = 0.75),
+    dpi = 300
+  ) +
+  scale_color_manual(values = palette_vector) +
+  theme_minimal() +
+  ggtitle("MHCII KO Cells Highlighted by Cluster Color") +
+  NoAxes() + NoGrid() + NoLegend()
+```
+
