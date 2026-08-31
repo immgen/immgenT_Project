@@ -75,4 +75,4 @@ Individual code chunks in `analysis/CD4_workflow.Rmd` can also be run independen
 
 ## ImmGenT
 
-This analysis is part of the ImmGenT project, a reference atlas of T cell states across tissues and immunological conditions.
+This analysis is part of the immgenT project, a reference atlas of T cell states across tissues and immunological conditions.
