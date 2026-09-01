@@ -1,14 +1,6 @@
 # immgenT Treg
 
-This directory contains the analysis and reproducibility code accompanying the **immgenT Treg** CITE-seq study. The analysis is organized using [workflowr](https://github.com/workflowr/workflowr) and includes the code used to reproduce the main and supplementary figure panels, together with supporting scripts and links to the required input data.
-
-## Analysis website
-
-The rendered workflowr analysis can be browsed here:
-
-**https://immgen.github.io/immgenT_Project/Treg_paper/**
-
-The website provides a figure-by-figure view of the analysis, with the corresponding R code and workflowr reproducibility information.
+This repository contains the analysis and reproducibility code accompanying the **immgenT Treg** manuscript. The rendered workflowr analysis can be browsed here: **https://immgen.github.io/immgenT_Project/Treg_paper/** This website provides a figure-by-figure view of the analysis, with the corresponding R code and workflowr reproducibility information.
 
 ## Data availability
 
@@ -109,7 +101,7 @@ The R Markdown workflow can also be run interactively in RStudio. Code chunks sh
 
 ## Reproducibility
 
-This analysis uses workflowr to organize the R Markdown source, rendered results, and version information associated with the analysis.
+This analysis uses [workflowr](https://github.com/workflowr/workflowr) to organize the R Markdown source, rendered results, and version information associated with the analysis.
 
 To rebuild the Treg workflow after making changes:
 
@@ -126,4 +118,5 @@ The published analysis can be viewed at:
 
 ## Citation
 
-If you use this code or data, please cite the associated **immgenT Treg** manuscript/resource and the corresponding Zenodo data release.
+If you use this code or data, please cite the associated immgenT Treg manuscript: Freuchet et al. **A Reference Landscape of Regulatory T Cell States in Mice**. https://www.biorxiv.org/content/10.64898/2026.01.30.702856
+
