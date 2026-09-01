@@ -66,22 +66,8 @@ pip install -r requirements.txt
 
 For reproducibility, using Python 3.12.3 is recommended.
 
-### R
 
-Some analysis steps require R. The required R packages and R version should be specified here if applicable.
 
-For example:
-
-```text
-R version: X.X.X
-
-Required R packages:
-- package1
-- package2
-- package3
-```
-
-If the R scripts are not required to run the notebooks, this should be stated explicitly.
 
 ---
 
