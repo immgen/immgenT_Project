@@ -1,4 +1,4 @@
-# treg_github
+# immgenT Treg
 
 A [workflowr][] project.
 
