@@ -61,22 +61,25 @@ treg_rna <- subset(treg_object, subset = !annotation_level2 %in% c("Treg.wM"))
 
 ```
 
+# Figure 1
+## immgenT resolves Treg heterogeneity into eight stable clusters
+## Figure 1a
 ```{r 1a - Overall MDE}
 #for david
 ```
-
+## Figure 1b
 ```{r 1b - GP68 volcano plot}
 #for david
 ```
-
+## Figure 1c
 ```{r 1c - selected gene expression across gp68}
 #for david
 ```
-
+## Figure 1d
 ```{r 1d - overall Treg mde, fig.width=8, fig.height=8}
 DimPlot(treg_object, reduction = "mde_incremental", group.by = "annotation_level2", cols = palette_vector, label = FALSE, raster = TRUE, raster.dpi = c(1024, 1024)) + ggtitle("Treg Cells in All Populations") + NoAxes() + NoLegend() + theme(legend.position = "none") + coord_cartesian(xlim = c(-2.5, 4), ylim = c(-2.5, 2.5))
 ```
-
+## Figure 1e
 ```{r 1e - feature plots of selected genes , fig.width=8, fig.height=8}
 p = FeaturePlot(treg_object, slot = "data", features = "Foxp3", reduction = "mde_incremental", pt.size = 1.5, order = TRUE, raster = T, raster.dpi = c(512, 512))
 p + NoLegend()
@@ -109,7 +112,7 @@ p = FeaturePlot(treg_object, slot = "data", features = "Cxcr3", reduction = "mde
 p + NoLegend()
 
 ```
-
+## Figure 1f
 ```{r 1f - heatmap of top 10 DGE/cluster, fig.width=8, fig.height=10}
 logfc_cols <- grep("^log2FC_", names(onevsall_cluster), value = TRUE)
 
@@ -172,10 +175,10 @@ pheatmap(
   main = "Top 10 Genes per Column (Scaled Across Rows)"
 )
 ```
-
+## Figure 1g
 ```{r 1g - clonotype frequencies}
 ```
-
+## Figure 1h
 ```{r 1h - clonotype sharing MDE}
 mypal_level2_all <- ZemmourLib::immgent_colors$level2
 
@@ -444,7 +447,10 @@ All_plot_legend <- ggplot() +
 
 All_plot_legend
 ```
+# Figure 2
 
+## An eight-color flow cytometry panel resolves Treg clusters
+# Figure 2a
 ```{r 2a - Treg vs Tconv protein expression}
 vol_sub <- subset(adt_so, subset = annotation_level1 %in% c("CD4", "Treg"))
 vol_sub <- subset(vol_sub, subset = !(annotation_level2 %in% c("Treg_cl1", "Treg_cl7")))
@@ -512,6 +518,7 @@ ggplot(volc_df, aes(x = avg_log2FC, y = neg_log10_padj, color = direction)) +
     y = "-log10(adj p-value)"
   )
 ```
+## Figure 2b
 ```{r 2b - citeseq heatmap of selected markers,  fig.width=4, fig.height=5}
 
 
@@ -564,6 +571,7 @@ pheatmap(
   legend = FALSE
 )
 ```
+## Figure 2d
 ```{r 2d - citeseq sorted MDEs highlighting clusters, fig.width= 8, fig.height=8}
 
 
@@ -718,6 +726,8 @@ MyDimPlotHighlightDensity(
   highlight_alpha = 1.0,
   cols = rocket(100))
 ```
+
+##Figure 2f
 ```{r 2f - radar plots comparing cluster distributions between flow/citeseq/scrnaseq across organs, fig.width= 8, fig.height= 8}
 library(Seurat)
 library(dplyr)
@@ -1222,7 +1232,11 @@ for (org in organs) {
   )
 }
 ```
+# Figure 3
 
+## Treg.A (resting Tregs), while enriched in lymphoid tissues, are broadly distributed and present in non-lymphoid organs
+
+## Figure 3b
 ```{r 3b - mde highlighting Extravascular Treg.A in NLTs, fig.width= 8, fig.height= 8}
 selected_organs <- c("small intestine", "colon", "skin", "liver", "placenta", "lung")
 
@@ -1311,7 +1325,7 @@ ggplot(plot, aes(mdeincremental_1, mdeincremental_2)) +
   NoAxes() +
   NoGrid()
 ```
-
+## Figure 3f
 ```{r 3f - heatmap comparing Treg.A in spleen to selected organs, fig.height= 15, fig.width=5}
 top_n <- 50
 
@@ -1471,7 +1485,10 @@ pheatmap(
 )
 
 ```
+# Figure 4
 
+## Treg cells in healthy tissues: shared clusters with organ-specific enrichments
+## Figure 4d
 ```{r 4d - mdes highlighting Treg cluster distributions in healthy NLTS, fig.width= 8, fig.height= 8}
 emb_all <- Embeddings(healthy_subset_inc, "mde_incremental") %>% as.data.frame()
 emb_all$cluster <- healthy_subset_inc$annotation_level2
@@ -1558,7 +1575,9 @@ ggplot(emb_all, aes(x = mdeincremental_1, y = mdeincremental_2)) +
   ggtitle("LN Cells Highlighted by Cluster Color") +
   NoAxes() + NoGrid()
 ```
-```{r heatmaps comparing Treg.D/E to Treg.A in spleen, fig.width = 5, fig.height = 15}
+
+## Figure 4h
+```{r 4h heatmaps comparing Treg.D/E to Treg.A in spleen, fig.width = 5, fig.height = 15}
 
 mdata_orig <- treg_object@meta.data
 genetics_keep <- c("wt", "B6-Foxp3-GFP (B6.Cg-Foxp3tm1Kuch/J)")
@@ -1747,6 +1766,11 @@ pheatmap(
   color = ColorRamp
 )
 ```
+# Figure 5
+
+## Treg cells during inflammation in tissues undergo cluster redistribution rather than the emergence of new states
+
+## Figure 5a
 ```{r 5a - radar plots of organs comparing baseline to conditions, fig.width=8, fig.height=8}
 treg_object_filtered@meta.data <- treg_object_filtered@meta.data %>%
   mutate(condition_detailed_simplified = case_when(
@@ -2143,7 +2167,7 @@ legend(
   cex = 0.8
 )
 ```
-
+## Figure 5b
 ```{r - 5b Rorc feature plot during HDM infection in lung, fig.width=8, fig.height=8}
 
 FeaturePlot(
@@ -2160,6 +2184,7 @@ FeaturePlot(
 ) +
   ggtitle("Rorc expression (lung, HDM)")
 ```
+## Figure 5c
 ```{r 5c - feature plot of Klrg1 in lung during MTB/KP/flu, fig.width=8, fig.height=8}
 FeaturePlot(
   treg_object,
@@ -2173,6 +2198,7 @@ FeaturePlot(
 ) +
   ggtitle("Klrg1 expression (lung, mtb + flu)")
 ```
+##Figure 5d
 ```{r heatmaps looking at Treg.D/E in lung across conditions, fig.width=5, fig.height=15}
 mdata_orig <- treg_object@meta.data
 conditions_selected <- mdata_orig %>%
@@ -2432,7 +2458,7 @@ pheatmap(
   cluster_cols = FALSE
 )
 ```
-
+## Figure 5g
 ```{r 5g - cancer radar plot, fig.width=8, fig.height=8}
 annotation_counts_cond <- treg_object_filtered@meta.data %>%
   group_by(sample_code, condition_broad, annotation_level2, condition_detailed_simplified) %>%
@@ -2562,6 +2588,7 @@ legend(
 )
 
 ```
+## Figure 5h
 ```{r 5h - radar plots showikng props of Treg clusters in different external cancer treg datasets, fig.width=8, fig.height=8}
 cond_col <- names(main_trbi)[1]
 
@@ -2618,6 +2645,11 @@ legend(
 )
 
 ```
+# Figure 6
+
+## Treg.F: the main circulating effector Treg population, enriched in specific non-lymphoid tissues and characterized by CD49b and KLF2 expression
+
+## Figure 6a
 ```{r 6a - mdes highlighting cluster dist. in top expressing cd4.f organs, fig.width=8, fig.height=8}
 top_organs <- c("placenta", "uterus", "liver", "peritoneal cavity", "blood")
 
@@ -2655,10 +2687,12 @@ for (org in top_organs) {
 }
 
 ```
+
+## Figure 6c
 ```{r 6c - Treg.F vs all - David}
 ```
 
-
+## Figure 6d
 ```{r 6d - pathway analysis of top pathway upregulated in Treg.F}
 assay_use <- "RNA"
 
@@ -2779,16 +2813,20 @@ p <- fgsea::plotEnrichment(
 print(p)
 ```
 
-
+## Figure 6f
 ```{r 6f - feature plot of klf2 expression, fig.width = 8, fig.height=8}
 FeaturePlot(treg_object_filtered, features = "Klf2",reduction = "mde_incremental", raster = TRUE, raster.dpi = c(512,512)) + NoAxes()
 
 ```
-
+## Figure 6h
 ```{r 6h - feature plot of s1pr1, fig.width = 8, fig.height=8}
 FeaturePlot(treg_object_filtered, features = "S1pr1",reduction = "mde_incremental", raster = TRUE, raster.dpi = c(512,512)) + NoAxes()
 ```
+# Extended Data Figure 1
 
+## Treg cluster characteristics
+
+## Figure S1c
 ```{r S1c - Upon immune perturbations, proportion of SLO vs NLT per conditions}
 s1c <- treg_object@meta.data %>%
   filter(
@@ -2905,9 +2943,12 @@ ggplot(s1c, aes(x = condition_detailed_simplified, y = plot_n, fill = compartmen
   ) +
   geom_hline(yintercept = 0, color = "black", linewidth = 0.3)
 ```
+
+## Figure S1e
 ```{r S1e - feature plot of mki67, fig.height=8, fig.width=8}
 FeaturePlot(treg_object_filtered, features = "Mki67",reduction = "mde_incremental") + NoAxes()
 ```
+## Figure S1h
 ```{r S1h - dotplot of effector markers, fig.width=4.375, fig.height=2.5}
 gene_markers <- c(
   "Il2ra", "Lrrc32", "Areg", "Ctla4", "Il10", "Gzma", "Gzmb",
@@ -3050,7 +3091,10 @@ p_rna <- ggplot(
 
 print(p_rna)
 ```
+# Extended Data Figure 2
 
+## pTregs do not form a distinct cluster and are broadly distributed across clusters
+## Figure S2a
 ```{r S2a - plotting cells w/ tcrs shared w/ tconvs/ex-tregs, fig.width = 8, fig.height=8}
 tcr <- tcr %>%
   unite(
@@ -3136,7 +3180,8 @@ plots_shared_treg_cd4$plot1 +
 
 
 ```
-```{r external dataset mapping of Chi et al. 2026, fig.width=8, fig.height=8}
+## Figure S2c
+```{r S2c external dataset mapping of Chi et al. 2026, fig.width=8, fig.height=8}
 ref_embedding <- as.data.frame(
   Embeddings(
     treg_object,
@@ -3221,7 +3266,10 @@ print(p)
 
 dev.off()
 ```
+## # Extended Data Figure 5
 
+## Comparing CITE-seq and flow cytometry performance for quantifying Treg clusters
+## Figure S5b
 ```{r S5b - flow vs scrnaeq cluster prop correlations per organ}
 #rownames(igt_flow) <- c("thymus", "bone marrow", "blood", "spleen", "LN", "lung", "colon", "small intestine", "peritoneal cavity", "liver")
 
@@ -3352,6 +3400,10 @@ dev.off()
   #theme_minimal() +
  # theme(axis.line = element_line())
 ```
+# Extended Data Figure 7
+
+## Treg distribution across anatomical lymph nodes at baseline
+## Figures S7a-e
 ```{r S7a-e mdes of cluster distributions across lymph nodes, downsampled, fig.width=8, fig.height=8}
 set.seed(123)
 
@@ -3408,6 +3460,10 @@ for (ln in sort(unique(ln_object$organ))) {
   )
 }
 ```
+# Extended Data Figure 8
+
+## Treg distribution during inflammation in tissues
+## Figure S8b
 ```{r S8b MDEs highlighting cluster dist. in selected conditions, fig.width=8, fig.height=8}
 
 lung_tregs <- subset(treg_object_clean, subset = organ_simplified == "lung")
@@ -3502,6 +3558,7 @@ plots_kp_lung <- MyDimPlotHighlight(
 p <- print(plots_kp_lung$plot1 + NoAxes() + NoGrid()) + NoLegend() + theme(legend.position = "none") + coord_cartesian(xlim = c(-2.5, 4), ylim = c(-2.5, 2.5))
 print(p)
 ```
+## Figure S8c
 ```{r S8c feature plots of Rorc and Klrg1 in healthy colon, fig.width=8, fig.height=8}
 FeaturePlot(
   treg_object,
@@ -3525,6 +3582,10 @@ FeaturePlot(
   ggtitle("Klrg1 expression (colon, healthy)")
 
 ```
+# Extended Data Figure 9
+
+## Treg distribution in cancer samples
+## Figure S9a
 ```{r S9a radar plot of Treg cluster proportions across cancer with treatment}
 
 cancer_sub_adt <- subset(
@@ -3689,7 +3750,7 @@ legend(
   cex = 0.85
 )
 ```
-
+## Figure S9f
 ```{r S9f cancer t-rbi radar plot, fig.width=8, fig.height=8}
 
 
@@ -3763,10 +3824,15 @@ legend(
 
 
 ```
+## Figure S9g
 ```{r S9g Ccr8 feature plot, fig.width=8, fig.height=8}
 FeaturePlot(treg_object, reduction = "mde_incremental", features = c("Ccr8"), order = T,  min.cutoff = "q1", max.cutoff = "q99",  cols = c("lightgrey", "blue") , raster = F, raster.dpi = c(512,512)) + coord_cartesian(xlim = c(-2.5, 4), ylim = c(-2.5, 2.5)) + NoAxes() + NoLegend() + theme_void() + theme(legend.position = "none")
 
 ```
+# Extended Data Figure 10
+
+## Treg.F characteristics
+## Figure S10b
 ```{r S10b - pathway analysis of Treg.F vs rest}
 library(msigdbr)
 library(fgsea)
@@ -3923,7 +3989,12 @@ for (lbl in targets) {
   print(p)
 }
 ```
-```{r S10a mhciiko/het mdes highlighting cluster distribution, fig.width=8, fig.height=8}
+# Extended Data Figure 11
+
+## Treg cells in AB+/o and ABo/o mice
+
+## Figure S11a
+```{r S11a mhciiko/het mdes highlighting cluster distribution, fig.width=8, fig.height=8}
 emb_all <- Embeddings(treg_object, "mde_incremental") %>% as.data.frame()
 emb_all$cluster <- treg_object$annotation_level2
 emb_all$organ   <- treg_object$organ_simplified

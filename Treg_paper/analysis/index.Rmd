@@ -1,11 +1,31 @@
 ---
-title: "Home"
+title: "immgenT Treg"
 site: workflowr::wflow_site
 output:
   workflowr::wflow_html:
     toc: false
-editor_options:
-  chunk_output_type: console
 ---
 
-Welcome to my research website.
+# immgenT Treg
+
+This site contains the analysis workflow for immgenT Treg
+
+## Main Figures
+
+- [Figure 1. immgenT resolves Treg heterogeneity into eight stable clusters](Treg_Workflow.html#figure-1)
+- [Figure 2. An eight-color flow cytometry panel resolves Treg clusters](Treg_Workflow.html#figure-2)
+- [Figure 3. Treg.A (resting Tregs), while enriched in lymphoid tissues, are broadly distributed and present in non-lymphoid organs](Treg_Workflow.html#figure-3)
+- [Figure 4. Treg cells in healthy tissues: shared clusters with organ-specific enrichments](Treg_Workflow.html#figure-4)
+- [Figure 5. Treg cells during inflammation in tissues undergo cluster redistribution rather than the emergence of new states](Treg_Workflow.html#figure-5)
+- [Figure 6. Treg.F: the main circulating effector Treg population, enriched in specific non-lymphoid tissues and characterized by CD49b and KLF2 expression](Treg_Workflow.html#figure-6)
+
+## Extended Data Figures
+
+- [Extended Data Figure 1. Treg cluster characteristics](Treg_Workflow.html#extended-data-figure-1)
+- [Extended Data Figure 2. pTregs do not form a distinct cluster and are broadly distributed across clusters](Treg_Workflow.html#extended-data-figure-2)
+- [Extended Data Figure 5. Comparing CITE-seq and flow cytometry performance for quantifying Treg clusters](Treg_Workflow.html#extended-data-figure-5)
+- [Extended Data Figure 7. Treg distribution across anatomical lymph nodes at baseline](Treg_Workflow.html#extended-data-figure-7)
+- [Extended Data Figure 8. Treg distribution during inflammation in tissues](Treg_Workflow.html#extended-data-figure-8)
+- [Extended Data Figure 9. Treg distribution in cancer samples](Treg_Workflow.html#extended-data-figure-9)
+- [Extended Data Figure 10. Treg.F characteristics](Treg_Workflow.html#extended-data-figure-10)
+- [Extended Data Figure 11. Treg cells in AB+/o and ABo/o mice](Treg_Workflow.html#extended-data-figure-11)
