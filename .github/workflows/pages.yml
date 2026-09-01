@@ -6,6 +6,7 @@ on:
       - main
     paths:
       - "Treg_paper/**"
+      - "CD4_paper/**"
       - ".github/workflows/pages.yml"
   workflow_dispatch:
 
@@ -36,7 +37,10 @@ jobs:
       - name: Prepare Pages artifact
         run: |
           mkdir -p _site/Treg_paper
+          mkdir -p _site/CD4_paper
+
           cp -R Treg_paper/docs/. _site/Treg_paper/
+          cp -R CD4_paper/docs/. _site/CD4_paper/
 
       - name: Upload site
         uses: actions/upload-pages-artifact@v3
