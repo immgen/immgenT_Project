@@ -356,7 +356,7 @@ div.tocify {
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-report" data-toggle="collapse" data-target="#workflowr-report">
 <span class="glyphicon glyphicon-list" aria-hidden="true"></span>
-workflowr <span class="glyphicon glyphicon-exclamation-sign text-danger"
+workflowr <span class="glyphicon glyphicon-ok text-success"
 aria-hidden="true"></span>
 </button>
 </p>
@@ -367,8 +367,8 @@ aria-hidden="true"></span>
 </li>
 <li>
 <a data-toggle="tab" href="#checks"> Checks <span
-class="glyphicon glyphicon-exclamation-sign text-danger"
-aria-hidden="true"></span> </a>
+class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
+</a>
 </li>
 <li>
 <a data-toggle="tab" href="#versions">Past versions</a>
@@ -381,9 +381,9 @@ aria-hidden="true"></span> </a>
 </p>
 <p>
 <strong>Checks:</strong> <span
-class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 6
+class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7
 <span class="glyphicon glyphicon-exclamation-sign text-danger"
-aria-hidden="true"></span> 1
+aria-hidden="true"></span> 0
 </p>
 <p>
 <strong>Knit directory:</strong> <code>cd4_github/</code> <span
@@ -406,21 +406,18 @@ versions</em> tab lists the development history.
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguncommittedchanges">
-<span class="glyphicon glyphicon-exclamation-sign text-danger"
-aria-hidden="true"></span> <strong>R Markdown file:</strong> uncommitted
-changes </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguptodate">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>R Markdown file:</strong> up-to-date
+</a>
 </p>
 </div>
-<div id="strongRMarkdownfilestronguncommittedchanges"
+<div id="strongRMarkdownfilestronguptodate"
 class="panel-collapse collapse">
 <div class="panel-body">
-<p>The R Markdown file has unstaged changes. To know which version of
-the R Markdown file created these results, you’ll want to first commit
-it to the Git repo. If you’re still working on the analysis, you can
-ignore this warning. When you’re finished, you can run
-<code>wflow_publish</code> to commit the R Markdown file and build the
-HTML.</p>
+<p>Great! Since the R Markdown file has been committed to the Git
+repository, you know the exact version of the code that produced these
+results.</p>
 </div>
 </div>
 </div>
@@ -511,13 +508,13 @@ project makes it easier to run your code on other machines.</p>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongadd1267">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrong8be5928">
 <span class="glyphicon glyphicon-ok text-success"
-aria-hidden="true"></span> <strong>Repository version:</strong> add1267
+aria-hidden="true"></span> <strong>Repository version:</strong> 8be5928
 </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrongadd1267"
+<div id="strongRepositoryversionstrong8be5928"
 class="panel-collapse collapse">
 <div class="panel-body">
 <p>
@@ -526,7 +523,7 @@ and connecting the code version to the results is critical for
 reproducibility.
 </p>
 <p>
-The results in this page were generated with repository version add1267.
+The results in this page were generated with repository version 8be5928.
 See the <em>Past versions</em> tab to see a history of the changes made
 to the R Markdown and HTML files.
 </p>
@@ -566,9 +563,6 @@ Untracked files:
     Untracked:  code/run_kappa_heatmap.R
     Untracked:  code/tail_dependence_functions.R
     Untracked:  data/metadata_with_modulescore_annotation.csv
-
-Unstaged changes:
-    Modified:   analysis/CD4_workflow.Rmd
 
 </code></pre>
 <p>
@@ -613,6 +607,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+8be5928
+</td>
+<td>
+Nitya Mehrotra
+</td>
+<td>
+2026-09-01
+</td>
+<td>
+Fix CD4 cluster highlight colors
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+8be5928
+</td>
+<td>
+Nitya Mehrotra
+</td>
+<td>
+2026-09-01
+</td>
+<td>
+Fix CD4 cluster highlight colors
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -3098,6 +3126,17 @@ Date
 <tbody>
 <tr>
 <td>
+8be5928
+</td>
+<td>
+Nitya Mehrotra
+</td>
+<td>
+2026-09-01
+</td>
+</tr>
+<tr>
+<td>
 add1267
 </td>
 <td>
@@ -3176,6 +3215,17 @@ Date
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+8be5928
+</td>
+<td>
+Nitya Mehrotra
+</td>
+<td>
+2026-09-01
+</td>
+</tr>
 <tr>
 <td>
 add1267
@@ -12431,21 +12481,21 @@ obj &lt;- FindNeighbors(obj, dims = 1:30)</code></pre>
 <pre><code>Warning: The default method for RunUMAP has changed from calling Python UMAP via reticulate to the R-native UWOT using the cosine metric
 To use Python UMAP via reticulate, set umap.method to &#39;umap-learn&#39; and metric to &#39;correlation&#39;
 This message will be shown once per session</code></pre>
-<pre><code>15:13:46 UMAP embedding parameters a = 0.9922 b = 1.112</code></pre>
-<pre><code>15:13:46 Read 12654 rows and found 30 numeric columns</code></pre>
-<pre><code>15:13:46 Using Annoy for neighbor search, n_neighbors = 30</code></pre>
-<pre><code>15:13:46 Building Annoy index with metric = cosine, n_trees = 50</code></pre>
+<pre><code>15:40:32 UMAP embedding parameters a = 0.9922 b = 1.112</code></pre>
+<pre><code>15:40:32 Read 12654 rows and found 30 numeric columns</code></pre>
+<pre><code>15:40:32 Using Annoy for neighbor search, n_neighbors = 30</code></pre>
+<pre><code>15:40:32 Building Annoy index with metric = cosine, n_trees = 50</code></pre>
 <pre><code>0%   10   20   30   40   50   60   70   80   90   100%</code></pre>
 <pre><code>[----|----|----|----|----|----|----|----|----|----|</code></pre>
 <pre><code>**************************************************|
-15:13:47 Writing NN index file to temp file /var/folders/sx/fnyds1ls6d941tz778_cwntr0000gn/T//RtmpC20zqM/file17574365ec987
-15:13:47 Searching Annoy index using 1 thread, search_k = 3000
-15:13:48 Annoy recall = 100%
-15:13:50 Commencing smooth kNN distance calibration using 1 thread with target n_neighbors = 30
-15:13:51 Initializing from normalized Laplacian + noise (using RSpectra)
-15:13:51 Commencing optimization for 200 epochs, with 535728 positive edges
-15:13:51 Using rng type: pcg
-15:13:56 Optimization finished</code></pre>
+15:40:33 Writing NN index file to temp file /var/folders/sx/fnyds1ls6d941tz778_cwntr0000gn/T//RtmpaOF51R/file1788c5bd97462
+15:40:33 Searching Annoy index using 1 thread, search_k = 3000
+15:40:34 Annoy recall = 100%
+15:40:36 Commencing smooth kNN distance calibration using 1 thread with target n_neighbors = 30
+15:40:37 Initializing from normalized Laplacian + noise (using RSpectra)
+15:40:37 Commencing optimization for 200 epochs, with 535728 positive edges
+15:40:37 Using rng type: pcg
+15:40:41 Optimization finished</code></pre>
 <pre class="r"><code>for (res in c(0.2, 0.3, 0.4, 0.5, 0.6)) {
   obj &lt;- FindClusters(obj, resolution = res)
 
