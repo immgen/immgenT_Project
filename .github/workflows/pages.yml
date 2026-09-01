@@ -1,4 +1,4 @@
-name: Deploy Treg workflowr site
+name: Deploy immgenT project sites
 
 on:
   push:
@@ -33,10 +33,15 @@ jobs:
       - name: Setup Pages
         uses: actions/configure-pages@v5
 
+      - name: Prepare Pages artifact
+        run: |
+          mkdir -p _site/Treg_paper
+          cp -R Treg_paper/docs/. _site/Treg_paper/
+
       - name: Upload site
         uses: actions/upload-pages-artifact@v3
         with:
-          path: Treg_paper/docs
+          path: _site
 
       - name: Deploy
         id: deployment
