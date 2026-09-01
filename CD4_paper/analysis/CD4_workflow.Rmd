@@ -898,32 +898,46 @@ if (length(clonotype_gallery) > 0) {
 ## Activated CD4+ T cells map to large mixed T helper phenotype clusters and smaller polarized clusters
 ### Fig 3a
 ```{r 3a MDE highlighting mixed-phenotype clusters (G/Q) and polarized clusters (R/S/T/U/X/Y/H/I), fig.width = 8, fig.height = 8}
+# 3a MDE highlighting mixed-phenotype clusters (G/Q)
 gq_clusters <- c("CD4.G", "CD4.Q")
 
-p_gq <- DimPlot(
-  cd4_object,
-  reduction = "mde_incremental",
-  group.by = "annotation_level2",
-  cells.highlight = WhichCells(
-    cd4_object,
-    expression = annotation_level2 %in% gq_clusters
-  ),
-  cols = "lightgrey",
-  cols.highlight = palette_vector[gq_clusters],
-  sizes.highlight = 0.6,
-  pt.size = 0.2,
-  raster = TRUE
-) +
-  ggtitle("CD4.G / CD4.Q") +
-  theme_void() +
+cells_gq <- colnames(cd4_object)[
+  cd4_object$annotation_level2 %in% gq_clusters
+]
+
+plots_gq <- MyDimPlotHighlight(
+  seurat_object         = cd4_object,
+  umap_to_plot          = "mde_incremental",
+  cells_to_highlight    = cells_gq,
+  highlight_column_name = "annotation_level2",
+  title                 = "CD4.G / CD4.Q",
+  labelclusters         = FALSE,
+  highlight_raster      = TRUE,
+  highlight_pixels      = c(1024, 1024),
+  mycols                = palette_vector,
+  highlight_size        = 1,
+  highlight_alpha       = 1,
+  background_alpha      = 1,
+  pixels                = c(512, 512)
+)
+
+p_gq <- plots_gq$plot1 +
+  NoAxes() +
+  NoGrid() +
+  NoLegend() +
   theme(
-    legend.position = "right",
+    legend.position = "none",
     plot.title = element_text(hjust = 0.5)
+  ) +
+  coord_cartesian(
+    xlim = c(-2.5, 4),
+    ylim = c(-2.5, 2.5)
   )
 
 p_gq
 
-# R/S/T/U/X/Y/H/I
+
+# 3a MDE highlighting polarized clusters (R/S/T/U/X/Y/H/I)
 polarized_clusters <- c(
   "CD4.R", "CD4.S",
   "CD4.T", "CD4.U",
@@ -931,25 +945,37 @@ polarized_clusters <- c(
   "CD4.H", "CD4.I"
 )
 
-p_polarized <- DimPlot(
-  cd4_object,
-  reduction = "mde_incremental",
-  group.by = "annotation_level2",
-  cells.highlight = WhichCells(
-    cd4_object,
-    expression = annotation_level2 %in% polarized_clusters
-  ),
-  cols = "lightgrey",
-  cols.highlight = palette_vector[polarized_clusters],
-  sizes.highlight = 0.6,
-  pt.size = 0.2,
-  raster = TRUE
-) +
-  ggtitle("Polarized clusters") +
-  theme_void() +
+cells_polarized <- colnames(cd4_object)[
+  cd4_object$annotation_level2 %in% polarized_clusters
+]
+
+plots_polarized <- MyDimPlotHighlight(
+  seurat_object         = cd4_object,
+  umap_to_plot          = "mde_incremental",
+  cells_to_highlight    = cells_polarized,
+  highlight_column_name = "annotation_level2",
+  title                 = "Polarized clusters",
+  labelclusters         = FALSE,
+  highlight_raster      = TRUE,
+  highlight_pixels      = c(1024, 1024),
+  mycols                = palette_vector,
+  highlight_size        = 1,
+  highlight_alpha       = 1,
+  background_alpha      = 1,
+  pixels                = c(512, 512)
+)
+
+p_polarized <- plots_polarized$plot1 +
+  NoAxes() +
+  NoGrid() +
+  NoLegend() +
   theme(
-    legend.position = "right",
+    legend.position = "none",
     plot.title = element_text(hjust = 0.5)
+  ) +
+  coord_cartesian(
+    xlim = c(-2.5, 4),
+    ylim = c(-2.5, 2.5)
   )
 
 p_polarized
