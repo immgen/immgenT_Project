@@ -11,10 +11,8 @@ This repository contains code used for **processing, integration, analysis, visu
 ## Repository organization
 
 * `Data_processing_pipeline/` — processing and quality-control workflows for the immgenT single-cell data
-* `Data_Integration/` — integration, dimensionality reduction, clustering, and reference construction
 * `T-RBI/` — T-cell Reference-Based Integration tools for mapping external scRNA-seq datasets onto the immgenT reference
 * `TCR_analysis/` — TCR repertoire analyses
-* `GEX/` — gene-expression analyses
 * `Cosmology_paper/` — analyses supporting the main immgenT reference manuscript
 * `GP_paper/` — gene-program analyses
 * `immgenT-CD4/`, `immgenT-CD8/`, `Treg_paper/` — lineage-specific analyses and companion manuscripts
