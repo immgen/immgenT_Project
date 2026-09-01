@@ -1,0 +1,35 @@
+---
+title: "immgenT CD4"
+site: workflowr::wflow_site
+output:
+  workflowr::wflow_html:
+    toc: false
+editor_options:
+  chunk_output_type: console
+---
+
+# immgenT CD4
+
+This site contains the analysis workflow for the **immgenT CD4** project.
+
+## Main Figures
+
+- [Figure 1. immgenT resolves CD4+ T cell heterogeneity into 20 discrete clusters and a reference embedding](CD4_workflow.html#figure-1)
+- [Figure 2. Mapping antigen-specific and clonally expanded cells across immune challenges](CD4_workflow.html#figure-2)
+- [Figure 3. Activated CD4+ T cells map to large mixed T helper phenotype clusters and smaller polarized clusters](CD4_workflow.html#figure-3)
+- [Figure 4. T helper programs vary in intensity and combination across mixed and polarized clusters](CD4_workflow.html#figure-4)
+- [Figure 5. Convergence of Tfh and chronically stimulated CD4+ T cells into CD4.H and CD4.I](CD4_workflow.html#figure-5)
+- [Figure 6. Memory CD4+ T cells map to the same clusters as effector cells](CD4_workflow.html#figure-6)
+- [Figure 7. Resting CD4+ T cell heterogeneity](CD4_workflow.html#figure-7)
+- [Figure 8. immgenT CD4 panel: a flow cytometry strategy to resolve the CD4+ T cell landscape](CD4_workflow.html#figure-8)
+
+## Extended Data Figures
+
+- [Extended Data Figure 1. Chemokine receptor expression across the CD4 landscape](CD4_workflow.html#extended-data-figure-1)
+- [Extended Data Figure 2. Cluster distribution of antigen-specific and clonally expanded cells across immune conditions](CD4_workflow.html#extended-data-figure-2)
+- [Extended Data Figure 3. Polarized clusters co-occur within individual immune responses and exhibit tissue-specific biases](CD4_workflow.html#extended-data-figure-3)
+- [Extended Data Figure 4. In vivo Th signature expression is conserved across tissues and varies in intensity and combination across clusters at the single-cell level](CD4_workflow.html#extended-data-figure-4)
+- [Extended Data Figure 5. Polyfunctional cell frequencies reflect random assortment of Th programs at low expression levels](CD4_workflow.html#extended-data-figure-5)
+- [Extended Data Figure 6. Memory CD4+ T cells](CD4_workflow.html#extended-data-figure-6)
+- [Extended Data Figure 7. Resting CD4+ T cell clusters](CD4_workflow.html#extended-data-figure-7)
+- [Extended Data Figure 8. immgenT CD4 flow cytometry panel examples](CD4_workflow.html#extended-data-figure-8)
