@@ -99,7 +99,7 @@ The R Markdown workflow can also be run interactively in RStudio. Code chunks sh
 
 - The curated Treg Seurat object contains the single-cell RNA and CITE-seq information used throughout the analysis.
 - The primary Treg embedding used for visualization is `mde_incremental`.
-- Treg populations are annotated using the `annotation_level2` metadata field, including the major Treg states `Treg.A`-`Treg.F` and proliferative Tregs.
+- Treg populations are annotated using the `annotation_level2` metadata field, including the major Treg states `Treg.A`–`Treg.F` and proliferative Tregs.
 - Supporting files distributed with the Zenodo data package provide precomputed results or metadata for analyses that do not require recomputation of the full upstream single-cell pipeline.
 - Large intermediate objects and computationally intensive upstream processing steps are not regenerated where a curated or precomputed input is sufficient to reproduce the corresponding figure panel.
 
