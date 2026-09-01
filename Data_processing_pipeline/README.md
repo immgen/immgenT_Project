@@ -8,6 +8,8 @@ To start from FASTQs, edit `CellRanger_Run.sh` before running.
 To start from a count matrix, skip `CellRanger_Run.sh` altogether and
 start directly from`'Ranalysis_wrapper.sh`.
 
+A use case is provided in **use_case_GSE311344.md**
+
 The `CellRanger_Run.sh` and  `Ranalysis_wrapper` scripts require several 
 supporting files to run,  which are heavily dependent on  the context of 
 your data. Please check the description of these files below and make sure 
