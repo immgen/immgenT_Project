@@ -511,13 +511,13 @@ project makes it easier to run your code on other machines.</p>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrong1a95b1b">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongadd1267">
 <span class="glyphicon glyphicon-ok text-success"
-aria-hidden="true"></span> <strong>Repository version:</strong> 1a95b1b
+aria-hidden="true"></span> <strong>Repository version:</strong> add1267
 </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrong1a95b1b"
+<div id="strongRepositoryversionstrongadd1267"
 class="panel-collapse collapse">
 <div class="panel-body">
 <p>
@@ -526,7 +526,7 @@ and connecting the code version to the results is critical for
 reproducibility.
 </p>
 <p>
-The results in this page were generated with repository version 1a95b1b.
+The results in this page were generated with repository version add1267.
 See the <em>Past versions</em> tab to see a history of the changes made
 to the R Markdown and HTML files.
 </p>
@@ -543,7 +543,6 @@ were generated:
 Ignored files:
     Ignored:    .DS_Store
     Ignored:    analysis/.DS_Store
-    Ignored:    analysis/figure/
 
 Untracked files:
     Untracked:  052726_2d_tmuris_highlighted.pdf
@@ -570,7 +569,6 @@ Untracked files:
 
 Unstaged changes:
     Modified:   analysis/CD4_workflow.Rmd
-    Modified:   analysis/index.Rmd
 
 </code></pre>
 <p>
@@ -615,6 +613,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+add1267
+</td>
+<td>
+Nitya Mehrotra
+</td>
+<td>
+2026-09-01
+</td>
+<td>
+Update CD4 workflowr analysis
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+add1267
+</td>
+<td>
+Nitya Mehrotra
+</td>
+<td>
+2026-09-01
+</td>
+<td>
+Update CD4 workflowr analysis
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -766,8 +798,47 @@ and a reference embedding</h2>
 <div id="figure-1b" class="section level3">
 <h3>Figure 1b</h3>
 <pre class="r"><code>DimPlot(cd4_object, reduction = &quot;mde_incremental&quot;, group.by = &quot;annotation_level2&quot;, cols = palette_vector, label = TRUE, raster = TRUE, raster.dpi = c(1024, 1024)) + ggtitle(&quot;CD4 T Cells in All Populations&quot;) + NoAxes() + NoLegend() + theme(legend.position = &quot;none&quot;) + coord_cartesian(xlim = c(-2.5, 4), ylim = c(-2.5, 2.5))</code></pre>
-<p><img src="figure/CD4_workflow.Rmd/1b%20-%20overall%20CD4%20MDE-1.png" alt="" width="768" style="display: block; margin: auto;" />
-### Figure 1c</p>
+<p><img src="figure/CD4_workflow.Rmd/1b%20-%20overall%20CD4%20MDE-1.png" alt="" width="768" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces-1b---overall-CD4-MDE-1">
+Past versions of "1b - overall CD4 MDE-1.png"
+</button>
+</p>
+<div id="fig-no-spaces-1b---overall-CD4-MDE-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+add1267
+</td>
+<td>
+Nitya Mehrotra
+</td>
+<td>
+2026-09-01
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div id="figure-1c" class="section level3">
+<h3>Figure 1c</h3>
 <pre class="r"><code>cd4_cite &lt;- NormalizeData(cd4_cite, assay = &quot;ADT&quot;, normalization.method = &quot;LogNormalize&quot;)
 
 resting_clusters &lt;-c(&quot;CD4.A&quot;, &quot;CD4.B&quot;, &quot;CD4.C&quot;, &quot;CD4.D&quot;, &quot;CD4.E&quot;, &quot;CD4.F&quot;)
@@ -782,6 +853,43 @@ p &lt;- MyFeatureScatter(
 )
 print(p)</code></pre>
 <p><img src="figure/CD4_workflow.Rmd/1c%20-%20cd62l%20x%20cd44%20feature%20plots%20for%20resting/activated-1.png" alt="" width="768" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-activated-1">
+Past versions of activated-1.png
+</button>
+</p>
+<div id="fig-activated-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+add1267
+</td>
+<td>
+Nitya Mehrotra
+</td>
+<td>
+2026-09-01
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>activated_clusters &lt;- c(&quot;CD4.G&quot;, &quot;CD4.H&quot;, &quot;CD4.I&quot;, &quot;CD4.Q&quot;, &quot;CD4.R&quot;, &quot;CD4.S&quot;, &quot;CD4.T&quot;, &quot;CD4.U&quot;, &quot;CD4.X&quot;, &quot;CD4.Y&quot;)
 cd4_activated &lt;- subset(cd4_cite, subset = annotation_level2 %in% activated_clusters)
 cd4_activated$not_cl6 &lt;- cd4_activated$annotation_level2 != &quot;CD4_cl6&quot;
@@ -793,8 +901,47 @@ p &lt;- MyFeatureScatter(
   raster = TRUE
 )
 print(p)</code></pre>
-<p><img src="figure/CD4_workflow.Rmd/1c%20-%20cd62l%20x%20cd44%20feature%20plots%20for%20resting/activated-2.png" alt="" width="768" style="display: block; margin: auto;" />
-### Figure 1d</p>
+<p><img src="figure/CD4_workflow.Rmd/1c%20-%20cd62l%20x%20cd44%20feature%20plots%20for%20resting/activated-2.png" alt="" width="768" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-activated-2">
+Past versions of activated-2.png
+</button>
+</p>
+<div id="fig-activated-2" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+add1267
+</td>
+<td>
+Nitya Mehrotra
+</td>
+<td>
+2026-09-01
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div id="figure-1d" class="section level3">
+<h3>Figure 1d</h3>
 <pre class="r"><code>gene_markers &lt;- c(&quot;Sell&quot;, &quot;Cd44&quot;, &quot;Bcl6&quot;, &quot;Cxcr5&quot;, &quot;Tox&quot;, &quot;Tox2&quot;, &quot;Tigit&quot;, &quot;Lag3&quot;, &quot;Ctla4&quot;, &quot;Havcr2&quot;, &quot;Il21&quot;, &quot;Pdcd1&quot;, &quot;Izumo1r&quot;, &quot;Tnfrs4&quot;, &quot;Tbx21&quot;, &quot;Ifng&quot;, &quot;Gzma&quot;, &quot;Gzmb&quot;, &quot;Gata3&quot;, &quot;Il4&quot;, &quot;Il5&quot;, &quot;Il13&quot;, &quot;Rorc&quot;, &quot;Il17a&quot;, &quot;Il22&quot;, &quot;Il10&quot;)
 
 DefaultAssay(cd4_object) &lt;- &quot;RNA&quot;
@@ -873,8 +1020,48 @@ p_rna &lt;- ggplot(dp_df, aes(x = id, y = features.plot)) +
   )
 
 print(p_rna)</code></pre>
-<p><img src="figure/CD4_workflow.Rmd/1d%20-%20dotplot%20of%20selected%20markers-1.png" alt="" width="432" style="display: block; margin: auto;" />
-### Figure 1e</p>
+<p><img src="figure/CD4_workflow.Rmd/1d%20-%20dotplot%20of%20selected%20markers-1.png" alt="" width="432" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces-1d---dotplot-of-selected-markers-1">
+Past versions of "1d - dotplot of selected markers-1.png"
+</button>
+</p>
+<div id="fig-no-spaces-1d---dotplot-of-selected-markers-1"
+class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+add1267
+</td>
+<td>
+Nitya Mehrotra
+</td>
+<td>
+2026-09-01
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div id="figure-1e" class="section level3">
+<h3>Figure 1e</h3>
 <pre class="r"><code>cd4_object@meta.data &lt;- cd4_object@meta.data %&gt;%
   mutate(
     condition_detailed_simplified = trimws(as.character(condition_detailed_simplified)),
@@ -1054,6 +1241,44 @@ bottom_row &lt;- plot_grid(
 
 plot_grid(legend_broad, bottom_row, ncol = 1, rel_heights = c(0.05, 0.95))</code></pre>
 <p><img src="figure/CD4_workflow.Rmd/1e%20-%20condition%20dotplot%20and%20organ%20dotplot-1.png" alt="" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces-1e---condition-dotplot-and-organ-dotplot-1">
+Past versions of "1e - condition dotplot and organ dotplot-1.png"
+</button>
+</p>
+<div id="fig-no-spaces-1e---condition-dotplot-and-organ-dotplot-1"
+class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+add1267
+</td>
+<td>
+Nitya Mehrotra
+</td>
+<td>
+2026-09-01
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>#conditions
 cond_order &lt;- rev(levels(dotplot$condition))
 organ_order &lt;- c(&quot;spleen&quot;, &quot;LN&quot;, &quot;blood&quot;, &quot;bone marrow&quot;,&quot;lung&quot;, &quot;colon&quot;,&quot;small intestine&quot;, &quot;skin&quot;, &quot;kidney&quot;, &quot;liver&quot;, &quot;pancreas&quot;, &quot;submandibular gland&quot;, &quot;synovial fluid&quot;, &quot;placenta&quot;, &quot;uterus&quot;, &quot;prostate&quot;, &quot;mammary gland&quot;, &quot;peritoneal cavity&quot;,&quot;CNS&quot;)
@@ -1093,10 +1318,50 @@ p_org_presence &lt;- ggplot(org_df, aes(x = organ, y = condition)) +
     plot.margin = margin(2, 2, 2, 2)
   )
 print(p_org_presence)</code></pre>
-<p><img src="figure/CD4_workflow.Rmd/1e%20-%20condition%20dotplot%20and%20organ%20dotplot-2.png" alt="" width="672" style="display: block; margin: auto;" />
-# Figure 2</p>
+<p><img src="figure/CD4_workflow.Rmd/1e%20-%20condition%20dotplot%20and%20organ%20dotplot-2.png" alt="" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces-1e---condition-dotplot-and-organ-dotplot-2">
+Past versions of "1e - condition dotplot and organ dotplot-2.png"
+</button>
+</p>
+<div id="fig-no-spaces-1e---condition-dotplot-and-organ-dotplot-2"
+class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+add1267
+</td>
+<td>
+Nitya Mehrotra
+</td>
+<td>
+2026-09-01
+</td>
+</tr>
+</tbody>
+</table>
 </div>
 </div>
+</div>
+</div>
+</div>
+<div id="figure-2" class="section level1">
+<h1>Figure 2</h1>
 <div
 id="mapping-antigen-specific-and-clonally-expanded-cells-across-immune-challenges"
 class="section level2">
@@ -1292,23 +1557,253 @@ for (plot_name in names(ag_plot_info)) {
 <pre><code>         plot n_condition n_ag_specific n_non_ag_specific
 1 LCMV_SMARTA       15075          1204             13871</code></pre>
 <p><img src="figure/CD4_workflow.Rmd/2a%20-%20ag-specific%20MDEs%20for%20conditions-1.png" alt="" width="768" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces-2a---ag-specific-MDEs-for-conditions-1">
+Past versions of "2a - ag-specific MDEs for conditions-1.png"
+</button>
+</p>
+<div id="fig-no-spaces-2a---ag-specific-MDEs-for-conditions-1"
+class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+add1267
+</td>
+<td>
+Nitya Mehrotra
+</td>
+<td>
+2026-09-01
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre><code>             plot n_condition n_ag_specific n_non_ag_specific
 1 Listeria_2WTetp         956           956                 0</code></pre>
 <p><img src="figure/CD4_workflow.Rmd/2a%20-%20ag-specific%20MDEs%20for%20conditions-2.png" alt="" width="768" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces-2a---ag-specific-MDEs-for-conditions-2">
+Past versions of "2a - ag-specific MDEs for conditions-2.png"
+</button>
+</p>
+<div id="fig-no-spaces-2a---ag-specific-MDEs-for-conditions-2"
+class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+add1267
+</td>
+<td>
+Nitya Mehrotra
+</td>
+<td>
+2026-09-01
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre><code>           plot n_condition n_ag_specific n_non_ag_specific
 1 Chlamydia_NR1        8468           560              7908</code></pre>
 <p><img src="figure/CD4_workflow.Rmd/2a%20-%20ag-specific%20MDEs%20for%20conditions-3.png" alt="" width="768" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces-2a---ag-specific-MDEs-for-conditions-3">
+Past versions of "2a - ag-specific MDEs for conditions-3.png"
+</button>
+</p>
+<div id="fig-no-spaces-2a---ag-specific-MDEs-for-conditions-3"
+class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+add1267
+</td>
+<td>
+Nitya Mehrotra
+</td>
+<td>
+2026-09-01
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre><code>           plot n_condition n_ag_specific n_non_ag_specific
 1 HDM_Derp1Tetp        8513            69              8444</code></pre>
 <p><img src="figure/CD4_workflow.Rmd/2a%20-%20ag-specific%20MDEs%20for%20conditions-4.png" alt="" width="768" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces-2a---ag-specific-MDEs-for-conditions-4">
+Past versions of "2a - ag-specific MDEs for conditions-4.png"
+</button>
+</p>
+<div id="fig-no-spaces-2a---ag-specific-MDEs-for-conditions-4"
+class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+add1267
+</td>
+<td>
+Nitya Mehrotra
+</td>
+<td>
+2026-09-01
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre><code>           plot n_condition n_ag_specific n_non_ag_specific
 1 Toxo_AS15Tetp        2171           128              2043</code></pre>
 <p><img src="figure/CD4_workflow.Rmd/2a%20-%20ag-specific%20MDEs%20for%20conditions-5.png" alt="" width="768" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces-2a---ag-specific-MDEs-for-conditions-5">
+Past versions of "2a - ag-specific MDEs for conditions-5.png"
+</button>
+</p>
+<div id="fig-no-spaces-2a---ag-specific-MDEs-for-conditions-5"
+class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+add1267
+</td>
+<td>
+Nitya Mehrotra
+</td>
+<td>
+2026-09-01
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>ag_gallery &lt;- wrap_plots(ag_plots,ncol = 5)
 
 print(ag_gallery)</code></pre>
-<p><img src="figure/CD4_workflow.Rmd/2a%20-%20ag-specific%20MDEs%20for%20conditions-6.png" alt="" width="768" style="display: block; margin: auto;" />
-### Figure 2b</p>
+<p><img src="figure/CD4_workflow.Rmd/2a%20-%20ag-specific%20MDEs%20for%20conditions-6.png" alt="" width="768" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces-2a---ag-specific-MDEs-for-conditions-6">
+Past versions of "2a - ag-specific MDEs for conditions-6.png"
+</button>
+</p>
+<div id="fig-no-spaces-2a---ag-specific-MDEs-for-conditions-6"
+class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+add1267
+</td>
+<td>
+Nitya Mehrotra
+</td>
+<td>
+2026-09-01
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div id="figure-2b" class="section level3">
+<h3>Figure 2b</h3>
 <pre class="r"><code>expanded_threshold &lt;- 9
 
 cd4_tcrs &lt;- tcr %&gt;%
@@ -1591,46 +2086,886 @@ for (cond in conditions_to_plot) {
 }</code></pre>
 <pre><code>Plotting: B16</code></pre>
 <p><img src="figure/CD4_workflow.Rmd/2b%20plots%20highlighting%20cells%20w/%20clonally%20expanded%20tcrs%20(10+)%20across%20conditions,%20colored%20by%20clonotype-1.png" alt="" width="768" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces--clonally-expanded-tcrs-(10+)-across-conditions,-colored-by-clonotype-1">
+Past versions of " clonally expanded tcrs (10+) across conditions,
+colored by clonotype-1.png"
+</button>
+</p>
+<div
+id="fig-no-spaces--clonally-expanded-tcrs-(10+)-across-conditions,-colored-by-clonotype-1"
+class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+add1267
+</td>
+<td>
+Nitya Mehrotra
+</td>
+<td>
+2026-09-01
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre><code>Plotting: baseline</code></pre>
 <p><img src="figure/CD4_workflow.Rmd/2b%20plots%20highlighting%20cells%20w/%20clonally%20expanded%20tcrs%20(10+)%20across%20conditions,%20colored%20by%20clonotype-2.png" alt="" width="768" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces--clonally-expanded-tcrs-(10+)-across-conditions,-colored-by-clonotype-2">
+Past versions of " clonally expanded tcrs (10+) across conditions,
+colored by clonotype-2.png"
+</button>
+</p>
+<div
+id="fig-no-spaces--clonally-expanded-tcrs-(10+)-across-conditions,-colored-by-clonotype-2"
+class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+add1267
+</td>
+<td>
+Nitya Mehrotra
+</td>
+<td>
+2026-09-01
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre><code>Plotting: Crodentium</code></pre>
 <p><img src="figure/CD4_workflow.Rmd/2b%20plots%20highlighting%20cells%20w/%20clonally%20expanded%20tcrs%20(10+)%20across%20conditions,%20colored%20by%20clonotype-3.png" alt="" width="768" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces--clonally-expanded-tcrs-(10+)-across-conditions,-colored-by-clonotype-3">
+Past versions of " clonally expanded tcrs (10+) across conditions,
+colored by clonotype-3.png"
+</button>
+</p>
+<div
+id="fig-no-spaces--clonally-expanded-tcrs-(10+)-across-conditions,-colored-by-clonotype-3"
+class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+add1267
+</td>
+<td>
+Nitya Mehrotra
+</td>
+<td>
+2026-09-01
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre><code>Plotting: CtrachomatisD</code></pre>
 <p><img src="figure/CD4_workflow.Rmd/2b%20plots%20highlighting%20cells%20w/%20clonally%20expanded%20tcrs%20(10+)%20across%20conditions,%20colored%20by%20clonotype-4.png" alt="" width="768" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces--clonally-expanded-tcrs-(10+)-across-conditions,-colored-by-clonotype-4">
+Past versions of " clonally expanded tcrs (10+) across conditions,
+colored by clonotype-4.png"
+</button>
+</p>
+<div
+id="fig-no-spaces--clonally-expanded-tcrs-(10+)-across-conditions,-colored-by-clonotype-4"
+class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+add1267
+</td>
+<td>
+Nitya Mehrotra
+</td>
+<td>
+2026-09-01
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre><code>Plotting: CtrachomatisL2</code></pre>
 <p><img src="figure/CD4_workflow.Rmd/2b%20plots%20highlighting%20cells%20w/%20clonally%20expanded%20tcrs%20(10+)%20across%20conditions,%20colored%20by%20clonotype-5.png" alt="" width="768" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces--clonally-expanded-tcrs-(10+)-across-conditions,-colored-by-clonotype-5">
+Past versions of " clonally expanded tcrs (10+) across conditions,
+colored by clonotype-5.png"
+</button>
+</p>
+<div
+id="fig-no-spaces--clonally-expanded-tcrs-(10+)-across-conditions,-colored-by-clonotype-5"
+class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+add1267
+</td>
+<td>
+Nitya Mehrotra
+</td>
+<td>
+2026-09-01
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre><code>Plotting: flu</code></pre>
 <p><img src="figure/CD4_workflow.Rmd/2b%20plots%20highlighting%20cells%20w/%20clonally%20expanded%20tcrs%20(10+)%20across%20conditions,%20colored%20by%20clonotype-6.png" alt="" width="768" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces--clonally-expanded-tcrs-(10+)-across-conditions,-colored-by-clonotype-6">
+Past versions of " clonally expanded tcrs (10+) across conditions,
+colored by clonotype-6.png"
+</button>
+</p>
+<div
+id="fig-no-spaces--clonally-expanded-tcrs-(10+)-across-conditions,-colored-by-clonotype-6"
+class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+add1267
+</td>
+<td>
+Nitya Mehrotra
+</td>
+<td>
+2026-09-01
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre><code>Plotting: Foxp3mutant</code></pre>
 <p><img src="figure/CD4_workflow.Rmd/2b%20plots%20highlighting%20cells%20w/%20clonally%20expanded%20tcrs%20(10+)%20across%20conditions,%20colored%20by%20clonotype-7.png" alt="" width="768" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces--clonally-expanded-tcrs-(10+)-across-conditions,-colored-by-clonotype-7">
+Past versions of " clonally expanded tcrs (10+) across conditions,
+colored by clonotype-7.png"
+</button>
+</p>
+<div
+id="fig-no-spaces--clonally-expanded-tcrs-(10+)-across-conditions,-colored-by-clonotype-7"
+class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+add1267
+</td>
+<td>
+Nitya Mehrotra
+</td>
+<td>
+2026-09-01
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre><code>Plotting: HDM</code></pre>
 <p><img src="figure/CD4_workflow.Rmd/2b%20plots%20highlighting%20cells%20w/%20clonally%20expanded%20tcrs%20(10+)%20across%20conditions,%20colored%20by%20clonotype-8.png" alt="" width="768" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces--clonally-expanded-tcrs-(10+)-across-conditions,-colored-by-clonotype-8">
+Past versions of " clonally expanded tcrs (10+) across conditions,
+colored by clonotype-8.png"
+</button>
+</p>
+<div
+id="fig-no-spaces--clonally-expanded-tcrs-(10+)-across-conditions,-colored-by-clonotype-8"
+class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+add1267
+</td>
+<td>
+Nitya Mehrotra
+</td>
+<td>
+2026-09-01
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre><code>Plotting: KP</code></pre>
 <p><img src="figure/CD4_workflow.Rmd/2b%20plots%20highlighting%20cells%20w/%20clonally%20expanded%20tcrs%20(10+)%20across%20conditions,%20colored%20by%20clonotype-9.png" alt="" width="768" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces--clonally-expanded-tcrs-(10+)-across-conditions,-colored-by-clonotype-9">
+Past versions of " clonally expanded tcrs (10+) across conditions,
+colored by clonotype-9.png"
+</button>
+</p>
+<div
+id="fig-no-spaces--clonally-expanded-tcrs-(10+)-across-conditions,-colored-by-clonotype-9"
+class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+add1267
+</td>
+<td>
+Nitya Mehrotra
+</td>
+<td>
+2026-09-01
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre><code>Plotting: LCMVarm</code></pre>
 <p><img src="figure/CD4_workflow.Rmd/2b%20plots%20highlighting%20cells%20w/%20clonally%20expanded%20tcrs%20(10+)%20across%20conditions,%20colored%20by%20clonotype-10.png" alt="" width="768" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces--clonally-expanded-tcrs-(10+)-across-conditions,-colored-by-clonotype-10">
+Past versions of " clonally expanded tcrs (10+) across conditions,
+colored by clonotype-10.png"
+</button>
+</p>
+<div
+id="fig-no-spaces--clonally-expanded-tcrs-(10+)-across-conditions,-colored-by-clonotype-10"
+class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+add1267
+</td>
+<td>
+Nitya Mehrotra
+</td>
+<td>
+2026-09-01
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre><code>Plotting: LCMVcl13</code></pre>
 <p><img src="figure/CD4_workflow.Rmd/2b%20plots%20highlighting%20cells%20w/%20clonally%20expanded%20tcrs%20(10+)%20across%20conditions,%20colored%20by%20clonotype-11.png" alt="" width="768" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces--clonally-expanded-tcrs-(10+)-across-conditions,-colored-by-clonotype-11">
+Past versions of " clonally expanded tcrs (10+) across conditions,
+colored by clonotype-11.png"
+</button>
+</p>
+<div
+id="fig-no-spaces--clonally-expanded-tcrs-(10+)-across-conditions,-colored-by-clonotype-11"
+class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+add1267
+</td>
+<td>
+Nitya Mehrotra
+</td>
+<td>
+2026-09-01
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre><code>Plotting: MCMV</code></pre>
 <p><img src="figure/CD4_workflow.Rmd/2b%20plots%20highlighting%20cells%20w/%20clonally%20expanded%20tcrs%20(10+)%20across%20conditions,%20colored%20by%20clonotype-12.png" alt="" width="768" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces--clonally-expanded-tcrs-(10+)-across-conditions,-colored-by-clonotype-12">
+Past versions of " clonally expanded tcrs (10+) across conditions,
+colored by clonotype-12.png"
+</button>
+</p>
+<div
+id="fig-no-spaces--clonally-expanded-tcrs-(10+)-across-conditions,-colored-by-clonotype-12"
+class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+add1267
+</td>
+<td>
+Nitya Mehrotra
+</td>
+<td>
+2026-09-01
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre><code>Plotting: Mfurfur</code></pre>
 <p><img src="figure/CD4_workflow.Rmd/2b%20plots%20highlighting%20cells%20w/%20clonally%20expanded%20tcrs%20(10+)%20across%20conditions,%20colored%20by%20clonotype-13.png" alt="" width="768" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces--clonally-expanded-tcrs-(10+)-across-conditions,-colored-by-clonotype-13">
+Past versions of " clonally expanded tcrs (10+) across conditions,
+colored by clonotype-13.png"
+</button>
+</p>
+<div
+id="fig-no-spaces--clonally-expanded-tcrs-(10+)-across-conditions,-colored-by-clonotype-13"
+class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+add1267
+</td>
+<td>
+Nitya Mehrotra
+</td>
+<td>
+2026-09-01
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre><code>Plotting: MTB</code></pre>
 <p><img src="figure/CD4_workflow.Rmd/2b%20plots%20highlighting%20cells%20w/%20clonally%20expanded%20tcrs%20(10+)%20across%20conditions,%20colored%20by%20clonotype-14.png" alt="" width="768" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces--clonally-expanded-tcrs-(10+)-across-conditions,-colored-by-clonotype-14">
+Past versions of " clonally expanded tcrs (10+) across conditions,
+colored by clonotype-14.png"
+</button>
+</p>
+<div
+id="fig-no-spaces--clonally-expanded-tcrs-(10+)-across-conditions,-colored-by-clonotype-14"
+class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+add1267
+</td>
+<td>
+Nitya Mehrotra
+</td>
+<td>
+2026-09-01
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre><code>Plotting: NOD</code></pre>
 <p><img src="figure/CD4_workflow.Rmd/2b%20plots%20highlighting%20cells%20w/%20clonally%20expanded%20tcrs%20(10+)%20across%20conditions,%20colored%20by%20clonotype-15.png" alt="" width="768" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces--clonally-expanded-tcrs-(10+)-across-conditions,-colored-by-clonotype-15">
+Past versions of " clonally expanded tcrs (10+) across conditions,
+colored by clonotype-15.png"
+</button>
+</p>
+<div
+id="fig-no-spaces--clonally-expanded-tcrs-(10+)-across-conditions,-colored-by-clonotype-15"
+class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+add1267
+</td>
+<td>
+Nitya Mehrotra
+</td>
+<td>
+2026-09-01
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre><code>Plotting: NP_OVA</code></pre>
 <p><img src="figure/CD4_workflow.Rmd/2b%20plots%20highlighting%20cells%20w/%20clonally%20expanded%20tcrs%20(10+)%20across%20conditions,%20colored%20by%20clonotype-16.png" alt="" width="768" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces--clonally-expanded-tcrs-(10+)-across-conditions,-colored-by-clonotype-16">
+Past versions of " clonally expanded tcrs (10+) across conditions,
+colored by clonotype-16.png"
+</button>
+</p>
+<div
+id="fig-no-spaces--clonally-expanded-tcrs-(10+)-across-conditions,-colored-by-clonotype-16"
+class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+add1267
+</td>
+<td>
+Nitya Mehrotra
+</td>
+<td>
+2026-09-01
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre><code>Plotting: PD1KO</code></pre>
 <p><img src="figure/CD4_workflow.Rmd/2b%20plots%20highlighting%20cells%20w/%20clonally%20expanded%20tcrs%20(10+)%20across%20conditions,%20colored%20by%20clonotype-17.png" alt="" width="768" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces--clonally-expanded-tcrs-(10+)-across-conditions,-colored-by-clonotype-17">
+Past versions of " clonally expanded tcrs (10+) across conditions,
+colored by clonotype-17.png"
+</button>
+</p>
+<div
+id="fig-no-spaces--clonally-expanded-tcrs-(10+)-across-conditions,-colored-by-clonotype-17"
+class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+add1267
+</td>
+<td>
+Nitya Mehrotra
+</td>
+<td>
+2026-09-01
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre><code>Plotting: pregnancy</code></pre>
 <p><img src="figure/CD4_workflow.Rmd/2b%20plots%20highlighting%20cells%20w/%20clonally%20expanded%20tcrs%20(10+)%20across%20conditions,%20colored%20by%20clonotype-18.png" alt="" width="768" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces--clonally-expanded-tcrs-(10+)-across-conditions,-colored-by-clonotype-18">
+Past versions of " clonally expanded tcrs (10+) across conditions,
+colored by clonotype-18.png"
+</button>
+</p>
+<div
+id="fig-no-spaces--clonally-expanded-tcrs-(10+)-across-conditions,-colored-by-clonotype-18"
+class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+add1267
+</td>
+<td>
+Nitya Mehrotra
+</td>
+<td>
+2026-09-01
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre><code>Plotting: SFB</code></pre>
 <p><img src="figure/CD4_workflow.Rmd/2b%20plots%20highlighting%20cells%20w/%20clonally%20expanded%20tcrs%20(10+)%20across%20conditions,%20colored%20by%20clonotype-19.png" alt="" width="768" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces--clonally-expanded-tcrs-(10+)-across-conditions,-colored-by-clonotype-19">
+Past versions of " clonally expanded tcrs (10+) across conditions,
+colored by clonotype-19.png"
+</button>
+</p>
+<div
+id="fig-no-spaces--clonally-expanded-tcrs-(10+)-across-conditions,-colored-by-clonotype-19"
+class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+add1267
+</td>
+<td>
+Nitya Mehrotra
+</td>
+<td>
+2026-09-01
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre><code>Plotting: Tmuris</code></pre>
 <p><img src="figure/CD4_workflow.Rmd/2b%20plots%20highlighting%20cells%20w/%20clonally%20expanded%20tcrs%20(10+)%20across%20conditions,%20colored%20by%20clonotype-20.png" alt="" width="768" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces--clonally-expanded-tcrs-(10+)-across-conditions,-colored-by-clonotype-20">
+Past versions of " clonally expanded tcrs (10+) across conditions,
+colored by clonotype-20.png"
+</button>
+</p>
+<div
+id="fig-no-spaces--clonally-expanded-tcrs-(10+)-across-conditions,-colored-by-clonotype-20"
+class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+add1267
+</td>
+<td>
+Nitya Mehrotra
+</td>
+<td>
+2026-09-01
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre><code>Plotting: Toxo</code></pre>
 <p><img src="figure/CD4_workflow.Rmd/2b%20plots%20highlighting%20cells%20w/%20clonally%20expanded%20tcrs%20(10+)%20across%20conditions,%20colored%20by%20clonotype-21.png" alt="" width="768" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces--clonally-expanded-tcrs-(10+)-across-conditions,-colored-by-clonotype-21">
+Past versions of " clonally expanded tcrs (10+) across conditions,
+colored by clonotype-21.png"
+</button>
+</p>
+<div
+id="fig-no-spaces--clonally-expanded-tcrs-(10+)-across-conditions,-colored-by-clonotype-21"
+class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+add1267
+</td>
+<td>
+Nitya Mehrotra
+</td>
+<td>
+2026-09-01
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>if (length(clonotype_gallery) &gt; 0) {
 
   clonotype_gallery_plot &lt;- wrap_plots(
@@ -1649,6 +2984,46 @@ for (cond in conditions_to_plot) {
   )
 }</code></pre>
 <p><img src="figure/CD4_workflow.Rmd/2b%20plots%20highlighting%20cells%20w/%20clonally%20expanded%20tcrs%20(10+)%20across%20conditions,%20colored%20by%20clonotype-22.png" alt="" width="768" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces--clonally-expanded-tcrs-(10+)-across-conditions,-colored-by-clonotype-22">
+Past versions of " clonally expanded tcrs (10+) across conditions,
+colored by clonotype-22.png"
+</button>
+</p>
+<div
+id="fig-no-spaces--clonally-expanded-tcrs-(10+)-across-conditions,-colored-by-clonotype-22"
+class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+add1267
+</td>
+<td>
+Nitya Mehrotra
+</td>
+<td>
+2026-09-01
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 </div>
 </div>
@@ -1661,34 +3036,82 @@ class="section level2">
 clusters and smaller polarized clusters</h2>
 <div id="fig-3a" class="section level3">
 <h3>Fig 3a</h3>
-<pre class="r"><code>gq_clusters &lt;- c(&quot;CD4.G&quot;, &quot;CD4.Q&quot;)
+<pre class="r"><code># 3a MDE highlighting mixed-phenotype clusters (G/Q)
+gq_clusters &lt;- c(&quot;CD4.G&quot;, &quot;CD4.Q&quot;)
 
-p_gq &lt;- DimPlot(
-  cd4_object,
-  reduction = &quot;mde_incremental&quot;,
-  group.by = &quot;annotation_level2&quot;,
-  cells.highlight = WhichCells(
-    cd4_object,
-    expression = annotation_level2 %in% gq_clusters
-  ),
-  cols = &quot;lightgrey&quot;,
-  cols.highlight = palette_vector[gq_clusters],
-  sizes.highlight = 0.6,
-  pt.size = 0.2,
-  raster = TRUE
-) +
-  ggtitle(&quot;CD4.G / CD4.Q&quot;) +
-  theme_void() +
+cells_gq &lt;- colnames(cd4_object)[
+  cd4_object$annotation_level2 %in% gq_clusters
+]
+
+plots_gq &lt;- MyDimPlotHighlight(
+  seurat_object         = cd4_object,
+  umap_to_plot          = &quot;mde_incremental&quot;,
+  cells_to_highlight    = cells_gq,
+  highlight_column_name = &quot;annotation_level2&quot;,
+  title                 = &quot;CD4.G / CD4.Q&quot;,
+  labelclusters         = FALSE,
+  highlight_raster      = TRUE,
+  highlight_pixels      = c(1024, 1024),
+  mycols                = palette_vector,
+  highlight_size        = 1,
+  highlight_alpha       = 1,
+  background_alpha      = 1,
+  pixels                = c(512, 512)
+)
+
+p_gq &lt;- plots_gq$plot1 +
+  NoAxes() +
+  NoGrid() +
+  NoLegend() +
   theme(
-    legend.position = &quot;right&quot;,
+    legend.position = &quot;none&quot;,
     plot.title = element_text(hjust = 0.5)
-  )</code></pre>
-<pre><code>Warning in SingleDimPlot(data = data[, c(dims, x, split.by, shape.by)], : When
-`raster = TRUE` highlighted and non-highlighted cells must be the same size.
-Plot will use the value provided to &#39;sizes.highlight&#39;.</code></pre>
-<pre class="r"><code>p_gq</code></pre>
+  ) +
+  coord_cartesian(
+    xlim = c(-2.5, 4),
+    ylim = c(-2.5, 2.5)
+  )
+
+p_gq</code></pre>
 <p><img src="figure/CD4_workflow.Rmd/3a%20MDE%20highlighting%20mixed-phenotype%20clusters%20(G/Q)%20and%20polarized%20clusters%20(R/S/T/U/X/Y/H/I)-1.png" alt="" width="768" style="display: block; margin: auto;" /></p>
-<pre class="r"><code># R/S/T/U/X/Y/H/I
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-I)-1">
+Past versions of I)-1.png
+</button>
+</p>
+<div id="fig-I)-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+add1267
+</td>
+<td>
+Nitya Mehrotra
+</td>
+<td>
+2026-09-01
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<pre class="r"><code># 3a MDE highlighting polarized clusters (R/S/T/U/X/Y/H/I)
 polarized_clusters &lt;- c(
   &quot;CD4.R&quot;, &quot;CD4.S&quot;,
   &quot;CD4.T&quot;, &quot;CD4.U&quot;,
@@ -1696,53 +3119,398 @@ polarized_clusters &lt;- c(
   &quot;CD4.H&quot;, &quot;CD4.I&quot;
 )
 
-p_polarized &lt;- DimPlot(
-  cd4_object,
-  reduction = &quot;mde_incremental&quot;,
-  group.by = &quot;annotation_level2&quot;,
-  cells.highlight = WhichCells(
-    cd4_object,
-    expression = annotation_level2 %in% polarized_clusters
-  ),
-  cols = &quot;lightgrey&quot;,
-  cols.highlight = palette_vector[polarized_clusters],
-  sizes.highlight = 0.6,
-  pt.size = 0.2,
-  raster = TRUE
-) +
-  ggtitle(&quot;Polarized clusters&quot;) +
-  theme_void() +
+cells_polarized &lt;- colnames(cd4_object)[
+  cd4_object$annotation_level2 %in% polarized_clusters
+]
+
+plots_polarized &lt;- MyDimPlotHighlight(
+  seurat_object         = cd4_object,
+  umap_to_plot          = &quot;mde_incremental&quot;,
+  cells_to_highlight    = cells_polarized,
+  highlight_column_name = &quot;annotation_level2&quot;,
+  title                 = &quot;Polarized clusters&quot;,
+  labelclusters         = FALSE,
+  highlight_raster      = TRUE,
+  highlight_pixels      = c(1024, 1024),
+  mycols                = palette_vector,
+  highlight_size        = 1,
+  highlight_alpha       = 1,
+  background_alpha      = 1,
+  pixels                = c(512, 512)
+)
+
+p_polarized &lt;- plots_polarized$plot1 +
+  NoAxes() +
+  NoGrid() +
+  NoLegend() +
   theme(
-    legend.position = &quot;right&quot;,
+    legend.position = &quot;none&quot;,
     plot.title = element_text(hjust = 0.5)
-  )</code></pre>
-<pre><code>Warning in SingleDimPlot(data = data[, c(dims, x, split.by, shape.by)], : When
-`raster = TRUE` highlighted and non-highlighted cells must be the same size.
-Plot will use the value provided to &#39;sizes.highlight&#39;.</code></pre>
-<pre class="r"><code>p_polarized</code></pre>
+  ) +
+  coord_cartesian(
+    xlim = c(-2.5, 4),
+    ylim = c(-2.5, 2.5)
+  )
+
+p_polarized</code></pre>
 <p><img src="figure/CD4_workflow.Rmd/3a%20MDE%20highlighting%20mixed-phenotype%20clusters%20(G/Q)%20and%20polarized%20clusters%20(R/S/T/U/X/Y/H/I)-2.png" alt="" width="768" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-I)-2">
+Past versions of I)-2.png
+</button>
+</p>
+<div id="fig-I)-2" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+add1267
+</td>
+<td>
+Nitya Mehrotra
+</td>
+<td>
+2026-09-01
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 <div id="fig-3bc" class="section level3">
 <h3>Fig 3bc</h3>
 <pre class="r"><code>#3b
 FeaturePlot(cd4_object, reduction = &quot;mde_incremental&quot;, features = c(&quot;Ifng&quot;), order = T,  min.cutoff = &quot;q20&quot;, max.cutoff = &quot;q99&quot;,  cols = c(&quot;lightgrey&quot;, &quot;blue&quot;) , raster = F, raster.dpi = c(512,512)) + coord_cartesian(xlim = c(-2.5, 4), ylim = c(-2.5, 2.5)) + NoAxes() + NoLegend() + theme_void() + theme(legend.position = &quot;none&quot;)</code></pre>
 <p><img src="figure/CD4_workflow.Rmd/3b/c%20feature%20plots%20of%20polarized%20state%20TF/cytokine%20genes-1.png" alt="" width="768" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces-cytokine-genes-1">
+Past versions of "cytokine genes-1.png"
+</button>
+</p>
+<div id="fig-no-spaces-cytokine-genes-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+add1267
+</td>
+<td>
+Nitya Mehrotra
+</td>
+<td>
+2026-09-01
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>FeaturePlot(cd4_object, reduction = &quot;mde_incremental&quot;, features = c(&quot;Il5&quot;), order = T,  min.cutoff = &quot;q20&quot;, max.cutoff = &quot;q99&quot;,  cols = c(&quot;lightgrey&quot;, &quot;blue&quot;) , raster = F, raster.dpi = c(512,512)) + coord_cartesian(xlim = c(-2.5, 4), ylim = c(-2.5, 2.5)) + NoAxes() + NoLegend() + theme_void() + theme(legend.position = &quot;none&quot;)</code></pre>
 <p><img src="figure/CD4_workflow.Rmd/3b/c%20feature%20plots%20of%20polarized%20state%20TF/cytokine%20genes-2.png" alt="" width="768" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces-cytokine-genes-2">
+Past versions of "cytokine genes-2.png"
+</button>
+</p>
+<div id="fig-no-spaces-cytokine-genes-2" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+add1267
+</td>
+<td>
+Nitya Mehrotra
+</td>
+<td>
+2026-09-01
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>FeaturePlot(cd4_object, reduction = &quot;mde_incremental&quot;, features = c(&quot;Il17a&quot;), order = T,  min.cutoff = &quot;q20&quot;, max.cutoff = &quot;q99&quot;,  cols = c(&quot;lightgrey&quot;, &quot;blue&quot;) , raster = F, raster.dpi = c(512,512)) + coord_cartesian(xlim = c(-2.5, 4), ylim = c(-2.5, 2.5)) + NoAxes() + NoLegend() + theme_void() + theme(legend.position = &quot;none&quot;) </code></pre>
 <p><img src="figure/CD4_workflow.Rmd/3b/c%20feature%20plots%20of%20polarized%20state%20TF/cytokine%20genes-3.png" alt="" width="768" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces-cytokine-genes-3">
+Past versions of "cytokine genes-3.png"
+</button>
+</p>
+<div id="fig-no-spaces-cytokine-genes-3" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+add1267
+</td>
+<td>
+Nitya Mehrotra
+</td>
+<td>
+2026-09-01
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>FeaturePlot(cd4_object, reduction = &quot;mde_incremental&quot;, features = c(&quot;Il21&quot;), order = T,  min.cutoff = &quot;q20&quot;, max.cutoff = &quot;q99&quot;,  cols = c(&quot;lightgrey&quot;, &quot;blue&quot;) , raster = F, raster.dpi = c(512,512)) + coord_cartesian(xlim = c(-2.5, 4), ylim = c(-2.5, 2.5)) + NoAxes() + NoLegend() + theme_void() + theme(legend.position = &quot;none&quot;) </code></pre>
 <p><img src="figure/CD4_workflow.Rmd/3b/c%20feature%20plots%20of%20polarized%20state%20TF/cytokine%20genes-4.png" alt="" width="768" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces-cytokine-genes-4">
+Past versions of "cytokine genes-4.png"
+</button>
+</p>
+<div id="fig-no-spaces-cytokine-genes-4" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+add1267
+</td>
+<td>
+Nitya Mehrotra
+</td>
+<td>
+2026-09-01
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>#3c
 FeaturePlot(cd4_object, reduction = &quot;mde_incremental&quot;, features = c(&quot;Tbx21&quot;), order = T,  min.cutoff = &quot;q20&quot;, max.cutoff = &quot;q99&quot;,  cols = c(&quot;lightgrey&quot;, &quot;blue&quot;) , raster = F, raster.dpi = c(512,512)) + coord_cartesian(xlim = c(-2.5, 4), ylim = c(-2.5, 2.5)) + NoAxes() + NoLegend() + theme_void() + theme(legend.position = &quot;none&quot;)</code></pre>
 <p><img src="figure/CD4_workflow.Rmd/3b/c%20feature%20plots%20of%20polarized%20state%20TF/cytokine%20genes-5.png" alt="" width="768" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces-cytokine-genes-5">
+Past versions of "cytokine genes-5.png"
+</button>
+</p>
+<div id="fig-no-spaces-cytokine-genes-5" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+add1267
+</td>
+<td>
+Nitya Mehrotra
+</td>
+<td>
+2026-09-01
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>FeaturePlot(cd4_object, reduction = &quot;mde_incremental&quot;, features = c(&quot;Gata3&quot;), order = T,  min.cutoff = &quot;q20&quot;, max.cutoff = &quot;q99&quot;,  cols = c(&quot;lightgrey&quot;, &quot;blue&quot;) , raster = F, raster.dpi = c(512,512)) + coord_cartesian(xlim = c(-2.5, 4), ylim = c(-2.5, 2.5)) + NoAxes() + NoLegend() + theme_void() + theme(legend.position = &quot;none&quot;) </code></pre>
 <p><img src="figure/CD4_workflow.Rmd/3b/c%20feature%20plots%20of%20polarized%20state%20TF/cytokine%20genes-6.png" alt="" width="768" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces-cytokine-genes-6">
+Past versions of "cytokine genes-6.png"
+</button>
+</p>
+<div id="fig-no-spaces-cytokine-genes-6" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+add1267
+</td>
+<td>
+Nitya Mehrotra
+</td>
+<td>
+2026-09-01
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>FeaturePlot(cd4_object, reduction = &quot;mde_incremental&quot;, features = c(&quot;Rorc&quot;), order = T,  min.cutoff = &quot;q20&quot;, max.cutoff = &quot;q99&quot;,  cols = c(&quot;lightgrey&quot;, &quot;blue&quot;) , raster = F, raster.dpi = c(512,512)) + coord_cartesian(xlim = c(-2.5, 4), ylim = c(-2.5, 2.5)) + NoAxes() + NoLegend() + theme_void() + theme(legend.position = &quot;none&quot;)</code></pre>
 <p><img src="figure/CD4_workflow.Rmd/3b/c%20feature%20plots%20of%20polarized%20state%20TF/cytokine%20genes-7.png" alt="" width="768" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces-cytokine-genes-7">
+Past versions of "cytokine genes-7.png"
+</button>
+</p>
+<div id="fig-no-spaces-cytokine-genes-7" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+add1267
+</td>
+<td>
+Nitya Mehrotra
+</td>
+<td>
+2026-09-01
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>FeaturePlot(cd4_object, reduction = &quot;mde_incremental&quot;, features = c(&quot;Bcl6&quot;), order = T,  min.cutoff = &quot;q20&quot;, max.cutoff = &quot;q99&quot;,  cols = c(&quot;lightgrey&quot;, &quot;blue&quot;) , raster = F, raster.dpi = c(512,512)) + coord_cartesian(xlim = c(-2.5, 4), ylim = c(-2.5, 2.5)) + NoAxes() + NoLegend() + theme_void() + theme(legend.position = &quot;none&quot;)</code></pre>
-<p><img src="figure/CD4_workflow.Rmd/3b/c%20feature%20plots%20of%20polarized%20state%20TF/cytokine%20genes-8.png" alt="" width="768" style="display: block; margin: auto;" />
-### Fig 3d</p>
+<p><img src="figure/CD4_workflow.Rmd/3b/c%20feature%20plots%20of%20polarized%20state%20TF/cytokine%20genes-8.png" alt="" width="768" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces-cytokine-genes-8">
+Past versions of "cytokine genes-8.png"
+</button>
+</p>
+<div id="fig-no-spaces-cytokine-genes-8" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+add1267
+</td>
+<td>
+Nitya Mehrotra
+</td>
+<td>
+2026-09-01
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div id="fig-3d" class="section level3">
+<h3>Fig 3d</h3>
 <pre class="r"><code>#tgondii
 cd4_object$is_toxod9 &lt;- cd4_object$condition_detailed %in% c(&quot;Toxo_D9&quot;)
 cells_toxo &lt;- colnames(cd4_object)[cd4_object$is_toxod9]
@@ -1761,8 +3529,88 @@ plots_toxo &lt;- MyDimPlotHighlight(
 )
 p &lt;- print(plots_toxo$plot1 + NoAxes() + NoGrid()) + NoLegend() + theme(legend.position = &quot;none&quot;) + coord_cartesian(xlim = c(-2.5, 4), ylim = c(-2.5, 2.5))</code></pre>
 <p><img src="figure/CD4_workflow.Rmd/3d%20-%20mdes%20highlighting%20cluster%20distribution%20in%20selected%20conditions-1.png" alt="" width="768" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces-3d---mdes-highlighting-cluster-distribution-in-selected-conditions-1">
+Past versions of "3d - mdes highlighting cluster distribution in
+selected conditions-1.png"
+</button>
+</p>
+<div
+id="fig-no-spaces-3d---mdes-highlighting-cluster-distribution-in-selected-conditions-1"
+class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+add1267
+</td>
+<td>
+Nitya Mehrotra
+</td>
+<td>
+2026-09-01
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>print(p)</code></pre>
 <p><img src="figure/CD4_workflow.Rmd/3d%20-%20mdes%20highlighting%20cluster%20distribution%20in%20selected%20conditions-2.png" alt="" width="768" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces-3d---mdes-highlighting-cluster-distribution-in-selected-conditions-2">
+Past versions of "3d - mdes highlighting cluster distribution in
+selected conditions-2.png"
+</button>
+</p>
+<div
+id="fig-no-spaces-3d---mdes-highlighting-cluster-distribution-in-selected-conditions-2"
+class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+add1267
+</td>
+<td>
+Nitya Mehrotra
+</td>
+<td>
+2026-09-01
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>#tmuris
 cd4_object$is_tmuris &lt;- cd4_object$condition_detailed_simplified %in% c(&quot;Tmuris&quot;)
 cells_tmuris &lt;- colnames(cd4_object)[cd4_object$is_tmuris]
@@ -1781,10 +3629,130 @@ plots_tmuris &lt;- MyDimPlotHighlight(
 )
 p &lt;- print(plots_tmuris$plot1 + NoAxes() + NoGrid()) + NoLegend() + theme(legend.position = &quot;none&quot;) + coord_cartesian(xlim = c(-2.5, 4), ylim = c(-2.5, 2.5))</code></pre>
 <p><img src="figure/CD4_workflow.Rmd/3d%20-%20mdes%20highlighting%20cluster%20distribution%20in%20selected%20conditions-3.png" alt="" width="768" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces-3d---mdes-highlighting-cluster-distribution-in-selected-conditions-3">
+Past versions of "3d - mdes highlighting cluster distribution in
+selected conditions-3.png"
+</button>
+</p>
+<div
+id="fig-no-spaces-3d---mdes-highlighting-cluster-distribution-in-selected-conditions-3"
+class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+add1267
+</td>
+<td>
+Nitya Mehrotra
+</td>
+<td>
+2026-09-01
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>p</code></pre>
 <p><img src="figure/CD4_workflow.Rmd/3d%20-%20mdes%20highlighting%20cluster%20distribution%20in%20selected%20conditions-4.png" alt="" width="768" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces-3d---mdes-highlighting-cluster-distribution-in-selected-conditions-4">
+Past versions of "3d - mdes highlighting cluster distribution in
+selected conditions-4.png"
+</button>
+</p>
+<div
+id="fig-no-spaces-3d---mdes-highlighting-cluster-distribution-in-selected-conditions-4"
+class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+add1267
+</td>
+<td>
+Nitya Mehrotra
+</td>
+<td>
+2026-09-01
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>print(p)</code></pre>
 <p><img src="figure/CD4_workflow.Rmd/3d%20-%20mdes%20highlighting%20cluster%20distribution%20in%20selected%20conditions-5.png" alt="" width="768" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces-3d---mdes-highlighting-cluster-distribution-in-selected-conditions-5">
+Past versions of "3d - mdes highlighting cluster distribution in
+selected conditions-5.png"
+</button>
+</p>
+<div
+id="fig-no-spaces-3d---mdes-highlighting-cluster-distribution-in-selected-conditions-5"
+class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+add1267
+</td>
+<td>
+Nitya Mehrotra
+</td>
+<td>
+2026-09-01
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>#sfb ileum
 cd4_object$is_sfb &lt;- cd4_object$condition_detailed_simplified %in% &quot;SFB&quot; &amp; cd4_object$organ == &quot;ileum lamina propria&quot;
 
@@ -1803,8 +3771,88 @@ plots_is_sfb &lt;- MyDimPlotHighlight(
 )
 p &lt;- print(plots_is_sfb$plot1 + NoAxes() + NoGrid()) + NoLegend() + theme(legend.position = &quot;none&quot;) + coord_cartesian(xlim = c(-2.5, 4), ylim = c(-2.5, 2.5))</code></pre>
 <p><img src="figure/CD4_workflow.Rmd/3d%20-%20mdes%20highlighting%20cluster%20distribution%20in%20selected%20conditions-6.png" alt="" width="768" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces-3d---mdes-highlighting-cluster-distribution-in-selected-conditions-6">
+Past versions of "3d - mdes highlighting cluster distribution in
+selected conditions-6.png"
+</button>
+</p>
+<div
+id="fig-no-spaces-3d---mdes-highlighting-cluster-distribution-in-selected-conditions-6"
+class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+add1267
+</td>
+<td>
+Nitya Mehrotra
+</td>
+<td>
+2026-09-01
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>print(p)</code></pre>
 <p><img src="figure/CD4_workflow.Rmd/3d%20-%20mdes%20highlighting%20cluster%20distribution%20in%20selected%20conditions-7.png" alt="" width="768" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces-3d---mdes-highlighting-cluster-distribution-in-selected-conditions-7">
+Past versions of "3d - mdes highlighting cluster distribution in
+selected conditions-7.png"
+</button>
+</p>
+<div
+id="fig-no-spaces-3d---mdes-highlighting-cluster-distribution-in-selected-conditions-7"
+class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+add1267
+</td>
+<td>
+Nitya Mehrotra
+</td>
+<td>
+2026-09-01
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>#np ova 7dpi
 cd4_object$is_npova &lt;- cd4_object$condition_detailed %in% c(&quot;NP_OVA_D7&quot;)
 
@@ -1823,9 +3871,91 @@ plots_npova &lt;- MyDimPlotHighlight(
 )
 p &lt;- print(plots_npova$plot1 + NoAxes() + NoGrid()) + NoLegend() + theme(legend.position = &quot;none&quot;) + coord_cartesian(xlim = c(-2.5, 4), ylim = c(-2.5, 2.5))</code></pre>
 <p><img src="figure/CD4_workflow.Rmd/3d%20-%20mdes%20highlighting%20cluster%20distribution%20in%20selected%20conditions-8.png" alt="" width="768" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces-3d---mdes-highlighting-cluster-distribution-in-selected-conditions-8">
+Past versions of "3d - mdes highlighting cluster distribution in
+selected conditions-8.png"
+</button>
+</p>
+<div
+id="fig-no-spaces-3d---mdes-highlighting-cluster-distribution-in-selected-conditions-8"
+class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+add1267
+</td>
+<td>
+Nitya Mehrotra
+</td>
+<td>
+2026-09-01
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>print(p)</code></pre>
-<p><img src="figure/CD4_workflow.Rmd/3d%20-%20mdes%20highlighting%20cluster%20distribution%20in%20selected%20conditions-9.png" alt="" width="768" style="display: block; margin: auto;" />
-### Fig 3e</p>
+<p><img src="figure/CD4_workflow.Rmd/3d%20-%20mdes%20highlighting%20cluster%20distribution%20in%20selected%20conditions-9.png" alt="" width="768" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces-3d---mdes-highlighting-cluster-distribution-in-selected-conditions-9">
+Past versions of "3d - mdes highlighting cluster distribution in
+selected conditions-9.png"
+</button>
+</p>
+<div
+id="fig-no-spaces-3d---mdes-highlighting-cluster-distribution-in-selected-conditions-9"
+class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+add1267
+</td>
+<td>
+Nitya Mehrotra
+</td>
+<td>
+2026-09-01
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div id="fig-3e" class="section level3">
+<h3>Fig 3e</h3>
 <pre class="r"><code>sub &lt;- subset(cd4_object, subset = annotation_level2 %in% c(&quot;CD4.G&quot;, &quot;CD4.H&quot;, &quot;CD4.I&quot;, &quot;CD4.Q&quot;, &quot;CD4.R&quot;, &quot;CD4.S&quot;, &quot;CD4.T&quot;, &quot;CD4.U&quot;, &quot;CD4.X&quot;, &quot;CD4.Y&quot;))
 
 genes &lt;- c(&quot;Ifng&quot;,&quot;Il4&quot;,&quot;Il5&quot;,&quot;Il17a&quot;,&quot;Il17f&quot;,&quot;Gzma&quot;,&quot;Gzmb&quot;,&quot;Il4&quot;, &quot;Il5&quot;,&quot;Il10&quot;,&quot;Il21&quot;,&quot;Il22&quot;, &quot;Il13&quot;)
@@ -1904,8 +4034,47 @@ pheatmap(
   cellwidth = 20,
   cellheight = 20
 )</code></pre>
-<p><img src="figure/CD4_workflow.Rmd/3e%20-%20effector%20gene/cytokine%20heatmap-1.png" alt="" width="768" style="display: block; margin: auto;" />
-### Fig 3f</p>
+<p><img src="figure/CD4_workflow.Rmd/3e%20-%20effector%20gene/cytokine%20heatmap-1.png" alt="" width="768" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces-cytokine-heatmap-1">
+Past versions of "cytokine heatmap-1.png"
+</button>
+</p>
+<div id="fig-no-spaces-cytokine-heatmap-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+add1267
+</td>
+<td>
+Nitya Mehrotra
+</td>
+<td>
+2026-09-01
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div id="fig-3f" class="section level3">
+<h3>Fig 3f</h3>
 <pre class="r"><code>ann_col   &lt;- &quot;annotation_level2&quot;
 sample_col &lt;- &quot;sample_code&quot;
 organ_col  &lt;- &quot;organ_simplified&quot;
@@ -1954,8 +4123,50 @@ p &lt;- ggplot(props2, aes(x = organ, y = prop, fill = organ)) +
 print(p)</code></pre>
 <pre><code>Warning: Removed 11 rows containing missing values or values outside the scale range
 (`geom_point()`).</code></pre>
-<p><img src="figure/CD4_workflow.Rmd/3f%20boxplots%20showing%20props%20of%20polarized%20clusters%20across%20organs-1.png" alt="" width="768" style="display: block; margin: auto;" />
-### Fig 3g</p>
+<p><img src="figure/CD4_workflow.Rmd/3f%20boxplots%20showing%20props%20of%20polarized%20clusters%20across%20organs-1.png" alt="" width="768" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces-3f-boxplots-showing-props-of-polarized-clusters-across-organs-1">
+Past versions of "3f boxplots showing props of polarized clusters across
+organs-1.png"
+</button>
+</p>
+<div
+id="fig-no-spaces-3f-boxplots-showing-props-of-polarized-clusters-across-organs-1"
+class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+add1267
+</td>
+<td>
+Nitya Mehrotra
+</td>
+<td>
+2026-09-01
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div id="fig-3g" class="section level3">
+<h3>Fig 3g</h3>
 <pre class="r"><code>ann_col    &lt;- &quot;annotation_level2&quot;
 sample_col &lt;- &quot;sample_code&quot;
 organ_col  &lt;- &quot;organ_simplified&quot;
@@ -2033,8 +4244,50 @@ p &lt;- ggplot(props2, aes(x = organ_cond, y = prop, fill = organ)) +
 print(p)</code></pre>
 <pre><code>Warning: Removed 33 rows containing missing values or values outside the scale range
 (`geom_point()`).</code></pre>
-<p><img src="figure/CD4_workflow.Rmd/3g%20-%20boxplots%20showing%20prop%20of%20polarized%20across%20activated%20cells%20in%20healthy%20vs%20nonhealthy%20colon,%20lung,%20spleen-1.png" alt="" width="672" style="display: block; margin: auto;" />
-### Fig 3h</p>
+<p><img src="figure/CD4_workflow.Rmd/3g%20-%20boxplots%20showing%20prop%20of%20polarized%20across%20activated%20cells%20in%20healthy%20vs%20nonhealthy%20colon,%20lung,%20spleen-1.png" alt="" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces-3g---boxplots-showing-prop-of-polarized-across-activated-cells-in-healthy-vs-nonhealthy-colon,-lung,-spleen-1">
+Past versions of "3g - boxplots showing prop of polarized across
+activated cells in healthy vs nonhealthy colon, lung, spleen-1.png"
+</button>
+</p>
+<div
+id="fig-no-spaces-3g---boxplots-showing-prop-of-polarized-across-activated-cells-in-healthy-vs-nonhealthy-colon,-lung,-spleen-1"
+class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+add1267
+</td>
+<td>
+Nitya Mehrotra
+</td>
+<td>
+2026-09-01
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div id="fig-3h" class="section level3">
+<h3>Fig 3h</h3>
 </div>
 <div id="fig-3i-k" class="section level3">
 <h3>Fig 3i-k</h3>
@@ -2440,8 +4693,50 @@ DoHeatmap(
     axis.ticks.x = element_blank()
   ) +
   NoLegend()</code></pre>
-<p><img src="figure/CD4_workflow.Rmd/4e%20-%20single%20cell%20heatmap%20of%20programs%20across%20clusters-1.png" alt="" width="672" style="display: block; margin: auto;" />
-### Fig 4f-i</p>
+<p><img src="figure/CD4_workflow.Rmd/4e%20-%20single%20cell%20heatmap%20of%20programs%20across%20clusters-1.png" alt="" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces-4e---single-cell-heatmap-of-programs-across-clusters-1">
+Past versions of "4e - single cell heatmap of programs across
+clusters-1.png"
+</button>
+</p>
+<div
+id="fig-no-spaces-4e---single-cell-heatmap-of-programs-across-clusters-1"
+class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+add1267
+</td>
+<td>
+Nitya Mehrotra
+</td>
+<td>
+2026-09-01
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div id="fig-4f-i" class="section level3">
+<h3>Fig 4f-i</h3>
 <pre class="r"><code>clusters_keep &lt;- c(&quot;CD4.Q&quot;,&quot;CD4.G&quot;)
 
 modulescores &lt;- FetchData(
@@ -2542,6 +4837,43 @@ ggplot(modulescores, aes(x = TH2_Score1, y = TH1_Score1, color = annotation_leve
   scale_color_manual(values = palette_vector) +
   scale_fill_manual(values = palette_vector)</code></pre>
 <p><img src="figure/CD4_workflow.Rmd/4f-i%20scatter%20plots%20of%20module%20scores%20-%20all%20cluster%20means,%20only%20plot%20g/q%20cells-1.png" alt="" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces-q-cells-1">
+Past versions of "q cells-1.png"
+</button>
+</p>
+<div id="fig-no-spaces-q-cells-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+add1267
+</td>
+<td>
+Nitya Mehrotra
+</td>
+<td>
+2026-09-01
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>#th1 vs th17
 quadrant_pct &lt;- modulescores %&gt;%
   mutate(quadrant = case_when(
@@ -2601,6 +4933,43 @@ ggplot(modulescores, aes(x = TH17_Score1, y = TH1_Score1, color = annotation_lev
   scale_color_manual(values = palette_vector) +
   scale_fill_manual(values = palette_vector)</code></pre>
 <p><img src="figure/CD4_workflow.Rmd/4f-i%20scatter%20plots%20of%20module%20scores%20-%20all%20cluster%20means,%20only%20plot%20g/q%20cells-2.png" alt="" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces-q-cells-2">
+Past versions of "q cells-2.png"
+</button>
+</p>
+<div id="fig-no-spaces-q-cells-2" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+add1267
+</td>
+<td>
+Nitya Mehrotra
+</td>
+<td>
+2026-09-01
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>#th2 vs th17
 quadrant_pct &lt;- modulescores %&gt;%
   mutate(quadrant = case_when(
@@ -2660,6 +5029,43 @@ ggplot(modulescores, aes(x = TH17_Score1, y = TH2_Score1, color = annotation_lev
   scale_color_manual(values = palette_vector) +
   scale_fill_manual(values = palette_vector)</code></pre>
 <p><img src="figure/CD4_workflow.Rmd/4f-i%20scatter%20plots%20of%20module%20scores%20-%20all%20cluster%20means,%20only%20plot%20g/q%20cells-3.png" alt="" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces-q-cells-3">
+Past versions of "q cells-3.png"
+</button>
+</p>
+<div id="fig-no-spaces-q-cells-3" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+add1267
+</td>
+<td>
+Nitya Mehrotra
+</td>
+<td>
+2026-09-01
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>#th1 vs tfhchron
 quadrant_pct &lt;- modulescores %&gt;%
   mutate(quadrant = case_when(
@@ -2717,8 +5123,47 @@ ggplot(modulescores, aes(x = TFH_TCHRON_Score1, y = TH1_Score1, color = annotati
   coord_cartesian(xlim = c(-0.50, 1.5), ylim = c(-0.5, 1.5)) +
   scale_color_manual(values = palette_vector) +
   scale_fill_manual(values = palette_vector)</code></pre>
-<p><img src="figure/CD4_workflow.Rmd/4f-i%20scatter%20plots%20of%20module%20scores%20-%20all%20cluster%20means,%20only%20plot%20g/q%20cells-4.png" alt="" width="672" style="display: block; margin: auto;" />
-### Fig 4j-m</p>
+<p><img src="figure/CD4_workflow.Rmd/4f-i%20scatter%20plots%20of%20module%20scores%20-%20all%20cluster%20means,%20only%20plot%20g/q%20cells-4.png" alt="" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces-q-cells-4">
+Past versions of "q cells-4.png"
+</button>
+</p>
+<div id="fig-no-spaces-q-cells-4" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+add1267
+</td>
+<td>
+Nitya Mehrotra
+</td>
+<td>
+2026-09-01
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div id="fig-4j-m" class="section level3">
+<h3>Fig 4j-m</h3>
 </div>
 </div>
 </div>
@@ -2748,6 +5193,43 @@ p &lt;- MyFeatureScatter(
 
 print(p)</code></pre>
 <p><img src="figure/CD4_workflow.Rmd/5g%20feature%20scatter%20plots%20of%20pd1%20x%20cxcr5%20protein%20expression%20in%20cd4.h/i-1.png" alt="" width="576" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-i-1">
+Past versions of i-1.png
+</button>
+</p>
+<div id="fig-i-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+add1267
+</td>
+<td>
+Nitya Mehrotra
+</td>
+<td>
+2026-09-01
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>cd4_cite$i &lt;- cd4_cite$annotation_level2  == &quot;CD4.I&quot;
 
 p &lt;- MyFeatureScatter(
@@ -2759,8 +5241,47 @@ p &lt;- MyFeatureScatter(
 ) + coord_cartesian(xlim = c(0, 5))
 
 print(p)</code></pre>
-<p><img src="figure/CD4_workflow.Rmd/5g%20feature%20scatter%20plots%20of%20pd1%20x%20cxcr5%20protein%20expression%20in%20cd4.h/i-2.png" alt="" width="576" style="display: block; margin: auto;" />
-### Fig 5h</p>
+<p><img src="figure/CD4_workflow.Rmd/5g%20feature%20scatter%20plots%20of%20pd1%20x%20cxcr5%20protein%20expression%20in%20cd4.h/i-2.png" alt="" width="576" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-i-2">
+Past versions of i-2.png
+</button>
+</p>
+<div id="fig-i-2" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+add1267
+</td>
+<td>
+Nitya Mehrotra
+</td>
+<td>
+2026-09-01
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div id="fig-5h" class="section level3">
+<h3>Fig 5h</h3>
 <pre class="r"><code>p &lt;- MyFeatureScatter(
   so = cd4_cite,
   group.by = &quot;i&quot;,
@@ -2770,6 +5291,43 @@ print(p)</code></pre>
 )
 print(p)</code></pre>
 <p><img src="figure/CD4_workflow.Rmd/5h%20feature%20scatter%20plots%20of%20fr4%20x%20cd73%20protein%20expression%20in%20cd4.h/i-1.png" alt="" width="576" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-i-1">
+Past versions of i-1.png
+</button>
+</p>
+<div id="fig-i-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+add1267
+</td>
+<td>
+Nitya Mehrotra
+</td>
+<td>
+2026-09-01
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>p &lt;- MyFeatureScatter(
   so = cd4_cite,
   group.by = &quot;h&quot;,
@@ -2778,10 +5336,49 @@ print(p)</code></pre>
   raster = TRUE
 )
 print(p)</code></pre>
-<p><img src="figure/CD4_workflow.Rmd/5h%20feature%20scatter%20plots%20of%20fr4%20x%20cd73%20protein%20expression%20in%20cd4.h/i-2.png" alt="" width="576" style="display: block; margin: auto;" />
-# Figure 6</p>
+<p><img src="figure/CD4_workflow.Rmd/5h%20feature%20scatter%20plots%20of%20fr4%20x%20cd73%20protein%20expression%20in%20cd4.h/i-2.png" alt="" width="576" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-i-2">
+Past versions of i-2.png
+</button>
+</p>
+<div id="fig-i-2" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+add1267
+</td>
+<td>
+Nitya Mehrotra
+</td>
+<td>
+2026-09-01
+</td>
+</tr>
+</tbody>
+</table>
 </div>
 </div>
+</div>
+</div>
+</div>
+<div id="figure-6" class="section level1">
+<h1>Figure 6</h1>
 <div id="memory-cd4-t-cells-map-to-the-same-clusters-as-effector-cells"
 class="section level2">
 <h2>Memory CD4+ T cells map to the same clusters as effector cells</h2>
@@ -2834,23 +5431,385 @@ for (cond in conds) {
 }</code></pre>
 <pre><code>Plotting: baseline</code></pre>
 <p><img src="figure/CD4_workflow.Rmd/6a%20-%20mdes%20mapping%20time%20course%20of%20slo%20listeria%20Tet+%20Cells-1.png" alt="" width="768" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces-6a---mdes-mapping-time-course-of-slo-listeria-Tet+-Cells-1">
+Past versions of "6a - mdes mapping time course of slo listeria Tet+
+Cells-1.png"
+</button>
+</p>
+<div
+id="fig-no-spaces-6a---mdes-mapping-time-course-of-slo-listeria-Tet+-Cells-1"
+class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+add1267
+</td>
+<td>
+Nitya Mehrotra
+</td>
+<td>
+2026-09-01
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre><code>Plotting: Lmonocytogenes_D10</code></pre>
 <p><img src="figure/CD4_workflow.Rmd/6a%20-%20mdes%20mapping%20time%20course%20of%20slo%20listeria%20Tet+%20Cells-2.png" alt="" width="768" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces-6a---mdes-mapping-time-course-of-slo-listeria-Tet+-Cells-2">
+Past versions of "6a - mdes mapping time course of slo listeria Tet+
+Cells-2.png"
+</button>
+</p>
+<div
+id="fig-no-spaces-6a---mdes-mapping-time-course-of-slo-listeria-Tet+-Cells-2"
+class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+add1267
+</td>
+<td>
+Nitya Mehrotra
+</td>
+<td>
+2026-09-01
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre><code>Plotting: Lmonocytogenes_D15</code></pre>
 <p><img src="figure/CD4_workflow.Rmd/6a%20-%20mdes%20mapping%20time%20course%20of%20slo%20listeria%20Tet+%20Cells-3.png" alt="" width="768" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces-6a---mdes-mapping-time-course-of-slo-listeria-Tet+-Cells-3">
+Past versions of "6a - mdes mapping time course of slo listeria Tet+
+Cells-3.png"
+</button>
+</p>
+<div
+id="fig-no-spaces-6a---mdes-mapping-time-course-of-slo-listeria-Tet+-Cells-3"
+class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+add1267
+</td>
+<td>
+Nitya Mehrotra
+</td>
+<td>
+2026-09-01
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre><code>Plotting: Lmonocytogenes_D19</code></pre>
 <p><img src="figure/CD4_workflow.Rmd/6a%20-%20mdes%20mapping%20time%20course%20of%20slo%20listeria%20Tet+%20Cells-4.png" alt="" width="768" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces-6a---mdes-mapping-time-course-of-slo-listeria-Tet+-Cells-4">
+Past versions of "6a - mdes mapping time course of slo listeria Tet+
+Cells-4.png"
+</button>
+</p>
+<div
+id="fig-no-spaces-6a---mdes-mapping-time-course-of-slo-listeria-Tet+-Cells-4"
+class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+add1267
+</td>
+<td>
+Nitya Mehrotra
+</td>
+<td>
+2026-09-01
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre><code>Plotting: Lmonocytogenes_D22</code></pre>
 <p><img src="figure/CD4_workflow.Rmd/6a%20-%20mdes%20mapping%20time%20course%20of%20slo%20listeria%20Tet+%20Cells-5.png" alt="" width="768" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces-6a---mdes-mapping-time-course-of-slo-listeria-Tet+-Cells-5">
+Past versions of "6a - mdes mapping time course of slo listeria Tet+
+Cells-5.png"
+</button>
+</p>
+<div
+id="fig-no-spaces-6a---mdes-mapping-time-course-of-slo-listeria-Tet+-Cells-5"
+class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+add1267
+</td>
+<td>
+Nitya Mehrotra
+</td>
+<td>
+2026-09-01
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre><code>Plotting: Lmonocytogenes_D25</code></pre>
 <p><img src="figure/CD4_workflow.Rmd/6a%20-%20mdes%20mapping%20time%20course%20of%20slo%20listeria%20Tet+%20Cells-6.png" alt="" width="768" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces-6a---mdes-mapping-time-course-of-slo-listeria-Tet+-Cells-6">
+Past versions of "6a - mdes mapping time course of slo listeria Tet+
+Cells-6.png"
+</button>
+</p>
+<div
+id="fig-no-spaces-6a---mdes-mapping-time-course-of-slo-listeria-Tet+-Cells-6"
+class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+add1267
+</td>
+<td>
+Nitya Mehrotra
+</td>
+<td>
+2026-09-01
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre><code>Plotting: Lmonocytogenes_D30</code></pre>
 <p><img src="figure/CD4_workflow.Rmd/6a%20-%20mdes%20mapping%20time%20course%20of%20slo%20listeria%20Tet+%20Cells-7.png" alt="" width="768" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces-6a---mdes-mapping-time-course-of-slo-listeria-Tet+-Cells-7">
+Past versions of "6a - mdes mapping time course of slo listeria Tet+
+Cells-7.png"
+</button>
+</p>
+<div
+id="fig-no-spaces-6a---mdes-mapping-time-course-of-slo-listeria-Tet+-Cells-7"
+class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+add1267
+</td>
+<td>
+Nitya Mehrotra
+</td>
+<td>
+2026-09-01
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre><code>Plotting: Lmonocytogenes_D6</code></pre>
 <p><img src="figure/CD4_workflow.Rmd/6a%20-%20mdes%20mapping%20time%20course%20of%20slo%20listeria%20Tet+%20Cells-8.png" alt="" width="768" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces-6a---mdes-mapping-time-course-of-slo-listeria-Tet+-Cells-8">
+Past versions of "6a - mdes mapping time course of slo listeria Tet+
+Cells-8.png"
+</button>
+</p>
+<div
+id="fig-no-spaces-6a---mdes-mapping-time-course-of-slo-listeria-Tet+-Cells-8"
+class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+add1267
+</td>
+<td>
+Nitya Mehrotra
+</td>
+<td>
+2026-09-01
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre><code>Plotting: Lmonocytogenes_D60</code></pre>
-<p><img src="figure/CD4_workflow.Rmd/6a%20-%20mdes%20mapping%20time%20course%20of%20slo%20listeria%20Tet+%20Cells-9.png" alt="" width="768" style="display: block; margin: auto;" />
-### Fig 6c</p>
+<p><img src="figure/CD4_workflow.Rmd/6a%20-%20mdes%20mapping%20time%20course%20of%20slo%20listeria%20Tet+%20Cells-9.png" alt="" width="768" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces-6a---mdes-mapping-time-course-of-slo-listeria-Tet+-Cells-9">
+Past versions of "6a - mdes mapping time course of slo listeria Tet+
+Cells-9.png"
+</button>
+</p>
+<div
+id="fig-no-spaces-6a---mdes-mapping-time-course-of-slo-listeria-Tet+-Cells-9"
+class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+add1267
+</td>
+<td>
+Nitya Mehrotra
+</td>
+<td>
+2026-09-01
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div id="fig-6c" class="section level3">
+<h3>Fig 6c</h3>
 <pre class="r"><code>listeria_object &lt;- subset(cd4_object, subset = igt_number == &quot;43&quot;)
 listeria_ids &lt;- listeria_ids &lt;- colnames(listeria_object)
 
@@ -2976,6 +5935,44 @@ ggplot() +
   scale_color_manual(values = palette_vector) +
   scale_fill_manual(values = palette_vector)</code></pre>
 <p><img src="figure/CD4_workflow.Rmd/6c%20-%20acute%20listeria%20module%20score%20scatter%20plots-1.png" alt="" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces-6c---acute-listeria-module-score-scatter-plots-1">
+Past versions of "6c - acute listeria module score scatter plots-1.png"
+</button>
+</p>
+<div id="fig-no-spaces-6c---acute-listeria-module-score-scatter-plots-1"
+class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+add1267
+</td>
+<td>
+Nitya Mehrotra
+</td>
+<td>
+2026-09-01
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>#th2 vs th17
 quadrant_pct &lt;- listeria_d7_slo %&gt;%
   mutate(
@@ -3070,8 +6067,48 @@ ggplot() +
   coord_cartesian(xlim = c(-0.4, 1.5), ylim = c(-0.5, 1.5)) +
   scale_color_manual(values = palette_vector) +
   scale_fill_manual(values = palette_vector)</code></pre>
-<p><img src="figure/CD4_workflow.Rmd/6c%20-%20acute%20listeria%20module%20score%20scatter%20plots-2.png" alt="" width="672" style="display: block; margin: auto;" />
-### Fig 6d</p>
+<p><img src="figure/CD4_workflow.Rmd/6c%20-%20acute%20listeria%20module%20score%20scatter%20plots-2.png" alt="" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces-6c---acute-listeria-module-score-scatter-plots-2">
+Past versions of "6c - acute listeria module score scatter plots-2.png"
+</button>
+</p>
+<div id="fig-no-spaces-6c---acute-listeria-module-score-scatter-plots-2"
+class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+add1267
+</td>
+<td>
+Nitya Mehrotra
+</td>
+<td>
+2026-09-01
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div id="fig-6d" class="section level3">
+<h3>Fig 6d</h3>
 <pre class="r"><code>listeria_25_slo &lt;- modulescores %&gt;%
   filter(
     is_listeria,
@@ -3172,6 +6209,44 @@ ggplot() +
   scale_color_manual(values = palette_vector) +
   scale_fill_manual(values = palette_vector)</code></pre>
 <p><img src="figure/CD4_workflow.Rmd/6d%20memory%20listeria%20module%20score%20scatter%20plots-1.png" alt="" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces-6d-memory-listeria-module-score-scatter-plots-1">
+Past versions of "6d memory listeria module score scatter plots-1.png"
+</button>
+</p>
+<div id="fig-no-spaces-6d-memory-listeria-module-score-scatter-plots-1"
+class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+add1267
+</td>
+<td>
+Nitya Mehrotra
+</td>
+<td>
+2026-09-01
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>#th2 vs th17
 quadrant_pct &lt;- listeria_d7_slo %&gt;%
   mutate(
@@ -3266,8 +6341,48 @@ ggplot() +
   coord_cartesian(xlim = c(-0.4, 1.5), ylim = c(-0.5, 1.5)) +
   scale_color_manual(values = palette_vector) +
   scale_fill_manual(values = palette_vector)</code></pre>
-<p><img src="figure/CD4_workflow.Rmd/6d%20memory%20listeria%20module%20score%20scatter%20plots-2.png" alt="" width="672" style="display: block; margin: auto;" />
-### Fig 6e</p>
+<p><img src="figure/CD4_workflow.Rmd/6d%20memory%20listeria%20module%20score%20scatter%20plots-2.png" alt="" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces-6d-memory-listeria-module-score-scatter-plots-2">
+Past versions of "6d memory listeria module score scatter plots-2.png"
+</button>
+</p>
+<div id="fig-no-spaces-6d-memory-listeria-module-score-scatter-plots-2"
+class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+add1267
+</td>
+<td>
+Nitya Mehrotra
+</td>
+<td>
+2026-09-01
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div id="fig-6e" class="section level3">
+<h3>Fig 6e</h3>
 <pre class="r"><code>adt &lt;- GetAssayData(cd4_cite, assay = &quot;ADT&quot;, layer = &quot;data&quot;)
 cd62l_feat &lt;- &quot;CD62L&quot;
 cd69_feat &lt;- &quot;CD69&quot;
@@ -3291,8 +6406,84 @@ MyDimPlotHighlightDensity(
   cols = magma(100)
 )</code></pre>
 <p><img src="figure/CD4_workflow.Rmd/6e%20mde%20highlighting%20cd62l+cd69+%20mde-1.png" alt="" width="768" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces-6e-mde-highlighting-cd62l+cd69+-mde-1">
+Past versions of "6e mde highlighting cd62l+cd69+ mde-1.png"
+</button>
+</p>
+<div id="fig-no-spaces-6e-mde-highlighting-cd62l+cd69+-mde-1"
+class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+add1267
+</td>
+<td>
+Nitya Mehrotra
+</td>
+<td>
+2026-09-01
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>print(p)</code></pre>
 <p><img src="figure/CD4_workflow.Rmd/6e%20mde%20highlighting%20cd62l+cd69+%20mde-2.png" alt="" width="768" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces-6e-mde-highlighting-cd62l+cd69+-mde-2">
+Past versions of "6e mde highlighting cd62l+cd69+ mde-2.png"
+</button>
+</p>
+<div id="fig-no-spaces-6e-mde-highlighting-cd62l+cd69+-mde-2"
+class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+add1267
+</td>
+<td>
+Nitya Mehrotra
+</td>
+<td>
+2026-09-01
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 </div>
 </div>
@@ -3364,8 +6555,48 @@ pheatmap(
   cellheight = 12,
   main = &quot;Mean ADT expression (log1p(CP10K))&quot;
 )</code></pre>
-<p><img src="figure/CD4_workflow.Rmd/7a%20resting%20cd4%20citeseq%20heatmap-1.png" alt="" width="960" style="display: block; margin: auto;" />
-### Fig 7c</p>
+<p><img src="figure/CD4_workflow.Rmd/7a%20resting%20cd4%20citeseq%20heatmap-1.png" alt="" width="960" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces-7a-resting-cd4-citeseq-heatmap-1">
+Past versions of "7a resting cd4 citeseq heatmap-1.png"
+</button>
+</p>
+<div id="fig-no-spaces-7a-resting-cd4-citeseq-heatmap-1"
+class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+add1267
+</td>
+<td>
+Nitya Mehrotra
+</td>
+<td>
+2026-09-01
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div id="fig-7c" class="section level3">
+<h3>Fig 7c</h3>
 <pre class="r"><code>cd4_object$is_resting_ivneg &lt;- cd4_object$annotation_level2 %in% c(&quot;CD4.A&quot;, &quot;CD4.B&quot;, &quot;CD4.C&quot;, &quot;CD4.D&quot;, &quot;CD4.E&quot;, &quot;CD4.F&quot;) &amp; cd4_object$gating_strategy %in% c(&quot; IV- CD3+&quot;, &quot;IV- CD45.2+ CD3e+&quot;, &quot;IV- CD45+ CD3+ CD44+&quot;, &quot;IV- CD45+ CD3e+&quot;, &quot; IV- CD45+ CD3e+ CD44+ Derp1 Tet +/+&quot;, &quot; IV- CD45+ CD3e+ CD44+ Thy1.1- and Thy1.1+ (OT1)&quot;, &quot; IV- CD45+ CD3e+ Derp1 tet- and IV- CD45+ CD3e+ Derp1 tet+&quot;, &quot;IV- CD45+ CD3e+ Thy1.1- and Thy1.1+ (OT1)&quot;)
 cells_ivneg &lt;- colnames(cd4_object)[cd4_object$is_resting_ivneg]
 plots_ivneg &lt;- MyDimPlotHighlight(
@@ -3386,9 +6617,85 @@ plots_ivneg &lt;- MyDimPlotHighlight(
 
 p &lt;- print(plots_ivneg$plot1 + NoAxes() + NoGrid()) + NoLegend() + theme(legend.position = &quot;none&quot;) + coord_cartesian(xlim = c(-2.5, 4), ylim = c(-2.5, 2.5))</code></pre>
 <p><img src="figure/CD4_workflow.Rmd/7c%20iv-%20clusters%20in%20nlts-1.png" alt="" width="768" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces-7c-iv--clusters-in-nlts-1">
+Past versions of "7c iv- clusters in nlts-1.png"
+</button>
+</p>
+<div id="fig-no-spaces-7c-iv--clusters-in-nlts-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+add1267
+</td>
+<td>
+Nitya Mehrotra
+</td>
+<td>
+2026-09-01
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>print(p)</code></pre>
-<p><img src="figure/CD4_workflow.Rmd/7c%20iv-%20clusters%20in%20nlts-2.png" alt="" width="768" style="display: block; margin: auto;" />
-### Fig 7d</p>
+<p><img src="figure/CD4_workflow.Rmd/7c%20iv-%20clusters%20in%20nlts-2.png" alt="" width="768" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces-7c-iv--clusters-in-nlts-2">
+Past versions of "7c iv- clusters in nlts-2.png"
+</button>
+</p>
+<div id="fig-no-spaces-7c-iv--clusters-in-nlts-2" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+add1267
+</td>
+<td>
+Nitya Mehrotra
+</td>
+<td>
+2026-09-01
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div id="fig-7d" class="section level3">
+<h3>Fig 7d</h3>
 <pre class="r"><code>cluster_order &lt;- c(&quot;CD4.A&quot;,&quot;CD4.B&quot;,&quot;CD4.C&quot;,&quot;CD4.D&quot;,&quot;CD4.E&quot;,&quot;CD4.F&quot;)
 markers_long &lt;- imap_dfr(resting_analysis, function(df, nm) {
   df %&gt;%
@@ -3456,8 +6763,48 @@ p &lt;- pheatmap(
 )
 
 print(p)</code></pre>
-<p><img src="figure/CD4_workflow.Rmd/7d%20-%20top%20dge%20between%20resting%20clusters-1.png" alt="" width="672" style="display: block; margin: auto;" />
-### Fig 7e</p>
+<p><img src="figure/CD4_workflow.Rmd/7d%20-%20top%20dge%20between%20resting%20clusters-1.png" alt="" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces-7d---top-dge-between-resting-clusters-1">
+Past versions of "7d - top dge between resting clusters-1.png"
+</button>
+</p>
+<div id="fig-no-spaces-7d---top-dge-between-resting-clusters-1"
+class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+add1267
+</td>
+<td>
+Nitya Mehrotra
+</td>
+<td>
+2026-09-01
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div id="fig-7e" class="section level3">
+<h3>Fig 7e</h3>
 <pre class="r"><code>cd4_tcrs &lt;- tcr %&gt;%
   filter(
     level1 == &quot;CD4&quot;
@@ -3728,8 +7075,50 @@ p &lt;- ggplot(
 
 
 print(p)</code></pre>
-<p><img src="figure/CD4_workflow.Rmd/7e%20bar%20plot%20of%20percent%20of%20cells%20with%20expanded%20clonotypes%20in%20resting%20clusters-1.png" alt="" width="672" style="display: block; margin: auto;" />
-### Fig 7f</p>
+<p><img src="figure/CD4_workflow.Rmd/7e%20bar%20plot%20of%20percent%20of%20cells%20with%20expanded%20clonotypes%20in%20resting%20clusters-1.png" alt="" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces-7e-bar-plot-of-percent-of-cells-with-expanded-clonotypes-in-resting-clusters-1">
+Past versions of "7e bar plot of percent of cells with expanded
+clonotypes in resting clusters-1.png"
+</button>
+</p>
+<div
+id="fig-no-spaces-7e-bar-plot-of-percent-of-cells-with-expanded-clonotypes-in-resting-clusters-1"
+class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+add1267
+</td>
+<td>
+Nitya Mehrotra
+</td>
+<td>
+2026-09-01
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div id="fig-7f" class="section level3">
+<h3>Fig 7f</h3>
 <pre class="r"><code>resting_clusters &lt;- c(
   &quot;CD4.A&quot;, &quot;CD4.B&quot;, &quot;CD4.C&quot;,
   &quot;CD4.D&quot;, &quot;CD4.E&quot;, &quot;CD4.F&quot;
@@ -3882,10 +7271,50 @@ pheatmap(
   angle_col = 45,
   main = &quot;log2FC in Proportion vs Baseline&quot;
 )</code></pre>
-<p><img src="figure/CD4_workflow.Rmd/7f%20heatmap%20of%20conditions%20in%20resting%20clusters-1.png" alt="" width="672" style="display: block; margin: auto;" />
-# Figure 8</p>
+<p><img src="figure/CD4_workflow.Rmd/7f%20heatmap%20of%20conditions%20in%20resting%20clusters-1.png" alt="" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces-7f-heatmap-of-conditions-in-resting-clusters-1">
+Past versions of "7f heatmap of conditions in resting clusters-1.png"
+</button>
+</p>
+<div id="fig-no-spaces-7f-heatmap-of-conditions-in-resting-clusters-1"
+class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+add1267
+</td>
+<td>
+Nitya Mehrotra
+</td>
+<td>
+2026-09-01
+</td>
+</tr>
+</tbody>
+</table>
 </div>
 </div>
+</div>
+</div>
+</div>
+<div id="figure-8" class="section level1">
+<h1>Figure 8</h1>
 <div
 id="immgent-cd4-panel-a-flow-cytometry-strategy-to-resolve-the-cd4-t-cell-landscape"
 class="section level2">
@@ -3977,8 +7406,48 @@ p_rna &lt;- ggplot(dp_df, aes(x = id, y = features.plot)) +
     fill = guide_colorbar(title = &quot;Avg expr (scaled)&quot;)
   )
 print(p_rna)</code></pre>
-<p><img src="figure/CD4_workflow.Rmd/8a%20dotplot%20of%20selected%20markersfor%20flow-1.png" alt="" width="420" style="display: block; margin: auto;" />
-### Fig 8b</p>
+<p><img src="figure/CD4_workflow.Rmd/8a%20dotplot%20of%20selected%20markersfor%20flow-1.png" alt="" width="420" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces-8a-dotplot-of-selected-markersfor-flow-1">
+Past versions of "8a dotplot of selected markersfor flow-1.png"
+</button>
+</p>
+<div id="fig-no-spaces-8a-dotplot-of-selected-markersfor-flow-1"
+class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+add1267
+</td>
+<td>
+Nitya Mehrotra
+</td>
+<td>
+2026-09-01
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div id="fig-8b" class="section level3">
+<h3>Fig 8b</h3>
 <pre class="r"><code>marker_order &lt;- c(
   &quot;CD62L&quot;, &quot;CD44&quot;, &quot;CD69&quot; ,&quot;CXCR5&quot;, &quot;CXCR6.CD186&quot;, &quot;FR4&quot;, &quot;CD73.5NTD&quot;,
   &quot;PDCD1.PD1.CD279&quot;, &quot;KLRG1&quot;, &quot;LY6C1-LY6C2&quot;
@@ -4019,8 +7488,48 @@ p_dot &lt;- ggplot(df_plot, aes(x = Cluster, y = Marker)) +
   labs(title = &quot;ADT markers (scaled color + raw expression size)&quot;, x = NULL, y = NULL)
 
 print(p_dot)</code></pre>
-<p><img src="figure/CD4_workflow.Rmd/8b%20citeseq%20protein%20expression%20dotplot-1.png" alt="" width="672" style="display: block; margin: auto;" />
-### Fig 8d</p>
+<p><img src="figure/CD4_workflow.Rmd/8b%20citeseq%20protein%20expression%20dotplot-1.png" alt="" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces-8b-citeseq-protein-expression-dotplot-1">
+Past versions of "8b citeseq protein expression dotplot-1.png"
+</button>
+</p>
+<div id="fig-no-spaces-8b-citeseq-protein-expression-dotplot-1"
+class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+add1267
+</td>
+<td>
+Nitya Mehrotra
+</td>
+<td>
+2026-09-01
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div id="fig-8d" class="section level3">
+<h3>Fig 8d</h3>
 <pre class="r"><code>adt &lt;- GetAssayData(cd4_cite, assay = &quot;ADT&quot;, layer = &quot;data&quot;)
 
 cd4_cite &lt;- NormalizeData(cd4_cite, assay = &quot;RNA&quot;, normalization.method = &quot;LogNormalize&quot;)</code></pre>
@@ -4077,8 +7586,84 @@ p &lt;- MyDimPlotHighlightDensity(
 ) + coord_cartesian(xlim = c(-2.5, 4), ylim = c(-2.5, 2.5)) + theme_void()+ NoGrid() + NoLegend()
 p </code></pre>
 <p><img src="figure/CD4_workflow.Rmd/8d%20-%20citeseq%20gating%20to%20highlight%20clusters-1.png" alt="" width="768" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces-8d---citeseq-gating-to-highlight-clusters-1">
+Past versions of "8d - citeseq gating to highlight clusters-1.png"
+</button>
+</p>
+<div id="fig-no-spaces-8d---citeseq-gating-to-highlight-clusters-1"
+class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+add1267
+</td>
+<td>
+Nitya Mehrotra
+</td>
+<td>
+2026-09-01
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>print(p)</code></pre>
 <p><img src="figure/CD4_workflow.Rmd/8d%20-%20citeseq%20gating%20to%20highlight%20clusters-2.png" alt="" width="768" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces-8d---citeseq-gating-to-highlight-clusters-2">
+Past versions of "8d - citeseq gating to highlight clusters-2.png"
+</button>
+</p>
+<div id="fig-no-spaces-8d---citeseq-gating-to-highlight-clusters-2"
+class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+add1267
+</td>
+<td>
+Nitya Mehrotra
+</td>
+<td>
+2026-09-01
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>cd4_cite$is_I &lt;-
   (adt[&quot;CD44&quot;, ]            &gt; cd44_thresh)  &amp;
   (adt[&quot;CD62L&quot;, ] &lt; cd62l_thresh) &amp;
@@ -4100,6 +7685,44 @@ p &lt;- MyDimPlotHighlightDensity(
 
 print(p)</code></pre>
 <p><img src="figure/CD4_workflow.Rmd/8d%20-%20citeseq%20gating%20to%20highlight%20clusters-3.png" alt="" width="768" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces-8d---citeseq-gating-to-highlight-clusters-3">
+Past versions of "8d - citeseq gating to highlight clusters-3.png"
+</button>
+</p>
+<div id="fig-no-spaces-8d---citeseq-gating-to-highlight-clusters-3"
+class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+add1267
+</td>
+<td>
+Nitya Mehrotra
+</td>
+<td>
+2026-09-01
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>cd4_cite$is_H &lt;-
   (adt[&quot;CD44&quot;, ]            &gt; cd44_thresh)  &amp;
   (adt[&quot;CXCR5&quot;, ]         &gt; cxcr5_cut) &amp; #top10
@@ -4120,6 +7743,44 @@ p &lt;- MyDimPlotHighlightDensity(
 
 print(p)</code></pre>
 <p><img src="figure/CD4_workflow.Rmd/8d%20-%20citeseq%20gating%20to%20highlight%20clusters-4.png" alt="" width="768" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces-8d---citeseq-gating-to-highlight-clusters-4">
+Past versions of "8d - citeseq gating to highlight clusters-4.png"
+</button>
+</p>
+<div id="fig-no-spaces-8d---citeseq-gating-to-highlight-clusters-4"
+class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+add1267
+</td>
+<td>
+Nitya Mehrotra
+</td>
+<td>
+2026-09-01
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code> cd4_cite$is_TU &lt;-
   (adt[&quot;CD44&quot;, ]  &gt; cd44_thresh) &amp;
   (adt[&quot;CD62L&quot;, ] &lt; cd62l_thresh) &amp;
@@ -4142,6 +7803,44 @@ p &lt;- MyDimPlotHighlightDensity(
 
 print(p)</code></pre>
 <p><img src="figure/CD4_workflow.Rmd/8d%20-%20citeseq%20gating%20to%20highlight%20clusters-5.png" alt="" width="768" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces-8d---citeseq-gating-to-highlight-clusters-5">
+Past versions of "8d - citeseq gating to highlight clusters-5.png"
+</button>
+</p>
+<div id="fig-no-spaces-8d---citeseq-gating-to-highlight-clusters-5"
+class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+add1267
+</td>
+<td>
+Nitya Mehrotra
+</td>
+<td>
+2026-09-01
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>cd4_cite$is_XY &lt;-
   (adt[&quot;CD44&quot;, ]  &gt; cd44_thresh) &amp;
   (adt[&quot;CD62L&quot;, ] &lt; cd62l_thresh) &amp;
@@ -4162,6 +7861,44 @@ print(p)</code></pre>
 )  + coord_cartesian(xlim = c(-2.5, 4), ylim = c(-2.5, 2.5)) + theme_void() + NoGrid() + NoLegend()
 print(p)</code></pre>
 <p><img src="figure/CD4_workflow.Rmd/8d%20-%20citeseq%20gating%20to%20highlight%20clusters-6.png" alt="" width="768" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces-8d---citeseq-gating-to-highlight-clusters-6">
+Past versions of "8d - citeseq gating to highlight clusters-6.png"
+</button>
+</p>
+<div id="fig-no-spaces-8d---citeseq-gating-to-highlight-clusters-6"
+class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+add1267
+</td>
+<td>
+Nitya Mehrotra
+</td>
+<td>
+2026-09-01
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>cd4_cite$is_Q &lt;-
   (adt[&quot;CD44&quot;, ]  &gt; cd44_thresh) &amp;
   (rna[&quot;Cxcr6&quot;, ] &gt; 0) &amp;
@@ -4184,6 +7921,44 @@ p &lt;- MyDimPlotHighlightDensity(
 
 print(p)</code></pre>
 <p><img src="figure/CD4_workflow.Rmd/8d%20-%20citeseq%20gating%20to%20highlight%20clusters-7.png" alt="" width="768" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces-8d---citeseq-gating-to-highlight-clusters-7">
+Past versions of "8d - citeseq gating to highlight clusters-7.png"
+</button>
+</p>
+<div id="fig-no-spaces-8d---citeseq-gating-to-highlight-clusters-7"
+class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+add1267
+</td>
+<td>
+Nitya Mehrotra
+</td>
+<td>
+2026-09-01
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>cd4_cite$is_RS &lt;-
   (adt[&quot;CD44&quot;, ]  &gt; cd44_thresh) &amp;
   (adt[&quot;CD62L&quot;, ] &lt; cd62l_thresh) &amp;
@@ -4205,10 +7980,50 @@ print(p)</code></pre>
 
 
 print(p)</code></pre>
-<p><img src="figure/CD4_workflow.Rmd/8d%20-%20citeseq%20gating%20to%20highlight%20clusters-8.png" alt="" width="768" style="display: block; margin: auto;" />
-# Extended Data Figure 1</p>
+<p><img src="figure/CD4_workflow.Rmd/8d%20-%20citeseq%20gating%20to%20highlight%20clusters-8.png" alt="" width="768" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces-8d---citeseq-gating-to-highlight-clusters-8">
+Past versions of "8d - citeseq gating to highlight clusters-8.png"
+</button>
+</p>
+<div id="fig-no-spaces-8d---citeseq-gating-to-highlight-clusters-8"
+class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+add1267
+</td>
+<td>
+Nitya Mehrotra
+</td>
+<td>
+2026-09-01
+</td>
+</tr>
+</tbody>
+</table>
 </div>
 </div>
+</div>
+</div>
+</div>
+<div id="extended-data-figure-1" class="section level1">
+<h1>Extended Data Figure 1</h1>
 <div id="chemokine-receptor-expression-across-the-cd4-landscape"
 class="section level2">
 <h2>Chemokine receptor expression across the CD4 landscape</h2>
@@ -4263,33 +8078,493 @@ MyFeaturePlotHighlight(
   background_alpha    = 0.25,
   title               = &quot;CD44 expression in CD4.A-F&quot;
 )</code></pre>
-<p><img src="figure/CD4_workflow.Rmd/S1a%20-%20cd44%20feature%20plot%20in%20resting%20cells-1.png" alt="" width="768" style="display: block; margin: auto;" />
-### Fig S1b</p>
+<p><img src="figure/CD4_workflow.Rmd/S1a%20-%20cd44%20feature%20plot%20in%20resting%20cells-1.png" alt="" width="768" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces-S1a---cd44-feature-plot-in-resting-cells-1">
+Past versions of "S1a - cd44 feature plot in resting cells-1.png"
+</button>
+</p>
+<div id="fig-no-spaces-S1a---cd44-feature-plot-in-resting-cells-1"
+class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+add1267
+</td>
+<td>
+Nitya Mehrotra
+</td>
+<td>
+2026-09-01
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div id="fig-s1b" class="section level3">
+<h3>Fig S1b</h3>
 <pre class="r"><code>FeaturePlot(cd4_object, reduction = &quot;mde_incremental&quot;, features = c(&quot;Cx3cr1&quot;), order = T,  min.cutoff = &quot;q20&quot;, max.cutoff = &quot;q99&quot;,  cols = c(&quot;lightgrey&quot;, &quot;blue&quot;) , raster = F, raster.dpi = c(512,512)) + coord_cartesian(xlim = c(-2.5, 4), ylim = c(-2.5, 2.5)) + NoAxes() + NoLegend() + theme_void() + theme(legend.position = &quot;none&quot;) </code></pre>
 <p><img src="figure/CD4_workflow.Rmd/s1b%20chemokine/cytokine%20receptor%20feature%20plots-1.png" alt="" width="768" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces-cytokine-receptor-feature-plots-1">
+Past versions of "cytokine receptor feature plots-1.png"
+</button>
+</p>
+<div id="fig-no-spaces-cytokine-receptor-feature-plots-1"
+class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+add1267
+</td>
+<td>
+Nitya Mehrotra
+</td>
+<td>
+2026-09-01
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>FeaturePlot(cd4_object, reduction = &quot;mde_incremental&quot;, features = c(&quot;Ccr7&quot;), order = T,  min.cutoff = &quot;q20&quot;, max.cutoff = &quot;q99&quot;,  cols = c(&quot;lightgrey&quot;, &quot;blue&quot;) , raster = F, raster.dpi = c(512,512)) + coord_cartesian(xlim = c(-2.5, 4), ylim = c(-2.5, 2.5)) + NoAxes() + NoLegend() + theme_void() + theme(legend.position = &quot;none&quot;)</code></pre>
 <p><img src="figure/CD4_workflow.Rmd/s1b%20chemokine/cytokine%20receptor%20feature%20plots-2.png" alt="" width="768" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces-cytokine-receptor-feature-plots-2">
+Past versions of "cytokine receptor feature plots-2.png"
+</button>
+</p>
+<div id="fig-no-spaces-cytokine-receptor-feature-plots-2"
+class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+add1267
+</td>
+<td>
+Nitya Mehrotra
+</td>
+<td>
+2026-09-01
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>FeaturePlot(cd4_object, reduction = &quot;mde_incremental&quot;, features = c(&quot;Cxcr3&quot;), order = T,  min.cutoff = &quot;q20&quot;, max.cutoff = &quot;q99&quot;,  cols = c(&quot;lightgrey&quot;, &quot;blue&quot;) , raster = F, raster.dpi = c(512,512)) + coord_cartesian(xlim = c(-2.5, 4), ylim = c(-2.5, 2.5)) + NoAxes() + NoLegend() + theme_void() + theme(legend.position = &quot;none&quot;)</code></pre>
 <p><img src="figure/CD4_workflow.Rmd/s1b%20chemokine/cytokine%20receptor%20feature%20plots-3.png" alt="" width="768" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces-cytokine-receptor-feature-plots-3">
+Past versions of "cytokine receptor feature plots-3.png"
+</button>
+</p>
+<div id="fig-no-spaces-cytokine-receptor-feature-plots-3"
+class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+add1267
+</td>
+<td>
+Nitya Mehrotra
+</td>
+<td>
+2026-09-01
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>FeaturePlot(cd4_object, reduction = &quot;mde_incremental&quot;, features = c(&quot;Ccr5&quot;), order = T,  min.cutoff = &quot;q20&quot;, max.cutoff = &quot;q99&quot;,  cols = c(&quot;lightgrey&quot;, &quot;blue&quot;) , raster = F, raster.dpi = c(512,512)) + coord_cartesian(xlim = c(-2.5, 4), ylim = c(-2.5, 2.5)) + NoAxes() + NoLegend() + theme_void() + theme(legend.position = &quot;none&quot;)</code></pre>
 <p><img src="figure/CD4_workflow.Rmd/s1b%20chemokine/cytokine%20receptor%20feature%20plots-4.png" alt="" width="768" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces-cytokine-receptor-feature-plots-4">
+Past versions of "cytokine receptor feature plots-4.png"
+</button>
+</p>
+<div id="fig-no-spaces-cytokine-receptor-feature-plots-4"
+class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+add1267
+</td>
+<td>
+Nitya Mehrotra
+</td>
+<td>
+2026-09-01
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>FeaturePlot(cd4_object, reduction = &quot;mde_incremental&quot;, features = c(&quot;Ccr4&quot;), order = T,  min.cutoff = &quot;q20&quot;, max.cutoff = &quot;q99&quot;,  cols = c(&quot;lightgrey&quot;, &quot;blue&quot;) , raster = F, raster.dpi = c(512,512)) + coord_cartesian(xlim = c(-2.5, 4), ylim = c(-2.5, 2.5)) + NoAxes() + NoLegend() + theme_void() + theme(legend.position = &quot;none&quot;)</code></pre>
 <p><img src="figure/CD4_workflow.Rmd/s1b%20chemokine/cytokine%20receptor%20feature%20plots-5.png" alt="" width="768" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces-cytokine-receptor-feature-plots-5">
+Past versions of "cytokine receptor feature plots-5.png"
+</button>
+</p>
+<div id="fig-no-spaces-cytokine-receptor-feature-plots-5"
+class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+add1267
+</td>
+<td>
+Nitya Mehrotra
+</td>
+<td>
+2026-09-01
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>FeaturePlot(cd4_object, reduction = &quot;mde_incremental&quot;, features = c(&quot;Ccr6&quot;), order = T,  min.cutoff = &quot;q20&quot;, max.cutoff = &quot;q99&quot;,  cols = c(&quot;lightgrey&quot;, &quot;blue&quot;) , raster = F, raster.dpi = c(512,512)) + coord_cartesian(xlim = c(-2.5, 4), ylim = c(-2.5, 2.5)) + NoAxes() + NoLegend() + theme_void() + theme(legend.position = &quot;none&quot;)</code></pre>
 <p><img src="figure/CD4_workflow.Rmd/s1b%20chemokine/cytokine%20receptor%20feature%20plots-6.png" alt="" width="768" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces-cytokine-receptor-feature-plots-6">
+Past versions of "cytokine receptor feature plots-6.png"
+</button>
+</p>
+<div id="fig-no-spaces-cytokine-receptor-feature-plots-6"
+class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+add1267
+</td>
+<td>
+Nitya Mehrotra
+</td>
+<td>
+2026-09-01
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>FeaturePlot(cd4_object, reduction = &quot;mde_incremental&quot;, features = c(&quot;Cxcr5&quot;), order = T,  min.cutoff = &quot;q20&quot;, max.cutoff = &quot;q99&quot;,  cols = c(&quot;lightgrey&quot;, &quot;blue&quot;) , raster = F, raster.dpi = c(512,512)) + coord_cartesian(xlim = c(-2.5, 4), ylim = c(-2.5, 2.5)) + NoAxes() + NoLegend() + theme_void() + theme(legend.position = &quot;none&quot;)</code></pre>
 <p><img src="figure/CD4_workflow.Rmd/s1b%20chemokine/cytokine%20receptor%20feature%20plots-7.png" alt="" width="768" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces-cytokine-receptor-feature-plots-7">
+Past versions of "cytokine receptor feature plots-7.png"
+</button>
+</p>
+<div id="fig-no-spaces-cytokine-receptor-feature-plots-7"
+class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+add1267
+</td>
+<td>
+Nitya Mehrotra
+</td>
+<td>
+2026-09-01
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>FeaturePlot(cd4_object, reduction = &quot;mde_incremental&quot;, features = c(&quot;Ccr2&quot;), order = T,  min.cutoff = &quot;q20&quot;, max.cutoff = &quot;q99&quot;,  cols = c(&quot;lightgrey&quot;, &quot;blue&quot;) , raster = F, raster.dpi = c(512,512)) + coord_cartesian(xlim = c(-2.5, 4), ylim = c(-2.5, 2.5)) + NoAxes() + NoLegend() + theme_void() + theme(legend.position = &quot;none&quot;)</code></pre>
 <p><img src="figure/CD4_workflow.Rmd/s1b%20chemokine/cytokine%20receptor%20feature%20plots-8.png" alt="" width="768" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces-cytokine-receptor-feature-plots-8">
+Past versions of "cytokine receptor feature plots-8.png"
+</button>
+</p>
+<div id="fig-no-spaces-cytokine-receptor-feature-plots-8"
+class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+add1267
+</td>
+<td>
+Nitya Mehrotra
+</td>
+<td>
+2026-09-01
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>FeaturePlot(cd4_object, reduction = &quot;mde_incremental&quot;, features = c(&quot;Ccr9&quot;), order = T,  min.cutoff = &quot;q20&quot;, max.cutoff = &quot;q99&quot;,  cols = c(&quot;lightgrey&quot;, &quot;blue&quot;) , raster = F, raster.dpi = c(512,512)) + coord_cartesian(xlim = c(-2.5, 4), ylim = c(-2.5, 2.5)) + NoAxes() + NoLegend() + theme_void() + theme(legend.position = &quot;none&quot;)</code></pre>
 <p><img src="figure/CD4_workflow.Rmd/s1b%20chemokine/cytokine%20receptor%20feature%20plots-9.png" alt="" width="768" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces-cytokine-receptor-feature-plots-9">
+Past versions of "cytokine receptor feature plots-9.png"
+</button>
+</p>
+<div id="fig-no-spaces-cytokine-receptor-feature-plots-9"
+class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+add1267
+</td>
+<td>
+Nitya Mehrotra
+</td>
+<td>
+2026-09-01
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>FeaturePlot(cd4_object, reduction = &quot;mde_incremental&quot;, features = c(&quot;Ccr10&quot;), order = T,  min.cutoff = &quot;q20&quot;, max.cutoff = &quot;q99&quot;,  cols = c(&quot;lightgrey&quot;, &quot;blue&quot;) , raster = F, raster.dpi = c(512,512)) + coord_cartesian(xlim = c(-2.5, 4), ylim = c(-2.5, 2.5)) + NoAxes() + NoLegend() + theme_void() + theme(legend.position = &quot;none&quot;) </code></pre>
 <p><img src="figure/CD4_workflow.Rmd/s1b%20chemokine/cytokine%20receptor%20feature%20plots-10.png" alt="" width="768" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces-cytokine-receptor-feature-plots-10">
+Past versions of "cytokine receptor feature plots-10.png"
+</button>
+</p>
+<div id="fig-no-spaces-cytokine-receptor-feature-plots-10"
+class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+add1267
+</td>
+<td>
+Nitya Mehrotra
+</td>
+<td>
+2026-09-01
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>FeaturePlot(cd4_object, reduction = &quot;mde_incremental&quot;, features = c(&quot;Cxcr6&quot;), order = T,  min.cutoff = &quot;q20&quot;, max.cutoff = &quot;q99&quot;,  cols = c(&quot;lightgrey&quot;, &quot;blue&quot;) , raster = F, raster.dpi = c(512,512)) + coord_cartesian(xlim = c(-2.5, 4), ylim = c(-2.5, 2.5)) + NoAxes() + NoLegend() + theme_void() + theme(legend.position = &quot;none&quot;)</code></pre>
-<p><img src="figure/CD4_workflow.Rmd/s1b%20chemokine/cytokine%20receptor%20feature%20plots-11.png" alt="" width="768" style="display: block; margin: auto;" />
-# Extended Data Figure 2</p>
+<p><img src="figure/CD4_workflow.Rmd/s1b%20chemokine/cytokine%20receptor%20feature%20plots-11.png" alt="" width="768" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces-cytokine-receptor-feature-plots-11">
+Past versions of "cytokine receptor feature plots-11.png"
+</button>
+</p>
+<div id="fig-no-spaces-cytokine-receptor-feature-plots-11"
+class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+add1267
+</td>
+<td>
+Nitya Mehrotra
+</td>
+<td>
+2026-09-01
+</td>
+</tr>
+</tbody>
+</table>
 </div>
 </div>
+</div>
+</div>
+</div>
+<div id="extended-data-figure-2" class="section level1">
+<h1>Extended Data Figure 2</h1>
 <div
 id="cluster-distribution-of-antigen-specific-and-clonally-expanded-cells-across-immune-conditions"
 class="section level2">
@@ -4732,10 +9007,49 @@ cowplot::plot_grid(
   ncol = 1,
   rel_heights = c(0.05, 0.95)
 )</code></pre>
-<p><img src="figure/CD4_workflow.Rmd/S2a%20dotplot%20of%20cluster%20proportions%20across%20conditins%20in%20cells%20w/%20expanded%20clonotypes-1.png" alt="" width="480" style="display: block; margin: auto;" />
-# Extended Data Figure 3</p>
+<p><img src="figure/CD4_workflow.Rmd/S2a%20dotplot%20of%20cluster%20proportions%20across%20conditins%20in%20cells%20w/%20expanded%20clonotypes-1.png" alt="" width="480" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces--expanded-clonotypes-1">
+Past versions of " expanded clonotypes-1.png"
+</button>
+</p>
+<div id="fig-no-spaces--expanded-clonotypes-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+add1267
+</td>
+<td>
+Nitya Mehrotra
+</td>
+<td>
+2026-09-01
+</td>
+</tr>
+</tbody>
+</table>
 </div>
 </div>
+</div>
+</div>
+</div>
+<div id="extended-data-figure-3" class="section level1">
+<h1>Extended Data Figure 3</h1>
 <div
 id="polarized-clusters-co-occur-within-individual-immune-responses-and-exhibit-tissue-specific-biases"
 class="section level2">
@@ -4960,8 +9274,50 @@ p_main &lt;- ggplot(
 
 
 print(p_main)</code></pre>
-<p><img src="figure/CD4_workflow.Rmd/S3c%20dotplot%20of%20cluster%20distribution%20across%20organs%20at%20baseline-1.png" alt="" width="480" style="display: block; margin: auto;" />
-### Fig S3d</p>
+<p><img src="figure/CD4_workflow.Rmd/S3c%20dotplot%20of%20cluster%20distribution%20across%20organs%20at%20baseline-1.png" alt="" width="480" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces-S3c-dotplot-of-cluster-distribution-across-organs-at-baseline-1">
+Past versions of "S3c dotplot of cluster distribution across organs at
+baseline-1.png"
+</button>
+</p>
+<div
+id="fig-no-spaces-S3c-dotplot-of-cluster-distribution-across-organs-at-baseline-1"
+class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+add1267
+</td>
+<td>
+Nitya Mehrotra
+</td>
+<td>
+2026-09-01
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div id="fig-s3d" class="section level3">
+<h3>Fig S3d</h3>
 <pre class="r"><code>organ_meta &lt;- cd4_object@meta.data %&gt;%
   filter(
     condition_detailed_simplified == &quot;baseline&quot;,
@@ -5168,8 +9524,47 @@ Computation failed in `stat_summary()`.
 Computation failed in `stat_summary()`.
 Caused by error in `as_function()`:
 ! Can&#39;t convert `x`, a data frame, to a function.</code></pre>
-<p><img src="figure/CD4_workflow.Rmd/S3d_log10_cd4s_spleen_LN_clusters-1.png" alt="" width="1152" style="display: block; margin: auto;" />
-### Fig S3e</p>
+<p><img src="figure/CD4_workflow.Rmd/S3d_log10_cd4s_spleen_LN_clusters-1.png" alt="" width="1152" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-S3d_log10_cd4s_spleen_LN_clusters-1">
+Past versions of S3d_log10_cd4s_spleen_LN_clusters-1.png
+</button>
+</p>
+<div id="fig-S3d_log10_cd4s_spleen_LN_clusters-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+add1267
+</td>
+<td>
+Nitya Mehrotra
+</td>
+<td>
+2026-09-01
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div id="fig-s3e" class="section level3">
+<h3>Fig S3e</h3>
 <pre class="r"><code>DefaultAssay(cd4_object) &lt;- &quot;RNA&quot;
 
 level2_order &lt;- levels(cd4_object$annotation_level2)
@@ -5297,10 +9692,57 @@ p_ifng_organ &lt;- ggplot(
   )
 
 p_ifng_organ</code></pre>
-<p><img src="figure/CD4_workflow.Rmd/S3e%20barplot%20of%20cluster%20distribution%20in%20ifng+%20spleen/ln%20cells-1.png" alt="" width="960" style="display: block; margin: auto;" />
-# Extended Data Figure 4 ## In vivo Th signature expression is conserved
-across tissues and varies in intensity and combination across clusters
-at the single-cell level ### Fig S4a-d</p>
+<p><img src="figure/CD4_workflow.Rmd/S3e%20barplot%20of%20cluster%20distribution%20in%20ifng+%20spleen/ln%20cells-1.png" alt="" width="960" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces-ln-cells-1">
+Past versions of "ln cells-1.png"
+</button>
+</p>
+<div id="fig-no-spaces-ln-cells-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+add1267
+</td>
+<td>
+Nitya Mehrotra
+</td>
+<td>
+2026-09-01
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="extended-data-figure-4" class="section level1">
+<h1>Extended Data Figure 4</h1>
+<div
+id="in-vivo-th-signature-expression-is-conserved-across-tissues-and-varies-in-intensity-and-combination-across-clusters-at-the-single-cell-level"
+class="section level2">
+<h2>In vivo Th signature expression is conserved across tissues and
+varies in intensity and combination across clusters at the single-cell
+level</h2>
+<div id="fig-s4a-d" class="section level3">
+<h3>Fig S4a-d</h3>
 <pre class="r"><code>gene_lists &lt;- list(
   XY = xy_genes,
   RS = rs_genes,
@@ -5687,13 +10129,175 @@ for (polarized_name in c(&quot;XY&quot;, &quot;RS&quot;, &quot;TU&quot;, &quot;H
 }</code></pre>
 <pre><code>Running XY</code></pre>
 <p><img src="figure/CD4_workflow.Rmd/s4a-d%20polarized%20cluster%20signatureheatmaps%20across%20organs-1.png" alt="" width="576" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces-s4a-d-polarized-cluster-signatureheatmaps-across-organs-1">
+Past versions of "s4a-d polarized cluster signatureheatmaps across
+organs-1.png"
+</button>
+</p>
+<div
+id="fig-no-spaces-s4a-d-polarized-cluster-signatureheatmaps-across-organs-1"
+class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+add1267
+</td>
+<td>
+Nitya Mehrotra
+</td>
+<td>
+2026-09-01
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre><code>Running RS</code></pre>
 <p><img src="figure/CD4_workflow.Rmd/s4a-d%20polarized%20cluster%20signatureheatmaps%20across%20organs-2.png" alt="" width="576" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces-s4a-d-polarized-cluster-signatureheatmaps-across-organs-2">
+Past versions of "s4a-d polarized cluster signatureheatmaps across
+organs-2.png"
+</button>
+</p>
+<div
+id="fig-no-spaces-s4a-d-polarized-cluster-signatureheatmaps-across-organs-2"
+class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+add1267
+</td>
+<td>
+Nitya Mehrotra
+</td>
+<td>
+2026-09-01
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre><code>Running TU</code></pre>
 <p><img src="figure/CD4_workflow.Rmd/s4a-d%20polarized%20cluster%20signatureheatmaps%20across%20organs-3.png" alt="" width="576" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces-s4a-d-polarized-cluster-signatureheatmaps-across-organs-3">
+Past versions of "s4a-d polarized cluster signatureheatmaps across
+organs-3.png"
+</button>
+</p>
+<div
+id="fig-no-spaces-s4a-d-polarized-cluster-signatureheatmaps-across-organs-3"
+class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+add1267
+</td>
+<td>
+Nitya Mehrotra
+</td>
+<td>
+2026-09-01
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre><code>Running HI</code></pre>
-<p><img src="figure/CD4_workflow.Rmd/s4a-d%20polarized%20cluster%20signatureheatmaps%20across%20organs-4.png" alt="" width="576" style="display: block; margin: auto;" />
-### S4e-h</p>
+<p><img src="figure/CD4_workflow.Rmd/s4a-d%20polarized%20cluster%20signatureheatmaps%20across%20organs-4.png" alt="" width="576" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces-s4a-d-polarized-cluster-signatureheatmaps-across-organs-4">
+Past versions of "s4a-d polarized cluster signatureheatmaps across
+organs-4.png"
+</button>
+</p>
+<div
+id="fig-no-spaces-s4a-d-polarized-cluster-signatureheatmaps-across-organs-4"
+class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+add1267
+</td>
+<td>
+Nitya Mehrotra
+</td>
+<td>
+2026-09-01
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div id="s4e-h" class="section level3">
+<h3>S4e-h</h3>
 <pre class="r"><code>clusters_keep &lt;- c(&quot;CD4.Q&quot;,&quot;CD4.G&quot;,&quot;CD4.H&quot;, &quot;CD4.I&quot;, &quot;CD4.R&quot;, &quot;CD4.S&quot;, &quot;CD4.T&quot;, &quot;CD4.U&quot;, &quot;CD4.X&quot;, &quot;CD4.Y&quot;)
 
 modulescores &lt;- FetchData(
@@ -5766,6 +10370,46 @@ ggplot(modulescores, aes(x = TH2_Score1, y = TH1_Score1, color = annotation_leve
   scale_color_manual(values = palette_vector) +
   scale_fill_manual(values = palette_vector)</code></pre>
 <p><img src="figure/CD4_workflow.Rmd/s4e-h%20scatter%20plots%20of%20module%20scores%20plotting%20all%20clusters-1.png" alt="" width="768" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces-s4e-h-scatter-plots-of-module-scores-plotting-all-clusters-1">
+Past versions of "s4e-h scatter plots of module scores plotting all
+clusters-1.png"
+</button>
+</p>
+<div
+id="fig-no-spaces-s4e-h-scatter-plots-of-module-scores-plotting-all-clusters-1"
+class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+add1267
+</td>
+<td>
+Nitya Mehrotra
+</td>
+<td>
+2026-09-01
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>#th1 vs th17
 quadrant_pct &lt;- modulescores %&gt;%
   mutate(quadrant = case_when(
@@ -5815,6 +10459,46 @@ ggplot(modulescores, aes(x = TH17_Score1, y = TH1_Score1, color = annotation_lev
   scale_color_manual(values = palette_vector) +
   scale_fill_manual(values = palette_vector)</code></pre>
 <p><img src="figure/CD4_workflow.Rmd/s4e-h%20scatter%20plots%20of%20module%20scores%20plotting%20all%20clusters-2.png" alt="" width="768" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces-s4e-h-scatter-plots-of-module-scores-plotting-all-clusters-2">
+Past versions of "s4e-h scatter plots of module scores plotting all
+clusters-2.png"
+</button>
+</p>
+<div
+id="fig-no-spaces-s4e-h-scatter-plots-of-module-scores-plotting-all-clusters-2"
+class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+add1267
+</td>
+<td>
+Nitya Mehrotra
+</td>
+<td>
+2026-09-01
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>#th2 vs th17
 quadrant_pct &lt;- modulescores %&gt;%
   mutate(quadrant = case_when(
@@ -5864,6 +10548,46 @@ ggplot(modulescores, aes(x = TH17_Score1, y = TH2_Score1, color = annotation_lev
   scale_color_manual(values = palette_vector) +
   scale_fill_manual(values = palette_vector)</code></pre>
 <p><img src="figure/CD4_workflow.Rmd/s4e-h%20scatter%20plots%20of%20module%20scores%20plotting%20all%20clusters-3.png" alt="" width="768" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces-s4e-h-scatter-plots-of-module-scores-plotting-all-clusters-3">
+Past versions of "s4e-h scatter plots of module scores plotting all
+clusters-3.png"
+</button>
+</p>
+<div
+id="fig-no-spaces-s4e-h-scatter-plots-of-module-scores-plotting-all-clusters-3"
+class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+add1267
+</td>
+<td>
+Nitya Mehrotra
+</td>
+<td>
+2026-09-01
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>#tfhtchron vs th1
 quadrant_pct &lt;- modulescores %&gt;%
   mutate(quadrant = case_when(
@@ -5911,8 +10635,50 @@ ggplot(modulescores, aes(x = TFH_TCHRON_Score1, y = TH1_Score1, color = annotati
   coord_cartesian(xlim = c(-0.50, 1.5), ylim = c(-0.5, 1.5)) +
   scale_color_manual(values = palette_vector) +
   scale_fill_manual(values = palette_vector)</code></pre>
-<p><img src="figure/CD4_workflow.Rmd/s4e-h%20scatter%20plots%20of%20module%20scores%20plotting%20all%20clusters-4.png" alt="" width="768" style="display: block; margin: auto;" />
-### S4i-k</p>
+<p><img src="figure/CD4_workflow.Rmd/s4e-h%20scatter%20plots%20of%20module%20scores%20plotting%20all%20clusters-4.png" alt="" width="768" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces-s4e-h-scatter-plots-of-module-scores-plotting-all-clusters-4">
+Past versions of "s4e-h scatter plots of module scores plotting all
+clusters-4.png"
+</button>
+</p>
+<div
+id="fig-no-spaces-s4e-h-scatter-plots-of-module-scores-plotting-all-clusters-4"
+class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+add1267
+</td>
+<td>
+Nitya Mehrotra
+</td>
+<td>
+2026-09-01
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div id="s4i-k" class="section level3">
+<h3>S4i-k</h3>
 <pre class="r"><code># ORIGINAL DGE GENERATION
 # Commented out because the precomputed DGE is loaded below
 
@@ -6298,10 +11064,134 @@ for (comp in names(comparison_info)) {
   print(p)
 
 }</code></pre>
-<p><img src="figure/CD4_workflow.Rmd/S4i-k%20volcano%20plots%20comparing%20Qth1%20vs%20Qth2%20vs%20Qth17-1.png" alt="" width="672" style="display: block; margin: auto;" /><img src="figure/CD4_workflow.Rmd/S4i-k%20volcano%20plots%20comparing%20Qth1%20vs%20Qth2%20vs%20Qth17-2.png" alt="" width="672" style="display: block; margin: auto;" /><img src="figure/CD4_workflow.Rmd/S4i-k%20volcano%20plots%20comparing%20Qth1%20vs%20Qth2%20vs%20Qth17-3.png" alt="" width="672" style="display: block; margin: auto;" />
-# Extended Data Figure 5</p>
+<p><img src="figure/CD4_workflow.Rmd/S4i-k%20volcano%20plots%20comparing%20Qth1%20vs%20Qth2%20vs%20Qth17-1.png" alt="" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces-S4i-k-volcano-plots-comparing-Qth1-vs-Qth2-vs-Qth17-1">
+Past versions of "S4i-k volcano plots comparing Qth1 vs Qth2 vs
+Qth17-1.png"
+</button>
+</p>
+<div
+id="fig-no-spaces-S4i-k-volcano-plots-comparing-Qth1-vs-Qth2-vs-Qth17-1"
+class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+add1267
+</td>
+<td>
+Nitya Mehrotra
+</td>
+<td>
+2026-09-01
+</td>
+</tr>
+</tbody>
+</table>
 </div>
 </div>
+<p><img src="figure/CD4_workflow.Rmd/S4i-k%20volcano%20plots%20comparing%20Qth1%20vs%20Qth2%20vs%20Qth17-2.png" alt="" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces-S4i-k-volcano-plots-comparing-Qth1-vs-Qth2-vs-Qth17-2">
+Past versions of "S4i-k volcano plots comparing Qth1 vs Qth2 vs
+Qth17-2.png"
+</button>
+</p>
+<div
+id="fig-no-spaces-S4i-k-volcano-plots-comparing-Qth1-vs-Qth2-vs-Qth17-2"
+class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+add1267
+</td>
+<td>
+Nitya Mehrotra
+</td>
+<td>
+2026-09-01
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p><img src="figure/CD4_workflow.Rmd/S4i-k%20volcano%20plots%20comparing%20Qth1%20vs%20Qth2%20vs%20Qth17-3.png" alt="" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces-S4i-k-volcano-plots-comparing-Qth1-vs-Qth2-vs-Qth17-3">
+Past versions of "S4i-k volcano plots comparing Qth1 vs Qth2 vs
+Qth17-3.png"
+</button>
+</p>
+<div
+id="fig-no-spaces-S4i-k-volcano-plots-comparing-Qth1-vs-Qth2-vs-Qth17-3"
+class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+add1267
+</td>
+<td>
+Nitya Mehrotra
+</td>
+<td>
+2026-09-01
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="extended-data-figure-5" class="section level1">
+<h1>Extended Data Figure 5</h1>
 <div
 id="polyfunctional-cell-frequencies-reflect-random-assortment-of-th-programs-at-low-expression-levels"
 class="section level2">
@@ -6410,10 +11300,239 @@ for (pair in pairs) {
     v_fixed = V_FIXED
   )
 }</code></pre>
-<p><img src="figure/CD4_workflow.Rmd/S5%20-%20kappa%20heatmaps-1.png" alt="" width="672" style="display: block; margin: auto;" /><img src="figure/CD4_workflow.Rmd/S5%20-%20kappa%20heatmaps-2.png" alt="" width="672" style="display: block; margin: auto;" /><img src="figure/CD4_workflow.Rmd/S5%20-%20kappa%20heatmaps-3.png" alt="" width="672" style="display: block; margin: auto;" /><img src="figure/CD4_workflow.Rmd/S5%20-%20kappa%20heatmaps-4.png" alt="" width="672" style="display: block; margin: auto;" /><img src="figure/CD4_workflow.Rmd/S5%20-%20kappa%20heatmaps-5.png" alt="" width="672" style="display: block; margin: auto;" /><img src="figure/CD4_workflow.Rmd/S5%20-%20kappa%20heatmaps-6.png" alt="" width="672" style="display: block; margin: auto;" />
-# Extended Data Figure 6</p>
+<p><img src="figure/CD4_workflow.Rmd/S5%20-%20kappa%20heatmaps-1.png" alt="" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces-S5---kappa-heatmaps-1">
+Past versions of "S5 - kappa heatmaps-1.png"
+</button>
+</p>
+<div id="fig-no-spaces-S5---kappa-heatmaps-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+add1267
+</td>
+<td>
+Nitya Mehrotra
+</td>
+<td>
+2026-09-01
+</td>
+</tr>
+</tbody>
+</table>
 </div>
 </div>
+<p><img src="figure/CD4_workflow.Rmd/S5%20-%20kappa%20heatmaps-2.png" alt="" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces-S5---kappa-heatmaps-2">
+Past versions of "S5 - kappa heatmaps-2.png"
+</button>
+</p>
+<div id="fig-no-spaces-S5---kappa-heatmaps-2" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+add1267
+</td>
+<td>
+Nitya Mehrotra
+</td>
+<td>
+2026-09-01
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p><img src="figure/CD4_workflow.Rmd/S5%20-%20kappa%20heatmaps-3.png" alt="" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces-S5---kappa-heatmaps-3">
+Past versions of "S5 - kappa heatmaps-3.png"
+</button>
+</p>
+<div id="fig-no-spaces-S5---kappa-heatmaps-3" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+add1267
+</td>
+<td>
+Nitya Mehrotra
+</td>
+<td>
+2026-09-01
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p><img src="figure/CD4_workflow.Rmd/S5%20-%20kappa%20heatmaps-4.png" alt="" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces-S5---kappa-heatmaps-4">
+Past versions of "S5 - kappa heatmaps-4.png"
+</button>
+</p>
+<div id="fig-no-spaces-S5---kappa-heatmaps-4" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+add1267
+</td>
+<td>
+Nitya Mehrotra
+</td>
+<td>
+2026-09-01
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p><img src="figure/CD4_workflow.Rmd/S5%20-%20kappa%20heatmaps-5.png" alt="" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces-S5---kappa-heatmaps-5">
+Past versions of "S5 - kappa heatmaps-5.png"
+</button>
+</p>
+<div id="fig-no-spaces-S5---kappa-heatmaps-5" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+add1267
+</td>
+<td>
+Nitya Mehrotra
+</td>
+<td>
+2026-09-01
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p><img src="figure/CD4_workflow.Rmd/S5%20-%20kappa%20heatmaps-6.png" alt="" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces-S5---kappa-heatmaps-6">
+Past versions of "S5 - kappa heatmaps-6.png"
+</button>
+</p>
+<div id="fig-no-spaces-S5---kappa-heatmaps-6" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+add1267
+</td>
+<td>
+Nitya Mehrotra
+</td>
+<td>
+2026-09-01
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="extended-data-figure-6" class="section level1">
+<h1>Extended Data Figure 6</h1>
 <div id="memory-cd4-t-cells" class="section level2">
 <h2>Memory CD4+ T cells</h2>
 <div id="fig-s6a-b" class="section level3">
@@ -6463,6 +11582,46 @@ MyFeaturePlotHighlight(
   title = &quot;Tbx21 in Listeria Infection d6/10&quot;
 )</code></pre>
 <p><img src="figure/CD4_workflow.Rmd/S6a/b%20Feature%20plots%20of%20Tbx21%20and%20Ifng%20in%20SLOs%20during%20acute%20listeria%20infection%20and%20memory-1.png" alt="" width="768" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces-b-Feature-plots-of-Tbx21-and-Ifng-in-SLOs-during-acute-listeria-infection-and-memory-1">
+Past versions of "b Feature plots of Tbx21 and Ifng in SLOs during acute
+listeria infection and memory-1.png"
+</button>
+</p>
+<div
+id="fig-no-spaces-b-Feature-plots-of-Tbx21-and-Ifng-in-SLOs-during-acute-listeria-infection-and-memory-1"
+class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+add1267
+</td>
+<td>
+Nitya Mehrotra
+</td>
+<td>
+2026-09-01
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>feature &lt;- &quot;Ifng&quot;
 MyFeaturePlotHighlight(
   seurat_object      = cd4_object,
@@ -6476,6 +11635,46 @@ MyFeaturePlotHighlight(
   title = &quot;Ifng in Listeria Infection d6/10&quot;
 )</code></pre>
 <p><img src="figure/CD4_workflow.Rmd/S6a/b%20Feature%20plots%20of%20Tbx21%20and%20Ifng%20in%20SLOs%20during%20acute%20listeria%20infection%20and%20memory-2.png" alt="" width="768" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces-b-Feature-plots-of-Tbx21-and-Ifng-in-SLOs-during-acute-listeria-infection-and-memory-2">
+Past versions of "b Feature plots of Tbx21 and Ifng in SLOs during acute
+listeria infection and memory-2.png"
+</button>
+</p>
+<div
+id="fig-no-spaces-b-Feature-plots-of-Tbx21-and-Ifng-in-SLOs-during-acute-listeria-infection-and-memory-2"
+class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+add1267
+</td>
+<td>
+Nitya Mehrotra
+</td>
+<td>
+2026-09-01
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>#d253060
 feature &lt;- &quot;Tbx21&quot;
 listeria_d253060 &lt;- subset(listeria_object, subset = condition_detailed %in% c(&quot;Lmonocytogenes_D25&quot;, &quot;Lmonocytogenes_D30&quot;, &quot;Lmonocytogenes_D60&quot;))
@@ -6492,6 +11691,46 @@ MyFeaturePlotHighlight(
   title = &quot;Tbx21 in Listeria Infection d25/30/60&quot;
 )</code></pre>
 <p><img src="figure/CD4_workflow.Rmd/S6a/b%20Feature%20plots%20of%20Tbx21%20and%20Ifng%20in%20SLOs%20during%20acute%20listeria%20infection%20and%20memory-3.png" alt="" width="768" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces-b-Feature-plots-of-Tbx21-and-Ifng-in-SLOs-during-acute-listeria-infection-and-memory-3">
+Past versions of "b Feature plots of Tbx21 and Ifng in SLOs during acute
+listeria infection and memory-3.png"
+</button>
+</p>
+<div
+id="fig-no-spaces-b-Feature-plots-of-Tbx21-and-Ifng-in-SLOs-during-acute-listeria-infection-and-memory-3"
+class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+add1267
+</td>
+<td>
+Nitya Mehrotra
+</td>
+<td>
+2026-09-01
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>feature &lt;- &quot;Ifng&quot;
 MyFeaturePlotHighlight(
   seurat_object      = cd4_object,
@@ -6504,8 +11743,50 @@ MyFeaturePlotHighlight(
   background_alpha   = 0.25, 
   title = &quot;Ifng in Listeria Infection d25/30/60&quot;
 )</code></pre>
-<p><img src="figure/CD4_workflow.Rmd/S6a/b%20Feature%20plots%20of%20Tbx21%20and%20Ifng%20in%20SLOs%20during%20acute%20listeria%20infection%20and%20memory-4.png" alt="" width="768" style="display: block; margin: auto;" />
-### Fig S6c</p>
+<p><img src="figure/CD4_workflow.Rmd/S6a/b%20Feature%20plots%20of%20Tbx21%20and%20Ifng%20in%20SLOs%20during%20acute%20listeria%20infection%20and%20memory-4.png" alt="" width="768" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces-b-Feature-plots-of-Tbx21-and-Ifng-in-SLOs-during-acute-listeria-infection-and-memory-4">
+Past versions of "b Feature plots of Tbx21 and Ifng in SLOs during acute
+listeria infection and memory-4.png"
+</button>
+</p>
+<div
+id="fig-no-spaces-b-Feature-plots-of-Tbx21-and-Ifng-in-SLOs-during-acute-listeria-infection-and-memory-4"
+class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+add1267
+</td>
+<td>
+Nitya Mehrotra
+</td>
+<td>
+2026-09-01
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div id="fig-s6c" class="section level3">
+<h3>Fig S6c</h3>
 </div>
 <div id="fig-s6e" class="section level3">
 <h3>Fig S6e</h3>
@@ -6635,6 +11916,46 @@ ggplot() +
   scale_color_manual(values = palette_vector) +
   scale_fill_manual(values = palette_vector)</code></pre>
 <p><img src="figure/CD4_workflow.Rmd/s6e%20mdes%20of%20smarta%20cells%20in%20SLOs%20at%20day%207%20and%20d21-1.png" alt="" width="768" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces-s6e-mdes-of-smarta-cells-in-SLOs-at-day-7-and-d21-1">
+Past versions of "s6e mdes of smarta cells in SLOs at day 7 and
+d21-1.png"
+</button>
+</p>
+<div
+id="fig-no-spaces-s6e-mdes-of-smarta-cells-in-SLOs-at-day-7-and-d21-1"
+class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+add1267
+</td>
+<td>
+Nitya Mehrotra
+</td>
+<td>
+2026-09-01
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>#th2 vs th17
 quadrant_pct &lt;- smarta_d7_slo %&gt;%
   mutate(
@@ -6729,6 +12050,46 @@ ggplot() +
   scale_color_manual(values = palette_vector) +
   scale_fill_manual(values = palette_vector)</code></pre>
 <p><img src="figure/CD4_workflow.Rmd/s6e%20mdes%20of%20smarta%20cells%20in%20SLOs%20at%20day%207%20and%20d21-2.png" alt="" width="768" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces-s6e-mdes-of-smarta-cells-in-SLOs-at-day-7-and-d21-2">
+Past versions of "s6e mdes of smarta cells in SLOs at day 7 and
+d21-2.png"
+</button>
+</p>
+<div
+id="fig-no-spaces-s6e-mdes-of-smarta-cells-in-SLOs-at-day-7-and-d21-2"
+class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+add1267
+</td>
+<td>
+Nitya Mehrotra
+</td>
+<td>
+2026-09-01
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>#memory
 smarta_d3060_slo &lt;- modulescores %&gt;%
   filter(
@@ -6833,6 +12194,46 @@ ggplot() +
   scale_color_manual(values = palette_vector) +
   scale_fill_manual(values = palette_vector)</code></pre>
 <p><img src="figure/CD4_workflow.Rmd/s6e%20mdes%20of%20smarta%20cells%20in%20SLOs%20at%20day%207%20and%20d21-3.png" alt="" width="768" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces-s6e-mdes-of-smarta-cells-in-SLOs-at-day-7-and-d21-3">
+Past versions of "s6e mdes of smarta cells in SLOs at day 7 and
+d21-3.png"
+</button>
+</p>
+<div
+id="fig-no-spaces-s6e-mdes-of-smarta-cells-in-SLOs-at-day-7-and-d21-3"
+class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+add1267
+</td>
+<td>
+Nitya Mehrotra
+</td>
+<td>
+2026-09-01
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>#th1 vs tfhtchron
 quadrant_pct &lt;- smarta_d3060_slo %&gt;%
   mutate(
@@ -6927,10 +12328,52 @@ ggplot() +
   coord_cartesian(xlim = c(-0.4, 1.5), ylim = c(-0.5, 1.5)) +
   scale_color_manual(values = palette_vector) +
   scale_fill_manual(values = palette_vector)</code></pre>
-<p><img src="figure/CD4_workflow.Rmd/s6e%20mdes%20of%20smarta%20cells%20in%20SLOs%20at%20day%207%20and%20d21-4.png" alt="" width="768" style="display: block; margin: auto;" />
-# Extended Data Figure 7</p>
+<p><img src="figure/CD4_workflow.Rmd/s6e%20mdes%20of%20smarta%20cells%20in%20SLOs%20at%20day%207%20and%20d21-4.png" alt="" width="768" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces-s6e-mdes-of-smarta-cells-in-SLOs-at-day-7-and-d21-4">
+Past versions of "s6e mdes of smarta cells in SLOs at day 7 and
+d21-4.png"
+</button>
+</p>
+<div
+id="fig-no-spaces-s6e-mdes-of-smarta-cells-in-SLOs-at-day-7-and-d21-4"
+class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+add1267
+</td>
+<td>
+Nitya Mehrotra
+</td>
+<td>
+2026-09-01
+</td>
+</tr>
+</tbody>
+</table>
 </div>
 </div>
+</div>
+</div>
+</div>
+<div id="extended-data-figure-7" class="section level1">
+<h1>Extended Data Figure 7</h1>
 <div id="resting-cd4-t-cell-clusters" class="section level2">
 <h2>Resting CD4+ T cell clusters</h2>
 <div id="fig-s7a" class="section level3">
@@ -6988,21 +12431,21 @@ obj &lt;- FindNeighbors(obj, dims = 1:30)</code></pre>
 <pre><code>Warning: The default method for RunUMAP has changed from calling Python UMAP via reticulate to the R-native UWOT using the cosine metric
 To use Python UMAP via reticulate, set umap.method to &#39;umap-learn&#39; and metric to &#39;correlation&#39;
 This message will be shown once per session</code></pre>
-<pre><code>14:32:06 UMAP embedding parameters a = 0.9922 b = 1.112</code></pre>
-<pre><code>14:32:06 Read 12654 rows and found 30 numeric columns</code></pre>
-<pre><code>14:32:06 Using Annoy for neighbor search, n_neighbors = 30</code></pre>
-<pre><code>14:32:06 Building Annoy index with metric = cosine, n_trees = 50</code></pre>
+<pre><code>15:13:46 UMAP embedding parameters a = 0.9922 b = 1.112</code></pre>
+<pre><code>15:13:46 Read 12654 rows and found 30 numeric columns</code></pre>
+<pre><code>15:13:46 Using Annoy for neighbor search, n_neighbors = 30</code></pre>
+<pre><code>15:13:46 Building Annoy index with metric = cosine, n_trees = 50</code></pre>
 <pre><code>0%   10   20   30   40   50   60   70   80   90   100%</code></pre>
 <pre><code>[----|----|----|----|----|----|----|----|----|----|</code></pre>
 <pre><code>**************************************************|
-14:32:07 Writing NN index file to temp file /var/folders/sx/fnyds1ls6d941tz778_cwntr0000gn/T//Rtmp4UrHNE/file171a4263aa4e9
-14:32:07 Searching Annoy index using 1 thread, search_k = 3000
-14:32:09 Annoy recall = 100%
-14:32:10 Commencing smooth kNN distance calibration using 1 thread with target n_neighbors = 30
-14:32:12 Initializing from normalized Laplacian + noise (using RSpectra)
-14:32:12 Commencing optimization for 200 epochs, with 535728 positive edges
-14:32:12 Using rng type: pcg
-14:32:16 Optimization finished</code></pre>
+15:13:47 Writing NN index file to temp file /var/folders/sx/fnyds1ls6d941tz778_cwntr0000gn/T//RtmpC20zqM/file17574365ec987
+15:13:47 Searching Annoy index using 1 thread, search_k = 3000
+15:13:48 Annoy recall = 100%
+15:13:50 Commencing smooth kNN distance calibration using 1 thread with target n_neighbors = 30
+15:13:51 Initializing from normalized Laplacian + noise (using RSpectra)
+15:13:51 Commencing optimization for 200 epochs, with 535728 positive edges
+15:13:51 Using rng type: pcg
+15:13:56 Optimization finished</code></pre>
 <pre class="r"><code>for (res in c(0.2, 0.3, 0.4, 0.5, 0.6)) {
   obj &lt;- FindClusters(obj, resolution = res)
 
@@ -7031,7 +12474,7 @@ Number of edges: 288186
 Running Louvain algorithm...
 Maximum modularity in 10 random starts: 0.8318
 Number of communities: 6
-Elapsed time: 1 seconds
+Elapsed time: 0 seconds
 
 resolution = 0.3 
 
@@ -7111,6 +12554,45 @@ DimPlot(
 columns: umaprna_1, umaprna_2. Consider renaming these metadata column(s) to
 avoid conflicts with dimensionality reduction embeddings.</code></pre>
 <p><img src="figure/CD4_workflow.Rmd/S7b%20-%20external%20dataset%20mapping%20for%20Sajani%20et%20al-1.png" alt="" width="768" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces-S7b---external-dataset-mapping-for-Sajani-et-al-1">
+Past versions of "S7b - external dataset mapping for Sajani et al-1.png"
+</button>
+</p>
+<div
+id="fig-no-spaces-S7b---external-dataset-mapping-for-Sajani-et-al-1"
+class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+add1267
+</td>
+<td>
+Nitya Mehrotra
+</td>
+<td>
+2026-09-01
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>ref_embedding &lt;- as.data.frame(
   Embeddings(
     cd4_object,
@@ -7183,8 +12665,49 @@ p &lt;- ggplot() +
   )
 
 print(p)</code></pre>
-<p><img src="figure/CD4_workflow.Rmd/S7b%20-%20external%20dataset%20mapping%20for%20Sajani%20et%20al-2.png" alt="" width="768" style="display: block; margin: auto;" />
-### Fig S7c</p>
+<p><img src="figure/CD4_workflow.Rmd/S7b%20-%20external%20dataset%20mapping%20for%20Sajani%20et%20al-2.png" alt="" width="768" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces-S7b---external-dataset-mapping-for-Sajani-et-al-2">
+Past versions of "S7b - external dataset mapping for Sajani et al-2.png"
+</button>
+</p>
+<div
+id="fig-no-spaces-S7b---external-dataset-mapping-for-Sajani-et-al-2"
+class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+add1267
+</td>
+<td>
+Nitya Mehrotra
+</td>
+<td>
+2026-09-01
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div id="fig-s7c" class="section level3">
+<h3>Fig S7c</h3>
 <pre class="r"><code>Idents(obj) &lt;- obj$clusters_0.2
 
 markers &lt;- FindAllMarkers(
@@ -7248,6 +12771,46 @@ pheatmap(
   border_color = &quot;lightgray&quot;
 )</code></pre>
 <p><img src="figure/CD4_workflow.Rmd/S7c%20-%20heatmap%20comparing%20sajani%20et%20al%20to%20igt%20cd4%20resting%20clusters-1.png" alt="" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces-S7c---heatmap-comparing-sajani-et-al-to-igt-cd4-resting-clusters-1">
+Past versions of "S7c - heatmap comparing sajani et al to igt cd4
+resting clusters-1.png"
+</button>
+</p>
+<div
+id="fig-no-spaces-S7c---heatmap-comparing-sajani-et-al-to-igt-cd4-resting-clusters-1"
+class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+add1267
+</td>
+<td>
+Nitya Mehrotra
+</td>
+<td>
+2026-09-01
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>Idents(obj) &lt;- obj$clusters_0.2
 
 obj &lt;- RenameIdents(
@@ -7270,6 +12833,46 @@ DimPlot(
   label = TRUE
 )</code></pre>
 <p><img src="figure/CD4_workflow.Rmd/S7c%20-%20heatmap%20comparing%20sajani%20et%20al%20to%20igt%20cd4%20resting%20clusters-2.png" alt="" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces-S7c---heatmap-comparing-sajani-et-al-to-igt-cd4-resting-clusters-2">
+Past versions of "S7c - heatmap comparing sajani et al to igt cd4
+resting clusters-2.png"
+</button>
+</p>
+<div
+id="fig-no-spaces-S7c---heatmap-comparing-sajani-et-al-to-igt-cd4-resting-clusters-2"
+class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+add1267
+</td>
+<td>
+Nitya Mehrotra
+</td>
+<td>
+2026-09-01
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>df_out &lt;- data.frame(
   Cell_ID = colnames(obj),
   batch = &quot;b6spleenb6ln&quot;,
@@ -7309,8 +12912,48 @@ p &lt;- MyDimPlotHighlightDensity(
   cols = viridis(100)
 )
 print(p)</code></pre>
-<p><img src="figure/CD4_workflow.Rmd/S8a%20hgihlighting%20cd44+cd62l+%20cells-1.png" alt="" width="768" style="display: block; margin: auto;" />
-### Fig S8b</p>
+<p><img src="figure/CD4_workflow.Rmd/S8a%20hgihlighting%20cd44+cd62l+%20cells-1.png" alt="" width="768" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces-S8a-hgihlighting-cd44+cd62l+-cells-1">
+Past versions of "S8a hgihlighting cd44+cd62l+ cells-1.png"
+</button>
+</p>
+<div id="fig-no-spaces-S8a-hgihlighting-cd44+cd62l+-cells-1"
+class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+add1267
+</td>
+<td>
+Nitya Mehrotra
+</td>
+<td>
+2026-09-01
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div id="fig-s8b" class="section level3">
+<h3>Fig S8b</h3>
 <pre class="r"><code>cd4_cite$not_cl6 &lt;- cd4_cite$annotation_level2 != &quot;CD4_cl6&quot;
 p &lt;- MyFeatureScatter(
   so = cd4_cite,
@@ -7321,6 +12964,46 @@ p &lt;- MyFeatureScatter(
 )
 print(p)</code></pre>
 <p><img src="figure/CD4_workflow.Rmd/s8b%20feature%20scatter%20plot%20of%20klrg1%20x%20cd62l%20+%20corresponding%20mde-1.png" alt="" width="768" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces-s8b-feature-scatter-plot-of-klrg1-x-cd62l-+-corresponding-mde-1">
+Past versions of "s8b feature scatter plot of klrg1 x cd62l +
+corresponding mde-1.png"
+</button>
+</p>
+<div
+id="fig-no-spaces-s8b-feature-scatter-plot-of-klrg1-x-cd62l-+-corresponding-mde-1"
+class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+add1267
+</td>
+<td>
+Nitya Mehrotra
+</td>
+<td>
+2026-09-01
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>cd62l_feat &lt;- &quot;CD62L&quot;
 klrg1_feat &lt;- &quot;KLRG1&quot;
 
@@ -7344,6 +13027,46 @@ p &lt;- MyDimPlotHighlightDensity(
 )
 print(p)</code></pre>
 <p><img src="figure/CD4_workflow.Rmd/s8b%20feature%20scatter%20plot%20of%20klrg1%20x%20cd62l%20+%20corresponding%20mde-2.png" alt="" width="768" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces-s8b-feature-scatter-plot-of-klrg1-x-cd62l-+-corresponding-mde-2">
+Past versions of "s8b feature scatter plot of klrg1 x cd62l +
+corresponding mde-2.png"
+</button>
+</p>
+<div
+id="fig-no-spaces-s8b-feature-scatter-plot-of-klrg1-x-cd62l-+-corresponding-mde-2"
+class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+add1267
+</td>
+<td>
+Nitya Mehrotra
+</td>
+<td>
+2026-09-01
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <br>
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
