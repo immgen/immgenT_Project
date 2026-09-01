@@ -1,4 +1,4 @@
-name: Deploy immgenT project sites
+name: Deploy immgenT project sites (Treg/CD4)
 
 on:
   push:
