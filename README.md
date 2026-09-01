@@ -2,7 +2,7 @@
 
 **A comprehensive molecular reference of T-cell states across the mouse immune system**
 
-The **immgenT Open Source Project** (https://www.immgen.org/ImmGenT/) [is](https://www.immgen.org/ImmGenT/%29is) a collaborative effort of the Immunological Genome Project (ImmGen) to build a comprehensive reference atlas of mouse T cells across tissues, physiological states, infections, tumors, autoimmunity, and other immune perturbations.
+The **immgenT Open Source Project** (https://www.immgen.org/ImmGenT/) a collaborative effort of the Immunological Genome Project (ImmGen) to build a comprehensive reference atlas of mouse T cells across tissues, physiological states, infections, tumors, autoimmunity, and other immune perturbations.
 
 The project profiled ~700,000 T cells from more than 700 samples using **single-cell RNA sequencing**, **128-plex CITE-seq surface-protein profiling**, and **paired TCRαβ sequencing**. Integration of these data defines a common molecular framework of major T-cell lineages and recurrent transcriptional states that can be compared across tissues and experimental conditions.
 
