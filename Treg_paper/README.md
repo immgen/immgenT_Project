@@ -1,12 +1,14 @@
 # immgenT Treg
 
-A [workflowr][] project.
+This directory contains the analysis and reproducibility code accompanying the **immgenT Treg** CITE-seq study. The analysis is organized using [workflowr](https://github.com/workflowr/workflowr) and includes the code used to reproduce the main and supplementary figure panels, together with supporting scripts and links to the required input data.
 
-[workflowr]: https://github.com/workflowr/workflowr
+## Analysis website
 
-# immgenT-Treg analysis companion
+The rendered workflowr analysis can be browsed here:
 
-This repository is the complete, ready-to-run companion code for the **immgenT-Treg** CITE-seq analysis (regulatory T cell atlas). It contains the R/workflowr analysis used to reproduce the main and supplementary figure panels, together with supporting scripts and links to the required input data.
+**https://immgen.github.io/immgenT_Project/Treg_paper/**
+
+The website provides a figure-by-figure view of the analysis, with the corresponding R code and workflowr reproducibility information.
 
 ## Data availability
 
@@ -14,37 +16,40 @@ The complete data package is available on Zenodo:
 
 **https://zenodo.org/records/21839963**
 
-The Zenodo archive contains the curated Treg Seurat object and supporting input files required to reproduce the analyses in this repository.
+The Zenodo archive contains the curated Treg Seurat object and supporting input files required to reproduce the analyses in this directory. Large single-cell data objects are distributed through Zenodo rather than stored directly on GitHub.
 
-## Contents
+## Repository structure
+
+The Treg analysis is contained within the `Treg_paper/` directory of the immgenT project repository:
 
 ```text
-immgenT-Treg/
-├── analysis/
-│   ├── Treg_Workflow.Rmd       # Main Treg analysis workflow
-│   ├── index.Rmd               # workflowr project homepage
-│   ├── about.Rmd
-│   └── license.Rmd
-├── code/                       # Supporting R scripts and functions
-├── data/                       # Input data downloaded from Zenodo
-├── docs/                       # Rendered workflowr site
-├── output/                     # Analysis outputs
-├── _workflowr.yml              # workflowr configuration
-├── immgenT-Treg.Rproj          # RStudio project
-├── README.md
-└── .gitignore
+immgenT_Project/
+└── Treg_paper/
+    ├── analysis/
+    │   ├── Treg_Workflow.Rmd       # Main Treg analysis workflow
+    │   ├── index.Rmd               # workflowr website homepage
+    │   ├── about.Rmd
+    │   └── license.Rmd
+    ├── code/                       # Supporting R scripts and functions
+    ├── data/                       # Input data downloaded from Zenodo
+    ├── docs/                       # Rendered workflowr website
+    ├── output/                     # Analysis outputs
+    ├── _workflowr.yml              # workflowr configuration
+    ├── treg_github.Rproj           # RStudio project
+    ├── README.md
+    └── .gitignore
 ```
 
-The main analysis is contained in `analysis/Treg_Workflow.Rmd`. Supporting data files are stored in the `data/` directory and analysis outputs are written to `output/` or the workflowr-generated figure directories.
+The main analysis is contained in `analysis/Treg_Workflow.Rmd`. Supporting data files are stored in `data/`, and analysis outputs are written to `output/` or workflowr-generated figure directories under `docs/`.
 
 ## Environment setup
 
 The analysis is written in R and uses Seurat for single-cell analysis together with workflowr for organization and reproducible rendering.
 
-Clone or download this repository and open the RStudio project:
+Clone or download the `immgenT_Project` repository and navigate to the `Treg_paper/` directory. The Treg analysis can then be opened using the included RStudio project:
 
 ```text
-immgenT-Treg.Rproj
+treg_github.Rproj
 ```
 
 Install `workflowr` if it is not already available:
@@ -53,70 +58,72 @@ Install `workflowr` if it is not already available:
 install.packages("workflowr")
 ```
 
-The analysis additionally uses packages including `Seurat`, `tidyverse`, `dplyr`, `ggplot2`, `ggrastr`, `pheatmap`, `RColorBrewer`, `scales`, `cowplot`, `ggrepel`, and other packages specified within the workflow.
+The analysis additionally uses packages including `Seurat`, `tidyverse`, `dplyr`, `ggplot2`, `ggrastr`, `pheatmap`, `RColorBrewer`, `scales`, `cowplot`, and `ggrepel`, together with additional packages specified within the workflow.
 
 ## Data setup
 
-Download the Treg data package from Zenodo and place the required files in the `data/` directory.
+Download the Treg data package from Zenodo and place the required input files in the `data/` directory.
 
-The repository is designed so that large single-cell data objects are distributed through Zenodo rather than stored directly in GitHub.
-
-After downloading the data, the project should have the general structure:
+After downloading the data, the relevant portion of the project should have the general structure:
 
 ```text
-immgenT-Treg/
+Treg_paper/
 ├── data/
 │   ├── [Treg Seurat object]
 │   └── [supporting analysis files]
 ├── analysis/
 ├── code/
+├── output/
 └── ...
 ```
+Large intermediate objects and other files that are impractical to distribute through GitHub are provided through the associated Zenodo archive.
 
-## How to run
+## Running the analysis
 
-1. Download or clone this repository.
-2. Download the associated data package from Zenodo and place the required files in `data/`.
-3. Open `immgenT-Treg.Rproj` in RStudio.
-4. Install the required R packages if necessary.
-5. Build the workflow from the project root:
+From the `Treg_paper/` project root:
+
+1. Download the associated data package from Zenodo and place the required files in `data/`.
+2. Open `treg_github.Rproj` in RStudio.
+3. Install the required R packages if necessary.
+4. Build the workflow:
 
 ```r
 library(workflowr)
 
 wflow_build("analysis/Treg_Workflow.Rmd")
 ```
-
-The rendered analysis will be written to:
+The rendered analysis is written to:
 
 ```text
 docs/Treg_Workflow.html
 ```
+The R Markdown workflow can also be run interactively in RStudio. Code chunks should generally be run in order because later analyses may depend on objects generated in earlier sections.
 
-The R Markdown workflow can also be run interactively in RStudio. Code chunks should be run in order because later analyses may depend on objects generated in earlier sections.
-
-## Data notes
+## Data and analysis notes
 
 - The curated Treg Seurat object contains the single-cell RNA and CITE-seq information used throughout the analysis.
 - The primary Treg embedding used for visualization is `mde_incremental`.
 - Treg populations are annotated using the `annotation_level2` metadata field, including the major Treg states `Treg.A`–`Treg.F` and proliferative Tregs.
 - Supporting files distributed with the Zenodo data package provide precomputed results or metadata for analyses that do not require recomputation of the full upstream single-cell pipeline.
-- Large intermediate objects and computationally intensive upstream processing steps are not regenerated where a curated or precomputed input is sufficient to reproduce the corresponding figure panel.
+- Large intermediate objects and computationally intensive upstream processing steps are not regenerated when a curated or precomputed input is sufficient to reproduce the corresponding figure panel.
 
 ## Reproducibility
 
-This repository uses workflowr to organize the analysis and track the relationship between source code and rendered results.
+This analysis uses workflowr to organize the R Markdown source, rendered results, and version information associated with the analysis.
 
-To rebuild the complete Treg workflow after making changes:
+To rebuild the Treg workflow after making changes:
 
 ```r
 library(workflowr)
 
 wflow_build("analysis/Treg_Workflow.Rmd")
 ```
+The generated workflowr website and figure outputs are stored under `docs/`.
 
-The generated workflowr site and figure outputs are stored under `docs/`.
+The published analysis can be viewed at:
+
+**https://immgen.github.io/immgenT_Project/Treg_paper/**
 
 ## Citation
 
-If you use this code or data, please cite the immgenT-Treg manuscript / resource associated with this analysis.
+If you use this code or data, please cite the associated **immgenT Treg** manuscript/resource and the corresponding Zenodo data release.
