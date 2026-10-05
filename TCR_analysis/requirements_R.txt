@@ -1,0 +1,14 @@
+# R package dependencies for the R scripts in this folder.
+# Install with:
+#   pkgs <- grep("^[^#[:space:]]", readLines("requirements_R.txt"), value = TRUE)
+#   install.packages(setdiff(pkgs, rownames(installed.packages())))
+#
+# Somatic_mutations.R and Mutation_rates_for_other_T_receptor_genes.R load the
+# CRAN packages below. All other R scripts use only base R
+# (base, stats, graphics, grDevices, utils), which ships with R itself.
+
+dplyr
+readr
+readxl
+stringr
+tidyr
